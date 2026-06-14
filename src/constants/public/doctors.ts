@@ -1,0 +1,55 @@
+import { Doctor } from "@/types/doctors";
+import cardiologyImage from "@/assets/doctor-cardiology.png";
+import neurologyImage from "@/assets/doctor-neurology.png";
+import orthopedicsImage from "@/assets/doctor-orthopedics.png";
+
+export const featuredDoctors: Doctor[] = [
+  {
+    id: "dr-arif-rahman",
+    name: "Dr. Arif Rahman",
+    email: "arif.rahman@example.com",
+    profilePhoto: cardiologyImage.src,
+    registrationNumber: "A-10427",
+    experience: 12,
+    gender: "MALE",
+    appointmentFee: 1200,
+    qualification: "MBBS, FCPS (Cardiology)",
+    currentWorkingPlace: "Dhaka Medical Centre",
+    designation: "Consultant Cardiologist",
+    averageRating: 4.9,
+    specialties: [{ id: "sp-cardio", title: "Cardiology", icon: "Heart" }],
+    available: true,
+  },
+  {
+    id: "dr-nabila-sultana",
+    name: "Dr. Nabila Sultana",
+    email: "nabila.sultana@example.com",
+    profilePhoto: neurologyImage.src,
+    registrationNumber: "A-11892",
+    experience: 9,
+    gender: "FEMALE",
+    appointmentFee: 1000,
+    qualification: "MBBS, MD (Neurology)",
+    currentWorkingPlace: "Central Care Hospital",
+    designation: "Consultant Neurologist",
+    averageRating: 4.8,
+    specialties: [{ id: "sp-neuro", title: "Neurology", icon: "Brain" }],
+    available: true,
+  },
+  {
+    id: "dr-tanvir-hossain",
+    name: "Dr. Tanvir Hossain",
+    email: "tanvir.hossain@example.com",
+    profilePhoto: orthopedicsImage.src,
+    registrationNumber: "A-09318",
+    experience: 15,
+    gender: "MALE",
+    appointmentFee: 1400,
+    qualification: "MBBS, MS (Orthopedics)",
+    currentWorkingPlace: "National Orthopedic Centre",
+    designation: "Senior Orthopedic Consultant",
+    averageRating: 4.9,
+    specialties: [{ id: "sp-ortho", title: "Orthopedics", icon: "Bone" }],
+    available: false,
+  },
+];
