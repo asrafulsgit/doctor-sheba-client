@@ -4,18 +4,22 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Doctor } from "@/types/doctors";
 import Link from "next/link";
+import Image from "next/image";
 
 export function DoctorCard({ doctor }: { doctor: Doctor }) {
   return (
-    <Card className="group h-full overflow-hidden border-border shadow-xs transition-[transform,box-shadow] duration-200 hover:-translate-y-1 hover:shadow-md">
+    <Card className="group h-full overflow-hidden border-border shadow-xs 
+    py-0
+    transition-[transform,box-shadow] duration-200 hover:-translate-y-1 hover:shadow-md">
       <div className="relative aspect-[4/3] overflow-hidden bg-surface-muted">
-        <img
-          src={doctor.profilePhoto}
+        <Image
+          src={doctor.profilePhoto as string}
           alt={`Portrait of ${doctor.name}`}
           width={768}
           height={896}
           loading="lazy"
-          className="h-full w-full object-cover object-top transition-transform duration-500 group-hover:scale-[1.025]"
+          className="h-full w-full object-cover object-top transition-transform 
+          duration-500 group-hover:scale-[1.025]"
         />
         <span className="absolute left-4 top-4 rounded-full border border-border bg-surface/95 px-3 py-1 text-xs font-medium text-foreground shadow-xs">
           {doctor.available ? "Available to book" : "Next slots soon"}
