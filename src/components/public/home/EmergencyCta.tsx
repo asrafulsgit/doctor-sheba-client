@@ -1,6 +1,6 @@
-import { Reveal } from "../shared/Reveal";
+import { Reveal } from "../../shared/Reveal";
 import { PhoneCall } from "lucide-react";
-import { Button } from "../ui/button";
+import { Button } from "../../ui/button";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 

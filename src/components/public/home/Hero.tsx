@@ -1,6 +1,6 @@
 import { Search, ShieldCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Reveal } from "../shared/Reveal";
+import { Reveal } from "../../shared/Reveal";
 import Link from "next/link";
 
 import heroImage from "@/assets/hero-image.png";

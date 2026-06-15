@@ -1,5 +1,5 @@
 import React from "react";
-import { Reveal, Stagger } from "../shared/Reveal";
+import { Reveal, Stagger } from "../../shared/Reveal";
 import { Clock, HeartPulse, ShieldCheck } from "lucide-react";
 
 const whyDoctorShebaCardItems = [

@@ -1,4 +1,4 @@
-import { Reveal } from "../shared/Reveal";
+import { Reveal } from "../../shared/Reveal";
 import { BadgeCheck, Lock, ShieldCheck } from "lucide-react";
 
 const TrustedAndSafety = () => {

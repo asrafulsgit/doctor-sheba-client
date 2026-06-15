@@ -1,7 +1,7 @@
 import React from 'react'
-import { Reveal } from '../shared/Reveal'
+import { Reveal } from '../../shared/Reveal'
 import { Briefcase } from 'lucide-react'
-import { Button } from '../ui/button'
+import { Button } from '../../ui/button'
 import Link from 'next/link'
 
 const BecomeADoctor = () => {

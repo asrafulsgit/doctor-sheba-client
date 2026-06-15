@@ -1,10 +1,10 @@
-import { SectionHeading } from "../shared/SectionHeading";
-import { Button } from "../ui/button";
+import { SectionHeading } from "../../shared/SectionHeading";
+import { Button } from "../../ui/button";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
-import { StaggerGroup, StaggerItem } from "../shared/Reveal";
+import { StaggerGroup, StaggerItem } from "../../shared/Reveal";
 import { featuredDoctors } from "@/constants/public/doctors";
-import { DoctorCard } from "../shared/DoctorCard";
+import { DoctorCard } from "../../shared/DoctorCard";
 
 const FeaturedDoctors = () => {
   return (

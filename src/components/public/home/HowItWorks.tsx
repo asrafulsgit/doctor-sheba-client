@@ -1,5 +1,5 @@
 import React from "react";
-import { Reveal, Stagger } from "../shared/Reveal";
+import { Reveal, Stagger } from "../../shared/Reveal";
 import { ArrowRight, CalendarCheck2, FileText, Search, Stethoscope } from "lucide-react";
 
 const STEPS = [

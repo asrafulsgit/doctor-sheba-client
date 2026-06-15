@@ -8,9 +8,11 @@ import Image from "next/image";
 
 export function DoctorCard({ doctor }: { doctor: Doctor }) {
   return (
-    <Card className="group h-full overflow-hidden border-border shadow-xs 
+    <Card
+      className="group h-full overflow-hidden border-border shadow-xs 
     py-0
-    transition-[transform,box-shadow] duration-200 hover:-translate-y-1 hover:shadow-md">
+    transition-[transform,box-shadow] duration-200  hover:shadow-md"
+    >
       <div className="relative aspect-[4/3] overflow-hidden bg-surface-muted">
         <Image
           src={doctor.profilePhoto as string}

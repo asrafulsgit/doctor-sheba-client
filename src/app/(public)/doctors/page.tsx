@@ -1,5 +1,7 @@
+import Doctors from "@/components/public/doctors/Doctors";
+
 const page = () => {
-  return <h1>doctors</h1>;
+  return <Doctors />;
 };
 
 export default page;

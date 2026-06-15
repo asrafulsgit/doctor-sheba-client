@@ -1,5 +1,5 @@
 import React from "react";
-import { Reveal, Stagger } from "../shared/Reveal";
+import { Reveal, Stagger } from "../../shared/Reveal";
 import { CalendarCheck2, FileText, Pill, Video } from "lucide-react";
 
 const serviceItems = [

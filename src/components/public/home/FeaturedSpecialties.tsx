@@ -1,5 +1,5 @@
 import { SPECIALTIES } from "@/constants/public/specialties";
-import { Reveal, Stagger } from "../shared/Reveal";
+import { Reveal, Stagger } from "../../shared/Reveal";
 import Link from "next/link";
 import { HeartPulse } from "lucide-react";
 
