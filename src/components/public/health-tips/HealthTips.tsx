@@ -1,8 +1,6 @@
 import { healthTips } from "@/constants/public/health-tips";
 import { PublicPageHeader } from "../PublicPageHeader";
 import { Reveal } from "@/components/shared/Reveal";
-import { ArrowRight, BookOpen, Clock3 } from "lucide-react";
-import Link from "next/link";
 import HealthTipCard from "./HealthTipCard";
 
 // seo optimization
