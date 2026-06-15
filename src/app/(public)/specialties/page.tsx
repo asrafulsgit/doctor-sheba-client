@@ -1,11 +1,7 @@
-import React from 'react'
+import Specialties from "@/components/public/specialties/Specialties";
 
 const page = () => {
-  return (
-    <div>
-      
-    </div>
-  )
-}
+  return <Specialties />;
+};
 
-export default page
+export default page;

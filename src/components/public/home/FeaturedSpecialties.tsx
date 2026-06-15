@@ -1,7 +1,6 @@
 import { SPECIALTIES } from "@/constants/public/specialties";
-import { Reveal, Stagger } from "../../shared/Reveal";
-import Link from "next/link";
-import { HeartPulse } from "lucide-react";
+import { Reveal, Stagger } from "../../shared/Reveal"; 
+import SpecialtyCard from "@/components/shared/SpecialtyCard";
 
 const FeaturedSpecialties = () => {
   return (
@@ -18,18 +17,7 @@ const FeaturedSpecialties = () => {
         </Reveal>
         <Stagger className="mt-10 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
           {SPECIALTIES.slice(0, 10).map((s) => (
-            <Link
-              key={s.id}
-              href="/doctors"
-              className="group flex flex-col items-center gap-3 rounded-2xl border border-border bg-card p-5 text-center shadow-soft transition-transform hover:-translate-y-0.5"
-            >
-              <span className="grid h-12 w-12 place-items-center rounded-xl bg-primary-soft text-primary transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
-                <HeartPulse className="h-5 w-5" />
-              </span>
-              <span className="text-sm font-medium text-foreground">
-                {s.title}
-              </span>
-            </Link>
+            <SpecialtyCard specialty={s} key={s.id} />
           ))}
         </Stagger>
       </div>
