@@ -14,7 +14,8 @@ const stats = [
 
 const Hero = () => {
   return (
-    <section className="relative overflow-hidden border-b border-border bg-gradient-to-b from-primary-soft/60 to-background">
+    <section className="relative overflow-hidden border-b border-border bg-gradient-to-b 
+    from-primary-soft/30 to-background">
       <div className="mx-auto grid max-w-7xl gap-12 px-4 py-10 sm:px-6 lg:grid-cols-2 lg:gap-16 lg:py-28 lg:px-8">
         <Reveal>
           <span className="inline-flex items-center gap-2 rounded-full border border-border bg-background px-3 py-1 text-xs font-medium text-primary">
