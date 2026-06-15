@@ -23,9 +23,18 @@ import {
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { ReactNode, useState } from "react";
 import Link from "next/link";
-import { UserRole } from "@/types/user";
+import { User, UserRole } from "@/types/user";
+import { Logo } from "../shared/Logo";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "../ui/sheet";
+import { activatedDashboard } from "@/constants/public/user";
 
 interface NavItem {
   to: string;
@@ -83,28 +92,12 @@ function roleLabel(role: UserRole) {
   if (role === "ADMIN" || role === "SUPER_ADMIN") return "Administrator";
 }
 
-interface DashboardShellProps {
-  title: string;
-  description?: string;
-  actions?: React.ReactNode;
-  children: React.ReactNode;
-}
-
-export function DashboardShell({
-  title,
-  description,
-  actions,
-  children,
-}: DashboardShellProps) {
+const PrivateLayout = ({ children }: { children: ReactNode }) => {
   //   const { user, logout } = useAuth();
   //   const navigate = useNavigate();
 
   const pathname = usePathname();
-  const [mobileOpen, setMobileOpen] = useState(false);
-  const user: { role: UserRole; name: string } = {
-    role: "PATIENT",
-    name: "Asraful",
-  };
+  const user: User = activatedDashboard;
   if (!user) return null;
   const nav = navFor(user.role);
 
@@ -119,34 +112,48 @@ export function DashboardShell({
       <header className="sticky top-0 z-40 border-b border-border bg-background">
         <div className="flex h-16 items-center justify-between px-4 sm:px-6">
           <div className="flex items-center gap-3">
-            <button
-              onClick={() => setMobileOpen(true)}
-              className="lg:hidden inline-flex h-9 w-9 items-center justify-center rounded-md text-foreground"
-              aria-label="Open menu"
-            >
-              <Menu className="h-5 w-5" />
-            </button>
+            <Sheet>
+              <SheetTrigger asChild>
+                <Button
+                  variant="outline"
+                  size="icon"
+                  className="lg:hidden"
+                  aria-label="Open navigation"
+                >
+                  <Menu />
+                </Button>
+              </SheetTrigger>
+              <SheetContent side="left">
+                <SheetHeader>
+                  <SheetTitle>
+                    <span className="text-sm font-semibold">Menu</span>
+                  </SheetTitle>
+                </SheetHeader>
+                <aside className="bg-background shadow-elevated">
+                  <SidebarNav
+                    nav={nav}
+                    pathname={pathname}
+                  />
+                </aside>
+              </SheetContent>
+            </Sheet>
+
             <Link
               href="/"
               className="flex items-center gap-2 font-semibold text-foreground"
             >
-              <span className="grid h-8 w-8 place-items-center rounded-lg bg-primary text-primary-foreground">
-                <Stethoscope className="h-4 w-4" />
-              </span>
-              <span className="hidden sm:inline">DoctorSheba</span>
+              <Logo />
             </Link>
           </div>
           <div className="flex items-center gap-3">
             <div className="hidden flex-col items-end text-right sm:flex">
-              <span className="text-sm font-medium text-foreground">
-                {user.name}
-              </span>
+              <span className="font-semibold text-foreground">{user.email}</span>
               <span className="text-xs text-muted-foreground">
                 {roleLabel(user.role)}
               </span>
             </div>
             <div className="grid h-9 w-9 place-items-center rounded-full bg-primary-soft text-sm font-semibold text-primary">
-              {user.name.slice(0, 1).toUpperCase()}
+              {user.email.slice(0, 1).toUpperCase()}
             </div>
             <Button
               variant="ghost"
@@ -166,55 +173,14 @@ export function DashboardShell({
           <SidebarNav nav={nav} pathname={pathname} />
         </aside>
 
-        {/* Mobile drawer */}
-        {mobileOpen && (
-          <div className="fixed inset-0 z-50 lg:hidden">
-            <div
-              className="absolute inset-0 bg-foreground/40"
-              onClick={() => setMobileOpen(false)}
-            />
-            <aside className="absolute left-0 top-0 h-full w-72 max-w-[85vw] bg-background shadow-elevated">
-              <div className="flex h-16 items-center justify-between px-4">
-                <span className="font-semibold">Menu</span>
-                <button
-                  onClick={() => setMobileOpen(false)}
-                  className="inline-flex h-9 w-9 items-center justify-center rounded-md text-foreground"
-                >
-                  <X className="h-5 w-5" />
-                </button>
-              </div>
-              <SidebarNav
-                nav={nav}
-                pathname={pathname}
-                onNavigate={() => setMobileOpen(false)}
-              />
-            </aside>
-          </div>
-        )}
-
         {/* Main */}
         <main className="min-w-0 flex-1 px-4 py-8 sm:px-6 lg:px-10">
-          <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-            <div>
-              <h1 className="text-2xl font-semibold tracking-tight text-foreground">
-                {title}
-              </h1>
-              {description && (
-                <p className="mt-1 text-sm text-muted-foreground">
-                  {description}
-                </p>
-              )}
-            </div>
-            {actions && (
-              <div className="flex flex-wrap items-center gap-2">{actions}</div>
-            )}
-          </div>
           {children}
         </main>
       </div>
     </div>
   );
-}
+};
 
 function SidebarNav({
   nav,
@@ -226,7 +192,7 @@ function SidebarNav({
   onNavigate?: () => void;
 }) {
   return (
-    <nav className="flex h-full flex-col gap-0.5 overflow-y-auto p-3">
+    <nav className="flex h-full flex-col gap-0.5 overflow-y-auto pt-5 lg:p-3">
       {nav.map((item) => {
         const active =
           pathname === item.to || pathname.startsWith(item.to + "/");
@@ -237,7 +203,7 @@ function SidebarNav({
             href={item.to}
             onClick={onNavigate}
             className={cn(
-              "group flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
+              "group flex items-center gap-3 rounded-lg px-3 py-2  font-medium transition-colors",
               active
                 ? "bg-primary-soft text-primary"
                 : "text-muted-foreground hover:bg-accent hover:text-foreground",
@@ -257,3 +223,5 @@ function SidebarNav({
     </nav>
   );
 }
+
+export default PrivateLayout;

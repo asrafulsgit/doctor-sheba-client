@@ -13,16 +13,15 @@ import {
 } from "../ui/sheet";
 import { usePathname } from "next/navigation";
 import { publicNavBarLinks } from "@/constants/public/nav-links";
-import { getDashboardPath } from "@/helpers/get-dashboard-path"; 
-import { UserRole } from "@/types/user";
+import { getDashboardPath } from "@/helpers/get-dashboard-path";
+import { User, UserRole } from "@/types/user";
+import { activatedDashboard } from "@/constants/public/user";
 
 export function PublicNavBar() {
   const pathName = usePathname();
 
   const isAuthenticated = true;
-  const user: { role: UserRole } = {
-    role: "PATIENT",
-  };
+  const user: User = activatedDashboard;
 
   return (
     <>

@@ -15,7 +15,7 @@ export function Logo({ compact = false, className }: { compact?: boolean; classN
       {compact ? (
         <span className="sr-only">DoctorSheba</span>
       ) : (
-        <span>
+        <span className="text-[18px]">
           Doctor<span className="text-primary">Sheba</span>
         </span>
       )}
