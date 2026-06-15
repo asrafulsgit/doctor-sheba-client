@@ -13,9 +13,16 @@ import {
 } from "../ui/sheet";
 import { usePathname } from "next/navigation";
 import { publicNavBarLinks } from "@/constants/public/nav-links";
+import { getDashboardPath } from "@/helpers/get-dashboard-path"; 
+import { UserRole } from "@/types/user";
 
 export function PublicNavBar() {
   const pathName = usePathname();
+
+  const isAuthenticated = true;
+  const user: { role: UserRole } = {
+    role: "PATIENT",
+  };
 
   return (
     <>
@@ -48,9 +55,18 @@ export function PublicNavBar() {
                 </Link>
               </Button>
             ))}
-            <Button asChild className="ml-2">
-              <Link href="/auth/login">Sign in</Link>
-            </Button>
+
+            {isAuthenticated && user ? (
+              <Button asChild>
+                <Link href={getDashboardPath(user.role)}>Open Dashboard</Link>
+              </Button>
+            ) : (
+              <>
+                <Button asChild className="ml-2">
+                  <Link href="/auth/login">Sign in</Link>
+                </Button>
+              </>
+            )}
           </nav>
           <Sheet>
             <SheetTrigger asChild>
@@ -84,9 +100,20 @@ export function PublicNavBar() {
                     <Link href={item.to}>{item.label}</Link>
                   </Button>
                 ))}
-                <Button asChild className="mt-2">
-                  <Link href="/auth/login">Sign in</Link>
-                </Button>
+
+                {isAuthenticated && user ? (
+                  <Button asChild>
+                    <Link href={getDashboardPath(user.role)}>
+                      Open Dashboard
+                    </Link>
+                  </Button>
+                ) : (
+                  <>
+                    <Button asChild className="mt-2">
+                      <Link href="/auth/login">Sign in</Link>
+                    </Button>
+                  </>
+                )}
               </nav>
             </SheetContent>
           </Sheet>
