@@ -1,7 +1,7 @@
-import Prescriptions from "@/components/patient/prescriptions/Prescriptions";
+import PatientPrescriptions from "@/components/patient/prescriptions/Prescriptions";
 
 const page = () => {
-  return <Prescriptions />;
+  return <PatientPrescriptions />;
 };
 
 export default page;

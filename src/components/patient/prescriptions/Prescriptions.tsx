@@ -15,7 +15,7 @@ const fmt = (iso: string) =>
     month: "short",
     year: "numeric",
   });
-const Prescriptions = () => {
+const PatientPrescriptions = () => {
   return (
     <>
       <DashboardHeader
@@ -84,4 +84,4 @@ const Prescriptions = () => {
   );
 };
 
-export default Prescriptions;
+export default PatientPrescriptions;
