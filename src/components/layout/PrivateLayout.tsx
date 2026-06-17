@@ -50,7 +50,6 @@ const PATIENT_NAV: NavItem[] = [
   { to: "/patient/reports", label: "Medical Reports", icon: FlaskConical },
   { to: "/patient/payments", label: "Payments", icon: Wallet2 },
   { to: "/patient/health-profile", label: "Health Profile", icon: HeartPulse },
-  { to: "/patient/reviews", label: "Reviews", icon: Star },
   { to: "/patient/settings", label: "Settings", icon: Settings },
 ];
 
@@ -130,10 +129,7 @@ const PrivateLayout = ({ children }: { children: ReactNode }) => {
                   </SheetTitle>
                 </SheetHeader>
                 <aside className="bg-background shadow-elevated">
-                  <SidebarNav
-                    nav={nav}
-                    pathname={pathname}
-                  />
+                  <SidebarNav nav={nav} pathname={pathname} />
                 </aside>
               </SheetContent>
             </Sheet>
@@ -147,7 +143,9 @@ const PrivateLayout = ({ children }: { children: ReactNode }) => {
           </div>
           <div className="flex items-center gap-3">
             <div className="hidden flex-col items-end text-right sm:flex">
-              <span className="font-semibold text-foreground">{user.email}</span>
+              <span className="font-semibold text-foreground">
+                {user.email}
+              </span>
               <span className="text-xs text-muted-foreground">
                 {roleLabel(user.role)}
               </span>
