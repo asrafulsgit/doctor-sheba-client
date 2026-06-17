@@ -2,6 +2,7 @@ import { Plus, Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import DashboardHeader from "@/components/shared/DashboardHeader";
+import { getDoctorSchedule } from "@/constants/doctor/data";
 
 // seo optimization
 // export const Route = createFileRoute("/doctor/schedules")({
@@ -32,7 +33,7 @@ const DoctorSchedules = () => {
       <div className="overflow-hidden rounded-2xl border border-border bg-card p-4 shadow-soft">
         <div className="grid grid-cols-7 gap-3">
           {DAYS.map((day, i) => {
-            const sched =  
+            const sched = getDoctorSchedule("doc-001", i);
             return (
               <div
                 key={day}
