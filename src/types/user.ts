@@ -1,3 +1,5 @@
+import { PaymentStatus } from "./payment";
+
 export type UserRole = "SUPER_ADMIN" | "ADMIN" | "DOCTOR" | "PATIENT";
 export type UserStatus = "ACTIVE" | "BLOCKED" | "DELETED";
 
@@ -13,6 +15,11 @@ export type BloodGroup =
   | "B_NEGATIVE"
   | "O_NEGATIVE"
   | "AB_NEGATIVE";
+export type AppointmentStatus =
+  | "SCHEDULED"
+  | "INPROGRESS"
+  | "COMPLETED"
+  | "CANCELED";
 
 export interface User {
   id: string;
@@ -42,6 +49,37 @@ export interface PatientHealthData {
   recentAnxiety: boolean;
   recentDepression: boolean;
   maritalStatus: MaritalStatus;
+  createdAt: string;
+  updatedAt: string;
+}
+export interface MedicalReport {
+  id: string;
+  patientId: string;
+  reportName: string;
+  reportLink: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface Appointment {
+  id: string;
+  patientId: string;
+  doctorId: string;
+  scheduleId: string;
+  videoCallingId: string;
+  status: AppointmentStatus;
+  paymentStatus: PaymentStatus;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface Prescription {
+  id: string;
+  appointmentId: string;
+  patientId: string;
+  doctorId: string;
+  instructions: string;
+  followUpDate?: string;
   createdAt: string;
   updatedAt: string;
 }

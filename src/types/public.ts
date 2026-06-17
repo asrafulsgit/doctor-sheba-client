@@ -5,8 +5,6 @@
 
 
 
-export type AppointmentStatus = "SCHEDULED" | "INPROGRESS" | "COMPLETED" | "CANCELED";
-export type PaymentStatus = "PAID" | "UNPAID";
 
 
 
@@ -53,39 +51,11 @@ export interface DoctorSchedule {
   schedule: Schedule;
 }
 
-export interface Appointment {
-  id: string;
-  patientId: string;
-  doctorId: string;
-  scheduleId: string;
-  videoCallingId: string;
-  status: AppointmentStatus;
-  paymentStatus: PaymentStatus;
-  createdAt: string;
-  updatedAt: string;
-}
 
-export interface Payment {
-  id: string;
-  appointmentId: string;
-  amount: number;
-  transactionId: string;
-  status: PaymentStatus;
-  paymentGatewayData?: unknown;
-  createdAt: string;
-  updatedAt: string;
-}
 
-export interface Prescription {
-  id: string;
-  appointmentId: string;
-  patientId: string;
-  doctorId: string;
-  instructions: string;
-  followUpDate?: string;
-  createdAt: string;
-  updatedAt: string;
-}
+
+
+
 
 export interface Review {
   id: string;
@@ -100,11 +70,4 @@ export interface Review {
 
 
 
-export interface MedicalReport {
-  id: string;
-  patientId: string;
-  reportName: string;
-  reportLink: string;
-  createdAt: string;
-  updatedAt: string;
-}
+

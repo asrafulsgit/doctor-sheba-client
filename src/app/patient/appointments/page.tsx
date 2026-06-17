@@ -1,11 +1,6 @@
-import React from 'react'
-
+import PatientAppointments from "@/components/patient/appointments/Appointments";
 const page = () => {
-  return (
-    <div>
-      
-    </div>
-  )
-}
+  return <PatientAppointments />;
+};
 
-export default page
+export default page;
