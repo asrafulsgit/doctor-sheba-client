@@ -30,4 +30,4 @@ export const admin: User = {
   updatedAt: "2026-06-15T10:00:00.000Z",
 };
 
-export const activatedDashboard = doctor;
+export const activatedDashboard = admin;
