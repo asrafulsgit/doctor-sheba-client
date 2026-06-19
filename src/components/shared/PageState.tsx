@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
 
 type StateProps = {
   title: string;
-  description: string;
+  description?: string;
   actionLabel?: string;
   onAction?: () => void;
   icon?: LucideIcon;
@@ -18,9 +18,10 @@ function PageState({
   description,
   actionLabel,
   onAction,
-  icon: Icon = Inbox,
+  icon,
   className,
 }: StateProps) {
+  const Icon = icon || Inbox;
   return (
     <section
       className={cn(
@@ -29,13 +30,20 @@ function PageState({
       )}
       aria-labelledby="page-state-title"
     >
-      <span className="mb-4 grid size-11 place-items-center rounded-full bg-info text-info-foreground">
-        <Icon aria-hidden="true" className="size-5" />
-      </span>
-      <h2 id="page-state-title" className="text-lg font-semibold text-foreground">
+      { icon &&
+        <span className="mb-4 grid size-11 place-items-center rounded-full bg-info text-info-foreground">
+          <Icon aria-hidden="true" className="size-5" />
+        </span>
+      }
+      <h2
+        id="page-state-title"
+        className="text-lg font-semibold text-foreground"
+      >
         {title}
       </h2>
-      <p className="mt-2 max-w-md text-sm leading-6 text-muted-foreground">{description}</p>
+      {description && <p className="mt-2 max-w-md text-sm leading-6 text-muted-foreground">
+        {description}
+      </p>}
       {actionLabel && onAction ? (
         <Button className="mt-5" onClick={onAction}>
           {actionLabel}
@@ -59,7 +67,10 @@ export function LoadingState({ label = "Loading" }: { label?: string }) {
       className="flex min-h-32 items-center justify-center gap-3 text-sm text-muted-foreground"
       role="status"
     >
-      <LoaderCircle className="size-5 animate-spin text-primary" aria-hidden="true" />
+      <LoaderCircle
+        className="size-5 animate-spin text-primary"
+        aria-hidden="true"
+      />
       <span>{label}</span>
     </div>
   );
