@@ -7,7 +7,7 @@ const SpecialtyCard = ({ specialty }: { specialty: Specialty }) => {
     <>
       <Link
         key={specialty.id}
-        href="/doctors"
+        href={`/doctors?specialty=${specialty.title}`}
         className="group flex flex-col items-center gap-3 rounded-2xl border border-border bg-card p-5 text-center shadow-soft transition-transform hover:-translate-y-0.5"
       >
         <span className="grid h-12 w-12 place-items-center rounded-xl bg-primary-soft text-primary transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
