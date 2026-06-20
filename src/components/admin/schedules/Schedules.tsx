@@ -1,3 +1,4 @@
+"use client";
 import { Clock } from "lucide-react";
 import { cn } from "@/lib/utils";
 import DashboardHeader from "@/components/shared/DashboardHeader";
