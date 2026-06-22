@@ -7,6 +7,10 @@ import Link from "next/link";
 import Image from "next/image";
 
 export function DoctorCard({ doctor }: { doctor: IDoctor }) {
+  const defaultImage =
+    doctor.gender === "MALE"
+      ? "https://png.pngtree.com/png-clipart/20241231/original/pngtree-the-doctor-character-is-cheerful-with-a-flat-design-style-vector-png-image_18358910.png"
+      : "https://png.pngtree.com/png-vector/20241225/ourmid/pngtree-doctor-woman-with-stethoscope-and-headset-icon-image-vector-illustration-design-png-image_14818447.png";
   return (
     <Card
       className="group h-full overflow-hidden border-border shadow-xs 
@@ -15,7 +19,7 @@ export function DoctorCard({ doctor }: { doctor: IDoctor }) {
     >
       <div className="relative aspect-[4/3] overflow-hidden bg-surface-muted">
         <Image
-          src={doctor.profilePhoto as string}
+          src={doctor.profilePhoto ?? defaultImage}
           alt={`Portrait of ${doctor.name}`}
           width={768}
           height={896}
@@ -23,15 +27,15 @@ export function DoctorCard({ doctor }: { doctor: IDoctor }) {
           className="h-full w-full object-cover object-top transition-transform 
           duration-500 group-hover:scale-[1.025]"
         />
-        <span className="absolute left-4 top-4 rounded-full border border-border bg-surface/95 px-3 py-1 text-xs font-medium text-foreground shadow-xs">
-          {doctor.available ? "Available to book" : "Next slots soon"}
-        </span>
+        {/* <span className="absolute left-4 top-4 rounded-full border border-border bg-surface/95 px-3 py-1 text-xs font-medium text-foreground shadow-xs">
+          {doctor?.available ? "Available to book" : "Next slots soon"}
+        </span> */}
       </div>
-      <CardContent className="p-5">
+      <CardContent className="px-4 pb-4">
         <div className="flex items-start justify-between gap-3">
           <div>
             <p className="text-sm font-medium text-primary">
-              {doctor?.specialties
+              {doctor?.doctorSpecialities
                 ?.map((specialty) => specialty.title)
                 .join(", ")}
             </p>

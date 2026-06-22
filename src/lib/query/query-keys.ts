@@ -1,4 +1,4 @@
-
+import { IDoctorFilter } from "@/types/doctors"; 
 
 export const queryKeys = {
   // ─── Auth ────────────────────────────────────────────────────────────────
@@ -13,7 +13,7 @@ export const queryKeys = {
   doctors: {
     all: ["doctors"] as const,
     lists: () => ["doctors", "list"] as const,
-    list: (filters: DoctorFilters) => ["doctors", "list", filters] as const,
+    list: (filters: IDoctorFilter) => ["doctors", "list", filters] as const,
     details: () => ["doctors", "detail"] as const,
     detail: (id: string) => ["doctors", "detail", id] as const,
     schedule: (id: string, dateRange?: DateRange) =>
@@ -52,8 +52,7 @@ export const queryKeys = {
     detail: (id: string) => ["appointments", "detail", id] as const,
     upcoming: (userId: string, role: "doctor" | "patient") =>
       ["appointments", "upcoming", userId, role] as const,
-    today: (doctorId: string) =>
-      ["appointments", "today", doctorId] as const,
+    today: (doctorId: string) => ["appointments", "today", doctorId] as const,
     calendar: (doctorId: string, month: string) =>
       ["appointments", "calendar", doctorId, month] as const,
   },
@@ -111,15 +110,7 @@ export interface DateRange {
   to: string;
 }
 
-export interface DoctorFilters {
-  specialty?: string;
-  location?: string;
-  availability?: string;
-  rating?: number;
-  page?: number;
-  limit?: number;
-  search?: string;
-}
+
 
 export interface PatientFilters {
   search?: string;
@@ -154,8 +145,3 @@ export interface PaymentFilters {
   page?: number;
   limit?: number;
 }
-
-
-
-
-

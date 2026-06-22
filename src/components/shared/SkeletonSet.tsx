@@ -1,3 +1,4 @@
+import { Card, CardContent } from "../ui/card";
 import { Skeleton } from "../ui/skeleton";
 
 export function SkeletonSet({
@@ -47,3 +48,44 @@ export function SkeletonSet({
     </div>
   );
 }
+
+export const DoctorCardSkeleton = ({ rows = 4 }: { rows?: number }) => {
+  return Array.from({ length: rows }, (_, index) => (
+    <Card
+      key={index}
+      className="group h-full overflow-hidden border-border shadow-xs py-0"
+    >
+      {/* Image */}
+      <div className="relative aspect-[4/3] overflow-hidden">
+        <Skeleton className="h-full w-full rounded-none" />
+      </div>
+
+      <CardContent className="px-4 pb-4">
+        {/* Header */}
+        <div className="flex items-start justify-between gap-3">
+          <div className="flex-1">
+            <Skeleton className="h-4 w-28" />
+            <Skeleton className="mt-3 h-6 w-40" />
+            <Skeleton className="mt-2 h-4 w-32" />
+          </div>
+
+          <Skeleton className="h-8 w-14 rounded-md" />
+        </div>
+
+        {/* Experience & Fee */}
+        <div className="mt-5 grid grid-cols-2 gap-3 border-y border-border py-4">
+          <Skeleton className="h-4 w-24" />
+          <div className="flex justify-end">
+            <Skeleton className="h-4 w-16" />
+          </div>
+        </div>
+
+        {/* Buttons */}
+        <div className="mt-5 grid grid-cols-2 gap-2">
+          <Skeleton className="h-10 w-full rounded-md" />
+          <Skeleton className="h-10 w-full rounded-md" />
+        </div>
+      </CardContent>
+    </Card>
+  ));
+};

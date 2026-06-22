@@ -1,4 +1,4 @@
-import { Specialty } from "./specialties";
+import { ISpecialty, Specialty } from "./specialties";
 import { Gender } from "./user";
 
 export interface Doctor {
@@ -23,6 +23,14 @@ export interface Doctor {
   available?: boolean;
 }
 
+export interface IDoctorSchedule {
+  isBooked: boolean;
+  schedule: {
+    startDateTime: string;
+    endDateTime: string;
+  };
+}
+
 export interface IDoctor {
   id: string;
   name: string;
@@ -41,4 +49,20 @@ export interface IDoctor {
   averageRating: number;
   createdAt: string;
   updatedAt: string;
+
+  doctorSchedules: IDoctorSchedule[];
+  doctorSpecialities: ISpecialty[];
+}
+
+export interface IDoctorFilter {
+  searchTerm?: string;
+  designation?: string;
+  minFee?: number;
+  maxFee?: number;
+  gender?: Gender;
+  page?: number;
+  limit?: number;
+  sortOrder?: string;
+  sortBy?: string;
+  specialty?: string;
 }

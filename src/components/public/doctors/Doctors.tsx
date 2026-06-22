@@ -1,5 +1,4 @@
 "use client";
-import { useEffect, useMemo, useState } from "react";
 import { Filter, Search, SlidersHorizontal, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -12,32 +11,14 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import FilterPanel, { DoctorSearch } from "./FilterPanel";
-import { featuredDoctors } from "@/constants/public/doctors";
+import FilterPanel from "./FilterPanel";
 import { PublicPageHeader } from "../PublicPageHeader";
-import { SkeletonSet } from "@/components/shared/SkeletonSet";
+import { DoctorCardSkeleton } from "@/components/shared/SkeletonSet";
 import { DoctorCard } from "@/components/shared/DoctorCard";
 import { EmptyState } from "@/components/shared/PageState";
-
-// function parseSearch(search: Record<string, unknown>): DoctorSearch {
-//   const page = Number(search.page);
-//   return {
-//     q: typeof search.q === "string" ? search.q.slice(0, 80) : undefined,
-//     specialty:
-//       typeof search.specialty === "string" ? search.specialty : undefined,
-//     gender:
-//       search.gender === "MALE" || search.gender === "FEMALE"
-//         ? search.gender
-//         : undefined,
-//     experience:
-//       typeof search.experience === "string" ? search.experience : undefined,
-//     available:
-//       search.available === true || search.available === "true"
-//         ? true
-//         : undefined,
-//     page: Number.isInteger(page) && page > 0 ? page : 1,
-//   };
-// }
+import { IDoctorFilter } from "@/types/doctors";
+import useQueryManager from "@/hooks/UseQueryManager";
+import { useDoctors } from "@/lib/hooks/UseDoctor";
 
 // seo optimization
 // export const Route = createFileRoute("/doctors/")({
@@ -61,21 +42,12 @@ import { EmptyState } from "@/components/shared/PageState";
 //   component: DoctorsPage,
 // });
 
-const Doctors = () => { 
-  const [loading, setLoading] = useState(false);
-  const update = (patch: Partial<DoctorSearch>) => {
-    setLoading(true); 
-  };
-  useEffect(() => {
-    if (!loading) return;
-    const timer = window.setTimeout(() => setLoading(false), 320);
-    return () => window.clearTimeout(timer);
-  }, [loading]);
- 
-  const filtered = featuredDoctors;
-  const activeFilters = [
-
-  ].filter(Boolean).length;
+const Doctors = () => {
+  const { getQuery, getAllQueries, setQuery } = useQueryManager();
+  const allQueries: IDoctorFilter = getAllQueries();
+  const searchTerm = getQuery("searchTerm");
+  const { data, isLoading, isError, error } = useDoctors(allQueries);
+  const doctors = data?.data;
 
   return (
     <>
@@ -92,21 +64,10 @@ const Doctors = () => {
           <Input
             aria-label="Search doctors by name"
             placeholder="Search by doctor name"
-            value={""}
-            onChange={(event) => update({ q: event.target.value || undefined })}
+            value={searchTerm ?? ""}
+            onChange={(event) => setQuery("searchTerm", event.target.value)}
             className="h-13 bg-surface pl-12 pr-12 text-base"
           />
-          {/* {true ? (  // clear search field
-            <Button
-              size="icon"
-              variant="ghost"
-              aria-label="Clear search"
-              className="absolute right-2 top-1/2 -translate-y-1/2"
-              onClick={() => update({ q: undefined })}
-            >
-              <X />
-            </Button>
-          ) : null} */}
         </div>
       </PublicPageHeader>
       <main className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
@@ -116,14 +77,14 @@ const Doctors = () => {
               Available doctors
             </h2>
             <p className="mt-1 text-sm text-muted-foreground">
-              {filtered.length} {filtered.length === 1 ? "doctor" : "doctors"}{" "}
+              {doctors?.length} {doctors?.length === 1 ? "doctor" : "doctors"}{" "}
               match your search
             </p>
           </div>
           <Sheet>
             <SheetTrigger asChild>
               <Button variant="outline" className="lg:hidden">
-                <Filter /> Filters {activeFilters ? `(${activeFilters})` : ""}
+                <Filter /> Filters
               </Button>
             </SheetTrigger>
             <SheetContent>
@@ -134,16 +95,7 @@ const Doctors = () => {
                 </SheetDescription>
               </SheetHeader>
               <div className="mt-8">
-                <FilterPanel
-                  search={{
-                    q: "",
-                    specialty: "",
-                    gender: "MALE",
-                    experience: "",
-                    available: true,
-                  }}
-                  update={update}
-                />
+                <FilterPanel />
               </div>
             </SheetContent>
           </Sheet>
@@ -155,40 +107,17 @@ const Doctors = () => {
                 <SlidersHorizontal className="size-5 text-primary" />
                 <h2 className="font-semibold text-foreground">Filters</h2>
               </div>
-              <FilterPanel
-                search={{
-                  q: "",
-                  specialty: "",
-                  gender: "MALE",
-                  experience: "",
-                  available: true,
-                }}
-                update={update}
-              />
-              {activeFilters ? (
-                <Button
-                  variant="ghost"
-                  className="mt-6 w-full"
-                  onClick={() =>
-                    update({
-                      specialty: undefined,
-                      gender: undefined,
-                      experience: undefined,
-                      available: undefined,
-                    })
-                  }
-                >
-                  Clear filters
-                </Button>
-              ) : null}
+              <FilterPanel />
             </div>
           </aside>
           <section aria-live="polite">
-            {loading ? (
-              <SkeletonSet rows={3} variant="cards" />
-            ) : filtered.length ? (
+            {isLoading ? (
               <div className="grid min-h-[470px] gap-6 sm:grid-cols-2 xl:grid-cols-3">
-                {filtered.map((doctor) => (
+                <DoctorCardSkeleton rows={3} />
+              </div>
+            ) : doctors?.length ? (
+              <div className="grid min-h-[470px] gap-6 sm:grid-cols-2 xl:grid-cols-3">
+                {doctors.map((doctor) => (
                   <DoctorCard key={doctor.id} doctor={doctor} />
                 ))}
               </div>
@@ -196,16 +125,6 @@ const Doctors = () => {
               <EmptyState
                 title="No doctors match these filters"
                 description="Try removing a filter or searching with a different doctor name."
-                actionLabel="Clear filters"
-                onAction={() =>
-                  update({
-                    q: undefined,
-                    specialty: undefined,
-                    gender: undefined,
-                    experience: undefined,
-                    available: undefined,
-                  })
-                }
               />
             )}
           </section>

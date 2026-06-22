@@ -1,4 +1,6 @@
-import { Checkbox } from "@/components/ui/checkbox";
+"use client";
+import { Button } from "@/components/ui/button";
+import { Combobox } from "@/components/ui/combobox";
 import { Label } from "@/components/ui/label";
 import {
   Select,
@@ -7,98 +9,76 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { SPECIALTIES } from "@/constants/public/specialties";
+import { DOCTOR_DESIGNATIONS } from "@/constants/doctor/data";
+import useQueryManager from "@/hooks/UseQueryManager";
+import { useSpecialties } from "@/lib/hooks/UseSpecialty";
 
-export type DoctorSearch = {
-  q?: string;
-  specialty?: string;
-  gender?: "MALE" | "FEMALE";
-  experience?: string;
-  available?: boolean;
-};
-
-const FilterPanel = ({
-  search,
-  update,
-}: {
-  search: DoctorSearch;
-  update: (patch: Partial<DoctorSearch>) => void;
-}) => {
+const FilterPanel = () => {
+  const { getQuery, setQuery, clearQuery } = useQueryManager();
+  const { data, isLoading, isError, error } = useSpecialties();
+  const specialties = data?.data;
+  const gender = getQuery("gender");
   return (
     <div className="grid gap-6">
       <div>
-        <Label htmlFor="specialty">Specialty</Label>
-        <Select
-          value={search.specialty ?? "all"}
-          onValueChange={(value) =>
-            update({ specialty: value === "all" ? undefined : value })
-          }
-        >
-          <SelectTrigger id="specialty" className="mt-2 h-11">
-            <SelectValue placeholder="All specialties" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all" >All specialties</SelectItem>
-            {SPECIALTIES.map((item) => (
-              <SelectItem key={item.id} value={item.id}>
-                {item.title}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+        <Label htmlFor="specialty" className="pb-2">
+          Specialty
+        </Label>
+        {specialties?.length && (
+          <Combobox
+            options={
+              specialties?.map((s) => ({
+                value: s.title,
+                label: s.title,
+              })) ?? []
+            }
+            value={getQuery("specialty") as string}
+            onChange={(id) => setQuery("specialty", id)}
+            placeholder="Select Specialty"
+            className="w-full"
+          />
+        )}
       </div>
       <div>
-        <Label htmlFor="gender">Gender</Label>
+        <Label htmlFor="gender" className="pb-2">
+          Gender
+        </Label>
         <Select
-          value={search.gender ?? "all"}
-          onValueChange={(value) =>
-            update({
-              gender:
-                value === "all" ? undefined : (value as "MALE" | "FEMALE"),
-            })
-          }
+          value={gender ?? "all"}
+          onValueChange={(value) => setQuery("gender", value)}
         >
-          <SelectTrigger id="gender" className="mt-2 h-11">
+          <SelectTrigger id="gender">
             <SelectValue placeholder="Any gender" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">Any gender</SelectItem>
+            <SelectItem value="all" disabled>
+              Any gender
+            </SelectItem>
             <SelectItem value="FEMALE">Female</SelectItem>
             <SelectItem value="MALE">Male</SelectItem>
           </SelectContent>
         </Select>
       </div>
       <div>
-        <Label htmlFor="experience">Experience</Label>
-        <Select
-          value={search.experience ?? "all"}
-          onValueChange={(value) =>
-            update({ experience: value === "all" ? undefined : value })
-          }
-        >
-          <SelectTrigger id="experience" className="mt-2 h-11">
-            <SelectValue placeholder="Any experience" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">Any experience</SelectItem>
-            <SelectItem value="5">5+ years</SelectItem>
-            <SelectItem value="10">10+ years</SelectItem>
-            <SelectItem value="15">15+ years</SelectItem>
-          </SelectContent>
-        </Select>
-      </div>
-      <div className="flex items-center gap-3">
-        <Checkbox
-          id="available"
-          checked={search.available ?? false}
-          onCheckedChange={(checked) =>
-            update({ available: checked === true ? true : undefined })
-          }
-        />
-        <Label htmlFor="available" className="cursor-pointer">
-          Available to book
+        <Label htmlFor="designation" className="pb-2">
+          Designation
         </Label>
+        <Combobox
+          options={
+            DOCTOR_DESIGNATIONS?.map((d) => ({
+              value: d,
+              label: d,
+            })) ?? []
+          }
+          value={getQuery("designation") as string}
+          onChange={(id) => setQuery("designation", id)}
+          placeholder="Select designation"
+          className="w-full"
+        />
       </div>
+      <Button variant="outline" className="w-full" onClick={clearQuery}>
+        Reset Filters
+      </Button>
     </div>
   );
 };
