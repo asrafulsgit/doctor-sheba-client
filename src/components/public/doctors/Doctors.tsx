@@ -61,41 +61,20 @@ import { EmptyState } from "@/components/shared/PageState";
 //   component: DoctorsPage,
 // });
 
-const Doctors = () => {
-  //   const search = Route.useSearch();
-  //   const navigate = useNavigate({ from: "/doctors" });
+const Doctors = () => { 
   const [loading, setLoading] = useState(false);
   const update = (patch: Partial<DoctorSearch>) => {
-    setLoading(true);
-    // void navigate({ search: { ...search, ...patch }, replace: true });
+    setLoading(true); 
   };
   useEffect(() => {
     if (!loading) return;
     const timer = window.setTimeout(() => setLoading(false), 320);
     return () => window.clearTimeout(timer);
   }, [loading]);
-  //   const filtered = useMemo(
-  //     () =>
-  //       featuredDoctors.filter((doctor) => {
-  //         const query = search.q?.trim().toLowerCase();
-  //         return (
-  //           (!query || doctor.name.toLowerCase().includes(query)) &&
-  //           (!search.specialty ||
-  //             doctor.specialtyIds.includes(search.specialty as never)) &&
-  //           (!search.gender || doctor.gender === search.gender) &&
-  //           (!search.experience ||
-  //             doctor.experience >= Number(search.experience)) &&
-  //           (!search.available || doctor.available)
-  //         );
-  //       }),
-  //     [search],
-  //   );
+ 
   const filtered = featuredDoctors;
   const activeFilters = [
-    // search.specialty,
-    // search.gender,
-    // search.experience,
-    // search.available,
+
   ].filter(Boolean).length;
 
   return (

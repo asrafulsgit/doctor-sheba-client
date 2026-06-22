@@ -5,8 +5,17 @@ import { ArrowRight } from "lucide-react";
 import { StaggerGroup, StaggerItem } from "../../shared/Reveal";
 import { featuredDoctors } from "@/constants/public/doctors";
 import { DoctorCard } from "../../shared/DoctorCard";
+import { api } from "@/lib/api/api-client";
 
-const FeaturedDoctors = () => {
+const FeaturedDoctors = async() => {
+   let specialties: Specialty[] = [];
+    let errorMessage: string = "";
+    try {
+      const res = await api<ApiResponse<Specialty[]>>("/specialties");
+      specialties = res?.data || [];
+    } catch (error: any) {
+      errorMessage = error?.message;
+    }
   return (
     <section className="border-b border-border bg-background py-20">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">

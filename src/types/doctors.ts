@@ -1,5 +1,5 @@
-import { Gender } from "./public";
 import { Specialty } from "./specialties";
+import { Gender } from "./user";
 
 export interface Doctor {
   id: string;
@@ -21,4 +21,24 @@ export interface Doctor {
   updatedAt?: string;
   specialties?: Specialty[];
   available?: boolean;
+}
+
+export interface IDoctor {
+  id: string;
+  name: string;
+  email: string;
+  profilePhoto: string | null;
+  contactNumber: string;
+  address: string;
+  experience: number;
+  gender: Gender;
+  registrationNumber: string;
+  appointmentFee: number;
+  currentWorkingPlace: string;
+  designation: string;
+  qualification: string;
+  isDeleted: boolean;
+  averageRating: number;
+  createdAt: string;
+  updatedAt: string;
 }

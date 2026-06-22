@@ -1,8 +1,20 @@
-import { SPECIALTIES } from "@/constants/public/specialties";
-import { Reveal, Stagger } from "../../shared/Reveal"; 
+import { Reveal, Stagger } from "../../shared/Reveal";
 import SpecialtyCard from "@/components/shared/SpecialtyCard";
+import { api } from "@/lib/api/api-client";
+import { ISpecialty } from "@/types/specialties";
+import { ApiResponse } from "@/types/api-response";
+import { EmptyState } from "@/components/shared/PageState";
 
-const FeaturedSpecialties = () => {
+const FeaturedSpecialties = async () => {
+  let specialties: ISpecialty[] = [];
+  let errorMessage: string = "";
+  try {
+    const res = await api<ApiResponse<ISpecialty[]>>("/specialties");
+    specialties = res?.data || [];
+  } catch (error: any) {
+    errorMessage = error?.message;
+  }
+
   return (
     <section className="border-b border-border bg-surface py-20">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -15,11 +27,19 @@ const FeaturedSpecialties = () => {
             you.
           </p>
         </Reveal>
-        <Stagger className="mt-10 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
-          {SPECIALTIES.slice(0, 10).map((s) => (
-            <SpecialtyCard specialty={s} key={s.id} />
-          ))}
-        </Stagger>
+        {specialties.length !== 0 ? (
+          <Stagger className="mt-10 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
+            {specialties.slice(0, 10).map((s) => (
+              <SpecialtyCard specialty={s} key={s.id} />
+            ))}
+          </Stagger>
+        ) : (
+          <EmptyState
+            title="Unable to load specialties"
+            description={errorMessage || "Please try again later."}
+            className="mt-3"
+          />
+        )}
       </div>
     </section>
   );

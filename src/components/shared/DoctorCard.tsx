@@ -2,11 +2,11 @@ import { BriefcaseMedical, CalendarDays, Star } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Doctor } from "@/types/doctors";
+import { IDoctor } from "@/types/doctors";
 import Link from "next/link";
 import Image from "next/image";
 
-export function DoctorCard({ doctor }: { doctor: Doctor }) {
+export function DoctorCard({ doctor }: { doctor: IDoctor }) {
   return (
     <Card
       className="group h-full overflow-hidden border-border shadow-xs 
