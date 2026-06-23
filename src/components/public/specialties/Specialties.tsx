@@ -1,3 +1,5 @@
+"use client";
+
 // seo optimization
 // export const Route = createFileRoute("/specialties")({
 //   head: () => ({
@@ -16,11 +18,15 @@
 // });
 
 import { StaggerGroup, StaggerItem } from "@/components/shared/Reveal";
-import { PublicPageHeader } from "../PublicPageHeader";
-import { SPECIALTIES } from "@/constants/public/specialties";
+import { PublicPageHeader } from "../PublicPageHeader"; 
 import SpecialtyCard from "@/components/shared/SpecialtyCard";
+import { useSpecialties } from "@/lib/hooks/UseSpecialty"; 
+import { EmptyState } from "@/components/shared/PageState";
+import { SpecialtyCardSkeleton } from "@/components/shared/SkeletonSet";
 
 const Specialties = () => {
+  const { data, isLoading, isError, error } = useSpecialties();
+  const specialties = data?.data;
   return (
     <>
       <PublicPageHeader
@@ -29,13 +35,24 @@ const Specialties = () => {
         description="Start with the type of care you need, then compare doctors who practice in that specialty."
       />
       <main className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-        <StaggerGroup className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {SPECIALTIES.map((specialty) => (
-            <StaggerItem key={specialty.id}>
-              <SpecialtyCard specialty={specialty} />
-            </StaggerItem>
-          ))}
-        </StaggerGroup>
+        {isLoading ? (
+          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
+            <SpecialtyCardSkeleton rows={5} />
+          </div>
+        ) : specialties?.length ? (
+          <StaggerGroup className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
+            {specialties.map((specialty) => (
+              <StaggerItem key={specialty.id}>
+                <SpecialtyCard specialty={specialty} />
+              </StaggerItem>
+            ))}
+          </StaggerGroup>
+        ) : (
+          <EmptyState
+            title="Unable to load specialties"
+            description={isError ? error.message : "Please try again later."}
+          />
+        )}
         <section className="mt-14 border-l-2 border-primary bg-info p-6">
           <h2 className="text-xl font-semibold text-info-foreground">
             Not sure which specialty to choose?

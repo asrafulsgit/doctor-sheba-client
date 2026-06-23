@@ -1,4 +1,5 @@
 import { IDoctorFilter } from "@/types/doctors"; 
+import { IHealthTipFilter } from "@/types/health-tips";
 
 export const queryKeys = {
   // ─── Auth ────────────────────────────────────────────────────────────────
@@ -91,6 +92,13 @@ export const queryKeys = {
   specialties: {
     all: ["specialties"] as const,
     list: () => ["specialties", "list"] as const,
+  },
+
+  // ─── Health Tips ───────────────────────────────────────────────────
+  healthTips: {
+    all: ["health-tips"] as const,
+    list: (filters: IHealthTipFilter) => ["health-tips", "list", filters] as const,
+    detail: (slug: string) => ["health-tips", "detail", slug] as const,
   },
 
   // ─── Payments ─────────────────────────────────────────────────────────────

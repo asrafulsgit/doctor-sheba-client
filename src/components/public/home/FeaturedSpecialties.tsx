@@ -29,7 +29,7 @@ const FeaturedSpecialties = async () => {
         </Reveal>
         {specialties.length !== 0 ? (
           <Stagger className="mt-10 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
-            {specialties.slice(0, 10).map((s) => (
+            {specialties.map((s) => (
               <SpecialtyCard specialty={s} key={s.id} />
             ))}
           </Stagger>

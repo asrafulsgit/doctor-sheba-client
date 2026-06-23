@@ -89,3 +89,113 @@ export const DoctorCardSkeleton = ({ rows = 4 }: { rows?: number }) => {
     </Card>
   ));
 };
+
+export const SpecialtyCardSkeleton = ({ rows = 4 }: { rows?: number }) => {
+  return Array.from({ length: rows }, (_, index) => (
+    <div
+      key={index}
+      className="flex flex-col items-center gap-3 rounded-2xl border border-border bg-card p-5 text-center shadow-soft"
+    >
+      {/* Icon */}
+      <Skeleton className="h-12 w-12 rounded-xl" />
+
+      {/* Title */}
+      <Skeleton className="h-4 w-24" />
+    </div>
+  ));
+};
+
+export function HealthTipCardSkeleton({ rows = 4 }: { rows?: number }) {
+  return Array.from({ length: rows }, (_, index) => (
+    <article
+      key={index}
+      className="flex h-full flex-col rounded-xl border border-border bg-surface p-6"
+    >
+      {/* Icon */}
+      <Skeleton className="size-11 rounded-xl" />
+
+      {/* Category */}
+      <Skeleton className="mt-6 h-4 w-24" />
+
+      {/* Title */}
+      <div className="mt-3 space-y-2">
+        <Skeleton className="h-7 w-full" />
+        <Skeleton className="h-7 w-3/4" />
+      </div>
+
+      {/* Excerpt */}
+      <div className="mt-4 flex-1 space-y-3">
+        <Skeleton className="h-4 w-full" />
+        <Skeleton className="h-4 w-full" />
+        <Skeleton className="h-4 w-5/6" />
+      </div>
+
+      {/* Footer */}
+      <div className="mt-6 flex items-center justify-between border-t border-border pt-4">
+        <div className="flex items-center gap-2">
+          <Skeleton className="size-4 rounded-full" />
+          <Skeleton className="h-4 w-16" />
+        </div>
+
+        <div className="flex items-center gap-2">
+          <Skeleton className="h-4 w-20" />
+          <Skeleton className="size-4 rounded-full" />
+        </div>
+      </div>
+    </article>
+  ));
+}
+
+export function HealthTipDetailSkeleton() {
+  return (
+    <main className="animate-pulse">
+      {/* HEADER */}
+      <header className="border-b border-border bg-surface-muted">
+        <div className="mx-auto max-w-4xl px-4 py-12 sm:px-6 sm:py-16">
+          {/* Back button */}
+          <div className="h-8 w-40 rounded-md bg-muted" />
+
+          {/* Category */}
+          <div className="mt-8 h-4 w-28 rounded bg-muted" />
+
+          {/* Title */}
+          <div className="mt-3 space-y-3">
+            <div className="h-10 w-full rounded bg-muted sm:h-12" />
+            <div className="h-10 w-3/4 rounded bg-muted sm:h-12" />
+          </div>
+
+          {/* Excerpt */}
+          <div className="mt-5 space-y-2">
+            <div className="h-5 w-full rounded bg-muted" />
+            <div className="h-5 w-5/6 rounded bg-muted" />
+          </div>
+
+          {/* Views */}
+          <div className="mt-5 h-4 w-24 rounded bg-muted" />
+        </div>
+      </header>
+
+      {/* ARTICLE */}
+      <article className="mx-auto max-w-3xl px-4 py-12 sm:px-6">
+        {/* Warning box */}
+        <div className="mb-10 flex gap-3 rounded-xl border border-border bg-muted p-5">
+          <div className="mt-0.5 h-5 w-5 rounded bg-muted-foreground/20" />
+          <div className="w-full space-y-2">
+            <div className="h-4 w-1/4 rounded bg-muted" />
+            <div className="h-4 w-full rounded bg-muted" />
+            <div className="h-4 w-5/6 rounded bg-muted" />
+          </div>
+        </div>
+
+        {/* Content section */}
+        <section className="mb-10 space-y-4">
+          <div className="h-5 w-full rounded bg-muted" />
+          <div className="h-5 w-full rounded bg-muted" />
+          <div className="h-5 w-11/12 rounded bg-muted" />
+          <div className="h-5 w-10/12 rounded bg-muted" />
+          <div className="h-5 w-9/12 rounded bg-muted" />
+        </section>
+      </article>
+    </main>
+  );
+}

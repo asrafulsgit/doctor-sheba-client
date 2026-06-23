@@ -1,8 +1,12 @@
-import { HealthTip } from "@/types/health-tips";
+import * as LucideIcons from "lucide-react";
+import {  IHealthTip } from "@/types/health-tips";
 import { ArrowRight, BookOpen, Clock3 } from "lucide-react";
-import Link from "next/link";
-
-const HealthTipCard = ({ article }: { article: HealthTip }) => {
+import Link from "next/link"; 
+import { IconType } from "@/components/shared/SpecialtyCard";
+const HealthTipCard = ({ article }: { article: IHealthTip }) => {
+  const Icon = LucideIcons[article.icon as keyof typeof LucideIcons] as
+      | IconType
+      | undefined;
   return (
     <article
       className="group flex h-full flex-col rounded-xl border 
@@ -13,7 +17,7 @@ const HealthTipCard = ({ article }: { article: HealthTip }) => {
         className="grid size-11 place-items-center rounded-xl bg-info 
                 text-info-foreground transition-colors duration-300 group-hover:bg-primary group-hover:text-primary-foreground"
       >
-        <BookOpen className="size-5" />
+        {Icon ? <Icon className="h-5 w-5" /> : null}
       </span>
       <p className="mt-6 text-sm font-semibold text-primary">
         {article.category}
@@ -27,7 +31,7 @@ const HealthTipCard = ({ article }: { article: HealthTip }) => {
       <div className="mt-6 flex items-center justify-between border-t border-border pt-4">
         <span className="inline-flex items-center gap-2 text-sm text-muted-foreground">
           <Clock3 className="size-4" />
-          {article.readTime}
+          {article.views}
         </span>
         <Link
           href={`/health-tips/${article.slug}`}

@@ -1,7 +1,7 @@
 import { ISpecialty } from "@/types/specialties";
 import * as LucideIcons from "lucide-react";
 import Link from "next/link";
-type IconType = React.FC<LucideIcons.LucideProps>;
+export type IconType = React.FC<LucideIcons.LucideProps>;
 
 const SpecialtyCard = ({ specialty }: { specialty: ISpecialty }) => {
   const Icon = LucideIcons[specialty.icon as keyof typeof LucideIcons] as

@@ -2,17 +2,17 @@
 import { ArrowLeft, Clock3, TriangleAlert } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useParams } from "next/navigation";
-import { healthTips } from "@/constants/public/health-tips";
 import Link from "next/link";
-import { PublicLayout } from "@/components/layout/PublicLayout";
+import { useHealthTip } from "@/lib/hooks/useHealthTip";
+import { HealthTipDetailSkeleton } from "@/components/shared/SkeletonSet";
 
 function ArticleNotFound() {
   return (
     <main className="mx-auto max-w-3xl px-4 py-24 text-center">
-      <h1 className="text-4xl font-semibold text-foreground">
+      <h1 className="text-xl sm:text-2xl md:text-3xl font-semibold text-foreground">
         Health article not found
       </h1>
-      <Button asChild className="mt-7">
+      <Button asChild className="mt-2 md:mt-5">
         <Link href="/health-tips">Browse health tips</Link>
       </Button>
     </main>
@@ -61,9 +61,14 @@ function ArticleNotFound() {
 
 const HealthTipDetails = () => {
   const slug = useParams().slug as string;
+  const { data, isLoading, isError, error } = useHealthTip(slug);
+  const article =data?.data;
 
-  const article = healthTips.find((tip) => tip.slug === slug);
-  if (!article) {
+  if (isLoading) {
+    return <HealthTipDetailSkeleton />;
+  }
+  
+  if (!article || isError) {
     return <ArticleNotFound />;
   }
   return (
@@ -78,14 +83,14 @@ const HealthTipDetails = () => {
           <p className="mt-8 text-sm font-semibold uppercase tracking-wider text-primary">
             {article.category}
           </p>
-          <h1 className="mt-3 text-4xl font-semibold tracking-tight text-foreground sm:text-5xl">
+          <h1 className="mt-3 text-3xl sm:text-4xl lg:text-5xl  font-semibold tracking-tight text-foreground">
             {article.title}
           </h1>
           <p className="mt-5 text-lg leading-8 text-muted-foreground">
             {article.excerpt}
           </p>
           <p className="mt-5 inline-flex items-center gap-2 text-sm text-muted-foreground">
-            <Clock3 className="size-4" /> {article.readTime}
+            <Clock3 className="size-4" /> {article.views}
           </p>
         </div>
       </header>
@@ -98,16 +103,11 @@ const HealthTipDetails = () => {
             professional for advice specific to you.
           </p>
         </div>
-        {article.sections.map((section: { heading: string; body: string }) => (
-          <section key={section.heading} className="mb-10">
-            <h2 className="text-2xl font-semibold text-foreground">
-              {section.heading}
-            </h2>
-            <p className="mt-4 text-lg leading-8 text-muted-foreground">
-              {section.body}
-            </p>
-          </section>
-        ))}
+        <section className="mb-10">
+          <p className="mt-4 text-lg leading-8 text-muted-foreground">
+            {article.content}
+          </p>
+        </section>
       </article>
     </main>
   );
