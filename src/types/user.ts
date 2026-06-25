@@ -1,6 +1,12 @@
 import { PaymentStatus } from "./payment";
 
-export type UserRole = "SUPER_ADMIN" | "ADMIN" | "DOCTOR" | "PATIENT";
+export enum UserRole {
+  PATIENT    = "PATIENT",
+  DOCTOR     = "DOCTOR",
+  ADMIN      = "ADMIN",
+  SUPER_ADMIN = "SUPER_ADMIN",
+}
+
 export type UserStatus = "ACTIVE" | "BLOCKED" | "DELETED";
 
 export type Gender = "MALE" | "FEMALE";
