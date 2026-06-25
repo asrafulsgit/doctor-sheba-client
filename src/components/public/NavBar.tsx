@@ -13,15 +13,14 @@ import {
 } from "../ui/sheet";
 import { usePathname } from "next/navigation";
 import { publicNavBarLinks } from "@/constants/public/nav-links";
-import { getDashboardPath } from "@/helpers/get-dashboard-path";
 import { User, UserRole } from "@/types/user";
-import { activatedDashboard } from "@/constants/public/user";
+import { ROLE_HOME } from "@/proxyHelpers/config";
+import { useMe } from "@/lib/hooks/useUser";
 
 export function PublicNavBar() {
   const pathName = usePathname();
-
-  const isAuthenticated = true;
-  const user: User = activatedDashboard;
+  const { data, isLoading } = useMe();
+  const user = data?.data;
 
   return (
     <>
@@ -55,9 +54,11 @@ export function PublicNavBar() {
               </Button>
             ))}
 
-            {isAuthenticated && user ? (
+            {!isLoading && user ? (
               <Button asChild>
-                <Link href={getDashboardPath(user.role)}>Open Dashboard</Link>
+                <Link href={ROLE_HOME[user.role as UserRole]}>
+                  Open Dashboard
+                </Link>
               </Button>
             ) : (
               <>
@@ -100,9 +101,9 @@ export function PublicNavBar() {
                   </Button>
                 ))}
 
-                {isAuthenticated && user ? (
+                {!isLoading && user ? (
                   <Button asChild>
-                    <Link href={getDashboardPath(user.role)}>
+                    <Link href={ROLE_HOME[user.role as UserRole]}>
                       Open Dashboard
                     </Link>
                   </Button>

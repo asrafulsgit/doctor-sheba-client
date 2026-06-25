@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Manrope, Source_Sans_3 } from "next/font/google";
 import "./globals.css";
 import { QueryProvider } from "@/providers/QueryProvider";
+import { Toaster } from "@/components/ui/sonner";
 
 const manrope = Manrope({
   variable: "--font-display",
@@ -30,6 +31,7 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col">
         <QueryProvider>{children}</QueryProvider>
+        <Toaster richColors closeButton position="top-right" />
       </body>
     </html>
   );

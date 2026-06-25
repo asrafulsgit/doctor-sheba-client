@@ -1,16 +1,15 @@
 "use client";
-// import * as React from "react";
-// import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-// import { zodValidator, fallback } from "@tanstack/zod-adapter";
 import { z } from "zod";
-// import { toast } from "sonner";
+import { Controller, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label"; 
-import { useState } from "react";
+import { Input } from "@/components/ui/input"; 
 import Link from "next/link";
-import { UserRole } from "@/types/user";
+import { toast } from "sonner";
+import { Field, FieldError, FieldGroup, FieldLabel } from "../ui/field"; 
+import { useLogin } from "@/lib/hooks/useAuth";
+import { useRouter } from "next/navigation";
 
 // seo optimization
 // export const Route = createFileRoute("/auth/login")({
@@ -23,40 +22,58 @@ import { UserRole } from "@/types/user";
 //   component: LoginPage,
 // });
 
+const loginSchema = z.object({
+  email: z
+    .string({ error: "Email is required" })
+    .email("Invalid email address"),
+  password: z.string({ error: "Password is required" }),
+});
+export type LoginFormValues = z.infer<typeof loginSchema>;
+
 const Login = () => {
-  // const { login, isReady, user } = useAuth();
-  // const navigate = useNavigate();
-  // const { redirect } = Route.useSearch();
-  const [role, setRole] = useState<UserRole>("PATIENT");
-  const [submitting, setSubmitting] = useState(false);
+  // const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  //   e.preventDefault();
 
-  // React.useEffect(() => {
-  //   if (isReady && user) {
-  //     navigate({ to: redirect || dashboardPathForRole(user.role), replace: true });
+  //   const fd = new FormData(e.currentTarget);
+  //   const email = String(fd.get("email") || "");
+  //   const password = String(fd.get("password") || "");
+  //   if (!email || !password) {
+  //     // toast.error("Email and password are required.");
+  //     return;
   //   }
-  // }, [isReady, user, navigate, redirect]);
+  //   setSubmitting(true);
+  //   // try {
+  //   //   const u = await login(email, password, role);
+  //   //   toast.success(`Welcome back, ${u.name}.`);
+  //   //   navigate({ to: redirect || dashboardPathForRole(u.role), replace: true });
+  //   // } catch {
+  //   //   toast.error("Could not sign you in.");
+  //   // } finally {
+  //   //   setSubmitting(false);
+  //   // }
+  // };
 
-  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const fd = new FormData(e.currentTarget);
-    const email = String(fd.get("email") || "");
-    const password = String(fd.get("password") || "");
-    if (!email || !password) {
-      // toast.error("Email and password are required.");
-      return;
-    }
-    setSubmitting(true);
-    // try {
-    //   const u = await login(email, password, role);
-    //   toast.success(`Welcome back, ${u.name}.`);
-    //   navigate({ to: redirect || dashboardPathForRole(u.role), replace: true });
-    // } catch {
-    //   toast.error("Could not sign you in.");
-    // } finally {
-    //   setSubmitting(false);
-    // }
-  };
+  const router = useRouter();
+  const form = useForm<z.infer<typeof loginSchema>>({
+    resolver: zodResolver(loginSchema),
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+  });
+  const { mutate: login, isPending} = useLogin();
 
+  function onSubmit(data: LoginFormValues) {
+    login(data, {
+      onSuccess: () => {
+        toast.success("Login successful");
+        router.push("/");
+      },
+      onError: (error) => { 
+        toast.error(error.message || "Error while login!");
+      },
+    });
+  }
   return (
     <motion.div
       initial={{ opacity: 0, y: 8 }}
@@ -70,9 +87,51 @@ const Login = () => {
         Sign in to access your dashboard.
       </p>
 
-      <form className="mt-8 space-y-4" onSubmit={onSubmit}>
-        {/* <RoleSelector value={role} onChange={setRole} /> */}
+      <form onSubmit={form.handleSubmit(onSubmit)} className="mt-8 space-y-4">
+        <FieldGroup>
+          <Controller
+            name="email"
+            control={form.control}
+            render={({ field, fieldState }) => (
+              <Field data-invalid={fieldState.invalid}>
+                <FieldLabel htmlFor="email">Email</FieldLabel>
+                <Input
+                  {...field}
+                  type="email"
+                  placeholder="you@example.com"
+                  aria-invalid={fieldState.invalid}
+                />
+                {fieldState.invalid && (
+                  <FieldError errors={[fieldState.error]} />
+                )}
+              </Field>
+            )}
+          />
+          <Controller
+            name="password"
+            control={form.control}
+            render={({ field, fieldState }) => (
+              <Field data-invalid={fieldState.invalid}>
+                <FieldLabel htmlFor="password">Password</FieldLabel>
+                <Input
+                  {...field}
+                  type="password"
+                  placeholder="••••••••"
+                  aria-invalid={fieldState.invalid}
+                />
+                {fieldState.invalid && (
+                  <FieldError errors={[fieldState.error]} />
+                )}
+              </Field>
+            )}
+          />
+          <Button type="submit" className="w-full" disabled={isPending}>
+            {isPending ? "Signing in…" : "Sign in"}
+          </Button>
+        </FieldGroup>
+      </form>
 
+      {/* <form className="mt-8 space-y-4" onSubmit={onSubmit}>
         <div>
           <Label htmlFor="email">Email</Label>
           <Input
@@ -106,7 +165,7 @@ const Login = () => {
         <Button type="submit" className="w-full" disabled={submitting}>
           {submitting ? "Signing in…" : "Sign in"}
         </Button>
-      </form>
+      </form> */}
 
       <p className="mt-6 text-center text-sm text-muted-foreground">
         Don't have an account?{" "}
