@@ -31,28 +31,7 @@ const loginSchema = z.object({
 export type LoginFormValues = z.infer<typeof loginSchema>;
 
 const Login = () => {
-  // const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-  //   e.preventDefault();
-
-  //   const fd = new FormData(e.currentTarget);
-  //   const email = String(fd.get("email") || "");
-  //   const password = String(fd.get("password") || "");
-  //   if (!email || !password) {
-  //     // toast.error("Email and password are required.");
-  //     return;
-  //   }
-  //   setSubmitting(true);
-  //   // try {
-  //   //   const u = await login(email, password, role);
-  //   //   toast.success(`Welcome back, ${u.name}.`);
-  //   //   navigate({ to: redirect || dashboardPathForRole(u.role), replace: true });
-  //   // } catch {
-  //   //   toast.error("Could not sign you in.");
-  //   // } finally {
-  //   //   setSubmitting(false);
-  //   // }
-  // };
-
+ 
   const router = useRouter();
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),

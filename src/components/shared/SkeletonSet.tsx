@@ -199,3 +199,64 @@ export function HealthTipDetailSkeleton() {
     </main>
   );
 }
+
+ 
+export function DashboardTopNavbarSkeleton() {
+  return (
+    <header className="sticky top-0 z-40 border-b border-border bg-background">
+      <div className="flex h-16 items-center justify-between px-4 sm:px-6">
+        {/* Left */}
+        <div className="flex items-center gap-3">
+          {/* Mobile menu button */}
+          <Skeleton className="size-10 rounded-md lg:hidden" />
+
+          {/* Logo */}
+          <div className="flex items-center gap-2">
+            <Skeleton className="h-8 w-8 rounded-md" />
+            <Skeleton className="hidden h-5 w-24 sm:block" />
+          </div>
+        </div>
+
+        {/* Right */}
+        <div className="flex items-center gap-3">
+          {/* User info */}
+          <div className="hidden flex-col items-end gap-1 sm:flex">
+            <Skeleton className="h-4 w-40" />
+            <Skeleton className="h-3 w-20" />
+          </div>
+
+          {/* Avatar */}
+          <Skeleton className="size-9 rounded-full" />
+
+          {/* Logout */}
+          <Skeleton className="size-9 rounded-md" />
+        </div>
+      </div>
+    </header>
+  );
+}
+ 
+export function DashboardSidebarSkeleton() {
+  return (
+    <aside className="sticky top-16 hidden h-[calc(100vh-4rem)] w-64 shrink-0 border-r border-border bg-background lg:block">
+      <nav className="flex h-full flex-col gap-0.5 overflow-y-auto pt-5 lg:p-3">
+        {Array.from({ length: 8 }).map((_, index) => (
+          <div
+            key={index}
+            className={`flex items-center gap-3 rounded-lg px-3 py-2 ${
+              index === 0 ? "bg-accent/50" : ""
+            }`}
+          >
+            <Skeleton className="h-4 w-4 rounded-sm" />
+            <Skeleton
+              className={`h-4 ${
+                index === 0 ? "w-28" : index % 2 === 0 ? "w-24" : "w-32"
+              }`}
+            />
+            {index === 0 && <Skeleton className="ml-auto h-3.5 w-3.5 rounded-sm" />}
+          </div>
+        ))}
+      </nav>
+    </aside>
+  );
+}

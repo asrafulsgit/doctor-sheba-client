@@ -22,7 +22,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { ReactNode, useState } from "react";
 import Link from "next/link";
 import { User, UserRole } from "@/types/user";
@@ -35,6 +35,13 @@ import {
   SheetTrigger,
 } from "../ui/sheet";
 import { activatedDashboard } from "@/constants/public/user";
+import { useMe } from "@/lib/hooks/useUser";
+import {
+  DashboardSidebarSkeleton,
+  DashboardTopNavbarSkeleton,
+} from "../shared/SkeletonSet";
+import { useLogout } from "@/lib/hooks/useAuth";
+import { toast } from "sonner";
 
 interface NavItem {
   to: string;
@@ -92,84 +99,104 @@ function roleLabel(role: UserRole) {
 }
 
 const PrivateLayout = ({ children }: { children: ReactNode }) => {
-  //   const { user, logout } = useAuth();
-  //   const navigate = useNavigate();
-
+  const router = useRouter();
   const pathname = usePathname();
-  const user: User = activatedDashboard;
-  if (!user) return null;
-  const nav = navFor(user.role);
+  const { data, isLoading } = useMe();
+  const user = data?.data;
+  const nav = navFor(user?.role);
+  const { mutate: logout, isPending } = useLogout();
 
-  const handleLogout = () => {
-    // logout();
-    // navigate({ to: "/auth/login" });
-  };
+  function handleLogout() {
+    const toastId = toast.loading("Logging out...");
+    logout(undefined, {
+      onSuccess: () => {
+        toast.success("Logged out successfully", {
+          id: toastId,
+        });
+        router.push("/auth/login");
+      },
+
+      onError: (error) => {
+        toast.error(error.message, {
+          id: toastId,
+        });
+      },
+    });
+  }
 
   return (
     <div className="min-h-screen bg-surface">
       {/* Top navbar */}
-      <header className="sticky top-0 z-40 border-b border-border bg-background">
-        <div className="flex h-16 items-center justify-between px-4 sm:px-6">
-          <div className="flex items-center gap-3">
-            <Sheet>
-              <SheetTrigger asChild>
-                <Button
-                  variant="outline"
-                  size="icon"
-                  className="lg:hidden"
-                  aria-label="Open navigation"
-                >
-                  <Menu />
-                </Button>
-              </SheetTrigger>
-              <SheetContent side="left">
-                <SheetHeader>
-                  <SheetTitle>
-                    <span className="text-sm font-semibold">Menu</span>
-                  </SheetTitle>
-                </SheetHeader>
-                <aside className="bg-background shadow-elevated">
-                  <SidebarNav nav={nav} pathname={pathname} />
-                </aside>
-              </SheetContent>
-            </Sheet>
+      {!isLoading ? (
+        <header className="sticky top-0 z-40 border-b border-border bg-background">
+          <div className="flex h-16 items-center justify-between px-4 sm:px-6">
+            <div className="flex items-center gap-3">
+              <Sheet>
+                <SheetTrigger asChild>
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    className="lg:hidden"
+                    aria-label="Open navigation"
+                  >
+                    <Menu />
+                  </Button>
+                </SheetTrigger>
+                <SheetContent side="left">
+                  <SheetHeader>
+                    <SheetTitle>
+                      <span className="text-sm font-semibold">Menu</span>
+                    </SheetTitle>
+                  </SheetHeader>
+                  <aside className="bg-background shadow-elevated">
+                    <SidebarNav nav={nav} pathname={pathname} />
+                  </aside>
+                </SheetContent>
+              </Sheet>
 
-            <Link
-              href="/"
-              className="flex items-center gap-2 font-semibold text-foreground"
-            >
-              <Logo />
-            </Link>
-          </div>
-          <div className="flex items-center gap-3">
-            <div className="hidden flex-col items-end text-right sm:flex">
-              <span className="font-semibold text-foreground">
-                {user.email}
-              </span>
-              <span className="text-xs text-muted-foreground">
-                {roleLabel(user.role)}
-              </span>
+              <Link
+                href="/"
+                className="flex items-center gap-2 font-semibold text-foreground"
+              >
+                <Logo />
+              </Link>
             </div>
-            <div className="grid h-9 w-9 place-items-center rounded-full bg-primary-soft text-sm font-semibold text-primary">
-              {user.email.slice(0, 1).toUpperCase()}
+            <div className="flex items-center gap-3">
+              <div className="hidden flex-col items-end text-right sm:flex">
+                <span className="font-semibold text-foreground">
+                  {user?.name}
+                </span>
+                <span className="text-xs text-muted-foreground">
+                  {roleLabel(user?.role)}
+                </span>
+              </div>
+              <div className="grid h-9 w-9 place-items-center rounded-full bg-primary-soft text-sm font-semibold text-primary">
+                {user?.name.slice(0, 1).toUpperCase()}
+              </div>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={handleLogout}
+                aria-label="Sign out"
+              >
+                <LogOut className="h-4 w-4" />
+              </Button>
             </div>
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={handleLogout}
-              aria-label="Sign out"
-            >
-              <LogOut className="h-4 w-4" />
-            </Button>
           </div>
-        </div>
-      </header>
+        </header>
+      ) : (
+        <DashboardTopNavbarSkeleton />
+      )}
 
       <div className="mx-auto flex max-w-[1600px]">
         {/* Sidebar — desktop */}
-        <aside className="sticky top-16 hidden h-[calc(100vh-4rem)] w-64 shrink-0 border-r border-border bg-background lg:block">
-          <SidebarNav nav={nav} pathname={pathname} />
-        </aside>
+        {!isLoading ? (
+          <aside className="sticky top-16 hidden h-[calc(100vh-4rem)] w-64 shrink-0 border-r border-border bg-background lg:block">
+            <SidebarNav nav={nav} pathname={pathname} />
+          </aside>
+        ) : (
+          <DashboardSidebarSkeleton />
+        )}
 
         {/* Main */}
         <main className="min-w-0 flex-1 px-4 py-8 sm:px-6 lg:px-10">

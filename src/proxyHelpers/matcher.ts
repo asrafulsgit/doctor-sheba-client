@@ -55,6 +55,6 @@ export function getRoleHome(role: UserRole): string {
   return ROLE_HOME[role] ?? "/";
 }
 
-export function getDeniedRedirect(config: RouteConfig): string {
-  return config.deniedRedirect ?? "/not-found";
+export function getDeniedRedirect(role: UserRole,config: RouteConfig): string {
+  return config.deniedRedirect ?? getRoleHome(role);
 }

@@ -13,7 +13,7 @@ import { decodeJWT, JWTPayload } from "./proxyHelpers/jwt";
 import {
   attemptTokenRefresh,
   clearAuthCookies,
-} from "./proxyHelpers/refresh-token"; 
+} from "./proxyHelpers/refresh-token";
 import { UserRole } from "./types/user";
 
 // ─── Middleware entry point ──────────────────────────────────────────────────
@@ -82,13 +82,13 @@ export async function proxy(request: NextRequest): Promise<NextResponse> {
 
   if (routeConfig) {
     // 7a. Not authenticated → redirect to login with return URL
-    if (!authObject.verification || !userRole) { 
+    if (!authObject.verification || !userRole) {
       return buildRedirect(request, "/auth/login", response);
     }
 
     // 7b. Authenticated but wrong role → redirect to their own dashboard
     if (!canRoleAccess(userRole as UserRole, routeConfig)) {
-      const dest = getDeniedRedirect(routeConfig);
+      const dest = getDeniedRedirect(userRole as UserRole, routeConfig);
       return buildRedirect(request, dest, response);
     }
 
@@ -97,7 +97,6 @@ export async function proxy(request: NextRequest): Promise<NextResponse> {
 
   return response;
 }
-
 
 // ─── Redirect helper — preserves security headers ───────────────────────────
 
