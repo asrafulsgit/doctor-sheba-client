@@ -1,12 +1,15 @@
-"use client";
-import * as React from "react";
+"use client"; 
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-// import { RoleSelector } from "./Login";
-import Link from "next/link";
-import { UserRole } from "@/types/user";
+import { Input } from "@/components/ui/input";  
+import Link from "next/link"; 
+import z from "zod";
+import { useRouter } from "next/navigation";
+import { Controller, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { usePatientRegister } from "@/lib/hooks/useAuth";
+import { toast } from "sonner";
+import { Field, FieldError, FieldGroup, FieldLabel } from "../ui/field";
 
 // seo optimization
 // export const Route = createFileRoute("/auth/register")({
@@ -14,37 +17,51 @@ import { UserRole } from "@/types/user";
 //   component: RegisterPage,
 // });
 
-const Register = () => {
-  // const { register, isReady, user } = useAuth();
-  // const navigate = useNavigate();
-  const [role, setRole] = React.useState<UserRole>("PATIENT");
-  const [submitting, setSubmitting] = React.useState(false);
+const registerSchema = z.object({
+  name: z
+      .string()
+      .trim()
+      .min(3, { error: "Name must be at least 3 characters long." }),
 
-  // React.useEffect(() => {
-  //   if (isReady && user) navigate({ to: dashboardPathForRole(user.role), replace: true });
-  // }, [isReady, user, navigate]);
+    email: z.string().trim().email({ error: "Invalid email format." }),
+    password: z
+      .string()
+      .trim()
+      .min(8, { error: "Password must be at least 8 characters long." })
+      .regex(
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#^()_\-+=<>[\]{}|\\:;"',./~`]).+$/,
+        {
+          error:
+            "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character.",
+        },
+      )
+});
+export type RegisterFormValues = z.infer<typeof registerSchema>;
 
-  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const fd = new FormData(e.currentTarget);
-    const name = String(fd.get("name") || "").trim();
-    const email = String(fd.get("email") || "").trim();
-    const password = String(fd.get("password") || "");
-    if (!name || !email || password.length < 6) {
-      // toast.error("Please fill all fields. Password must be 6+ characters.");
-      return;
-    }
-    setSubmitting(true);
-    // try {
-    //   const u = await register(name, email, password, role);
-    //   toast.success("Account created.");
-    //   navigate({ to: dashboardPathForRole(u.role), replace: true });
-    // } catch {
-    //   toast.error("Could not create your account.");
-    // } finally {
-    //   setSubmitting(false);
-    // }
-  };
+const Register = () => { 
+
+  const router = useRouter();
+  const form = useForm<z.infer<typeof registerSchema>>({
+    resolver: zodResolver(registerSchema),
+    defaultValues: {
+      name : "",
+      email: "",
+      password: "",
+    },
+  });
+  const { mutate: patientRegister, isPending } = usePatientRegister();
+
+  function onSubmit(data: RegisterFormValues) {
+    patientRegister(data, {
+      onSuccess: () => {
+        toast.success("Login successful");
+        router.push("/auth/login");
+      },
+      onError: (error) => {
+        toast.error(error.message || "Error while login!");
+      },
+    });
+  }
 
   return (
     <motion.div
@@ -59,44 +76,67 @@ const Register = () => {
         It only takes a minute.
       </p>
 
-      <form className="mt-8 space-y-4" onSubmit={onSubmit}>
-        {/* <RoleSelector value={role} onChange={setRole} /> */}
-        <div>
-          <Label htmlFor="name">Full name</Label>
-          <Input
-            id="name"
+      <form className="mt-8 space-y-4" onSubmit={form.handleSubmit(onSubmit)}>
+         <FieldGroup>
+          <Controller
             name="name"
-            required
-            placeholder="Your full name"
-            className="mt-1.5"
+            control={form.control}
+            render={({ field, fieldState }) => (
+              <Field data-invalid={fieldState.invalid}>
+                <FieldLabel htmlFor="name">Name</FieldLabel>
+                <Input
+                  {...field}
+                  type="name"
+                  placeholder="jhony huang"
+                  aria-invalid={fieldState.invalid}
+                />
+                {fieldState.invalid && (
+                  <FieldError errors={[fieldState.error]} />
+                )}
+              </Field>
+            )}
           />
-        </div>
-        <div>
-          <Label htmlFor="email">Email</Label>
-          <Input
-            id="email"
+          <Controller
             name="email"
-            type="email"
-            required
-            placeholder="you@example.com"
-            className="mt-1.5"
+            control={form.control}
+            render={({ field, fieldState }) => (
+              <Field data-invalid={fieldState.invalid}>
+                <FieldLabel htmlFor="email">Email</FieldLabel>
+                <Input
+                  {...field}
+                  type="email"
+                  placeholder="you@example.com"
+                  aria-invalid={fieldState.invalid}
+                />
+                {fieldState.invalid && (
+                  <FieldError errors={[fieldState.error]} />
+                )}
+              </Field>
+            )}
           />
-        </div>
-        <div>
-          <Label htmlFor="password">Password</Label>
-          <Input
-            id="password"
+          <Controller
             name="password"
-            type="password"
-            required
-            minLength={6}
-            placeholder="At least 6 characters"
-            className="mt-1.5"
+            control={form.control}
+            render={({ field, fieldState }) => (
+              <Field data-invalid={fieldState.invalid}>
+                <FieldLabel htmlFor="password">Password</FieldLabel>
+                <Input
+                  {...field}
+                  type="password"
+                  placeholder="••••••••"
+                  aria-invalid={fieldState.invalid}
+                />
+                {fieldState.invalid && (
+                  <FieldError errors={[fieldState.error]} />
+                )}
+              </Field>
+            )}
           />
-        </div>
-        <Button type="submit" className="w-full" disabled={submitting}>
-          {submitting ? "Creating account…" : "Create account"}
+           
+        <Button type="submit" className="w-full" disabled={isPending}>
+          {isPending ? "Creating account…" : "Create account"}
         </Button>
+        </FieldGroup>
       </form>
 
       <p className="mt-6 text-center text-sm text-muted-foreground">

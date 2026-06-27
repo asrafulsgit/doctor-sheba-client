@@ -4,12 +4,13 @@ import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input"; 
+import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import { toast } from "sonner";
-import { Field, FieldError, FieldGroup, FieldLabel } from "../ui/field"; 
+import { Field, FieldError, FieldGroup, FieldLabel } from "../ui/field";
 import { useLogin } from "@/lib/hooks/useAuth";
 import { useRouter } from "next/navigation";
+import { cn } from "@/lib/utils";
 
 // seo optimization
 // export const Route = createFileRoute("/auth/login")({
@@ -31,7 +32,6 @@ const loginSchema = z.object({
 export type LoginFormValues = z.infer<typeof loginSchema>;
 
 const Login = () => {
- 
   const router = useRouter();
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
@@ -40,7 +40,7 @@ const Login = () => {
       password: "",
     },
   });
-  const { mutate: login, isPending} = useLogin();
+  const { mutate: login, isPending } = useLogin();
 
   function onSubmit(data: LoginFormValues) {
     login(data, {
@@ -48,7 +48,7 @@ const Login = () => {
         toast.success("Login successful");
         router.push("/");
       },
-      onError: (error) => { 
+      onError: (error) => {
         toast.error(error.message || "Error while login!");
       },
     });
@@ -104,47 +104,15 @@ const Login = () => {
               </Field>
             )}
           />
-          <Button type="submit" className="w-full" disabled={isPending}>
+          <Button
+            type="submit"
+            className={cn("", "w-full mt-2")}
+            disabled={isPending}
+          >
             {isPending ? "Signing in…" : "Sign in"}
           </Button>
         </FieldGroup>
       </form>
-
-      {/* <form className="mt-8 space-y-4" onSubmit={onSubmit}>
-        <div>
-          <Label htmlFor="email">Email</Label>
-          <Input
-            id="email"
-            name="email"
-            type="email"
-            required
-            placeholder="you@example.com"
-            className="mt-1.5"
-          />
-        </div>
-        <div>
-          <div className="flex items-center justify-between">
-            <Label htmlFor="password">Password</Label>
-            <Link
-              href="/auth/forgot-password"
-              className="text-xs font-medium text-primary hover:underline"
-            >
-              Forgot?
-            </Link>
-          </div>
-          <Input
-            id="password"
-            name="password"
-            type="password"
-            required
-            placeholder="••••••••"
-            className="mt-1.5"
-          />
-        </div>
-        <Button type="submit" className="w-full" disabled={submitting}>
-          {submitting ? "Signing in…" : "Sign in"}
-        </Button>
-      </form> */}
 
       <p className="mt-6 text-center text-sm text-muted-foreground">
         Don't have an account?{" "}

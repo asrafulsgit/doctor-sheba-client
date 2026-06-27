@@ -3,12 +3,14 @@ import { api } from "../api/api-client";
 import { ApiResponse } from "@/types/api-response";
 import { LoginFormValues } from "@/components/auth/Login";
 import { queryKeys } from "../query/query-keys";
+import { IPatient } from "@/types/patient";
+import { RegisterFormValues } from "@/components/auth/Register";
 
 export function useLogin() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (payload: LoginFormValues) =>
-      api<ApiResponse<Record<string,any>>>("/auth/login", {
+      api<ApiResponse<Record<string, any>>>("/auth/login", {
         method: "POST",
         body: JSON.stringify(payload),
       }),
@@ -16,6 +18,16 @@ export function useLogin() {
     onSuccess: (data) => {
       queryClient.setQueryData(queryKeys.auth.session(), data);
     },
+  });
+}
+
+export function usePatientRegister() {
+  return useMutation({
+    mutationFn: (data: RegisterFormValues) =>
+      api<ApiResponse<IPatient>>("/user/create-patient", {
+        method: "POST",
+        body: JSON.stringify(data),
+      }),
   });
 }
 
@@ -28,4 +40,3 @@ export function useLogout() {
     },
   });
 }
-
