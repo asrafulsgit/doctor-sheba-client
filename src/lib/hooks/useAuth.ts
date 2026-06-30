@@ -5,6 +5,8 @@ import { LoginFormValues } from "@/components/auth/Login";
 import { queryKeys } from "../query/query-keys";
 import { IPatient } from "@/types/patient";
 import { RegisterFormValues } from "@/components/auth/Register";
+import { ResetPasswordFormValues } from "@/components/auth/ResetPassword";
+import { ForgotPasswordFormValues } from "@/components/auth/ForgotPassword";
 
 export function useLogin() {
   const queryClient = useQueryClient();
@@ -38,5 +40,25 @@ export function useLogout() {
     onSettled: () => {
       queryClient.clear();
     },
+  });
+}
+
+
+export function useForgotPassword() {
+  return useMutation({
+    mutationFn: (data: ForgotPasswordFormValues) =>
+      api<ApiResponse<null>>("/auth/forgot-password", {
+        method: "POST",
+        body: JSON.stringify(data),
+      }),
+  });
+}
+export function useResetPassword(token : string) {
+  return useMutation({
+    mutationFn: (data: ResetPasswordFormValues) =>
+      api<ApiResponse<IPatient>>(`/auth/reset-password?token=${token}`, {
+        method: "POST",
+        body: JSON.stringify({password : data.password}),
+      }),
   });
 }

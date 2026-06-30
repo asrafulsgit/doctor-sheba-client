@@ -6,6 +6,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Link from "next/link";
+import z from "zod";
+import { Controller, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForgotPassword } from "@/lib/hooks/useAuth";
+import { toast } from "sonner";
+import { Field, FieldError, FieldGroup, FieldLabel } from "../ui/field";
+import { cn } from "@/lib/utils";
 
 // seo optimization
 // export const Route = createFileRoute("/auth/forgot-password")({
@@ -13,19 +20,31 @@ import Link from "next/link";
 //   component: ForgotPage,
 // });
 
+const forgotPasswordSchema = z.object({
+  email: z.string().trim().email({ error: "Invalid email format." }),
+});
+export type ForgotPasswordFormValues = z.infer<typeof forgotPasswordSchema>;
+
 const ForgotPassword = () => {
   const [sent, setSent] = React.useState(false);
-  const [submitting, setSubmitting] = React.useState(false);
+  const form = useForm<z.infer<typeof forgotPasswordSchema>>({
+    resolver: zodResolver(forgotPasswordSchema),
+    defaultValues: {
+      email: "",
+    },
+  });
+  const { mutate: forgotPassword, isPending } = useForgotPassword();
 
-  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setSubmitting(true);
-    setTimeout(() => {
-      setSubmitting(false);
-      setSent(true);
-      // toast.success("If that email exists, a reset link is on its way.");
-    }, 600);
-  };
+  function onSubmit(data: ForgotPasswordFormValues) {
+    forgotPassword(data, {
+      onSuccess: () => {
+        setSent(true);
+      },
+      onError: (error) => {
+        toast.error(error.message || "Error while login!");
+      },
+    });
+  }
 
   return (
     <motion.div
@@ -46,21 +65,34 @@ const ForgotPassword = () => {
           Check your inbox for a link to reset your password.
         </div>
       ) : (
-        <form className="mt-8 space-y-4" onSubmit={onSubmit}>
-          <div>
-            <Label htmlFor="email">Email</Label>
-            <Input
-              id="email"
+        <form onSubmit={form.handleSubmit(onSubmit)} className="mt-8 space-y-4">
+          <FieldGroup>
+            <Controller
               name="email"
-              type="email"
-              required
-              placeholder="you@example.com"
-              className="mt-1.5"
+              control={form.control}
+              render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid}>
+                  <FieldLabel htmlFor="email">Email</FieldLabel>
+                  <Input
+                    {...field}
+                    type="email"
+                    placeholder="you@example.com"
+                    aria-invalid={fieldState.invalid}
+                  />
+                  {fieldState.invalid && (
+                    <FieldError errors={[fieldState.error]} />
+                  )}
+                </Field>
+              )}
             />
-          </div>
-          <Button type="submit" className="w-full" disabled={submitting}>
-            {submitting ? "Sending…" : "Send reset link"}
-          </Button>
+            <Button
+              type="submit"
+              className={cn("", "w-full mt-1")}
+              disabled={isPending}
+            >
+              {isPending ? "Sending…" : "Send reset link"}
+            </Button>
+          </FieldGroup>
         </form>
       )}
 

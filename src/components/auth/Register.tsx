@@ -1,8 +1,8 @@
-"use client"; 
+"use client";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";  
-import Link from "next/link"; 
+import { Input } from "@/components/ui/input";
+import Link from "next/link";
 import z from "zod";
 import { useRouter } from "next/navigation";
 import { Controller, useForm } from "react-hook-form";
@@ -19,32 +19,31 @@ import { Field, FieldError, FieldGroup, FieldLabel } from "../ui/field";
 
 const registerSchema = z.object({
   name: z
-      .string()
-      .trim()
-      .min(3, { error: "Name must be at least 3 characters long." }),
+    .string()
+    .trim()
+    .min(3, { error: "Name must be at least 3 characters long." }),
 
-    email: z.string().trim().email({ error: "Invalid email format." }),
-    password: z
-      .string()
-      .trim()
-      .min(8, { error: "Password must be at least 8 characters long." })
-      .regex(
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#^()_\-+=<>[\]{}|\\:;"',./~`]).+$/,
-        {
-          error:
-            "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character.",
-        },
-      )
+  email: z.string().trim().email({ error: "Invalid email format." }),
+  password: z
+    .string()
+    .trim()
+    .min(8, { error: "Password must be at least 8 characters long." })
+    .regex(
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#^()_\-+=<>[\]{}|\\:;"',./~`]).+$/,
+      {
+        error:
+          "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character.",
+      },
+    ),
 });
 export type RegisterFormValues = z.infer<typeof registerSchema>;
 
-const Register = () => { 
-
+const Register = () => {
   const router = useRouter();
   const form = useForm<z.infer<typeof registerSchema>>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
-      name : "",
+      name: "",
       email: "",
       password: "",
     },
@@ -77,7 +76,7 @@ const Register = () => {
       </p>
 
       <form className="mt-8 space-y-4" onSubmit={form.handleSubmit(onSubmit)}>
-         <FieldGroup>
+        <FieldGroup>
           <Controller
             name="name"
             control={form.control}
@@ -132,10 +131,10 @@ const Register = () => {
               </Field>
             )}
           />
-           
-        <Button type="submit" className="w-full" disabled={isPending}>
-          {isPending ? "Creating account…" : "Create account"}
-        </Button>
+
+          <Button type="submit" className="w-full" disabled={isPending}>
+            {isPending ? "Creating account…" : "Create account"}
+          </Button>
         </FieldGroup>
       </form>
 

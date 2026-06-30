@@ -91,7 +91,15 @@ const Login = () => {
             control={form.control}
             render={({ field, fieldState }) => (
               <Field data-invalid={fieldState.invalid}>
-                <FieldLabel htmlFor="password">Password</FieldLabel>
+                <div className="flex justify-between items-center">
+                  <FieldLabel htmlFor="password">Password</FieldLabel>
+                  <Link
+                    href="/auth/forgot-password"
+                    className="text-xs font-medium text-primary hover:underline"
+                  >
+                    Forgot Password?
+                  </Link>
+                </div>
                 <Input
                   {...field}
                   type="password"
