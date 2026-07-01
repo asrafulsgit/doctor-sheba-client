@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import { toast } from "sonner";
 import { Field, FieldError, FieldGroup, FieldLabel } from "../ui/field";
-import { useLogin } from "@/lib/hooks/useAuth";
+import { useLogin, useVerfiyEmailOTPSend } from "@/lib/hooks/useAuth";
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 
@@ -41,6 +41,8 @@ const Login = () => {
     },
   });
   const { mutate: login, isPending } = useLogin();
+  const { mutate: otpSend, isPending: otpSendPending } =
+    useVerfiyEmailOTPSend();
 
   function onSubmit(data: LoginFormValues) {
     login(data, {
@@ -48,11 +50,28 @@ const Login = () => {
         toast.success("Login successful");
         router.push("/");
       },
-      onError: (error) => {
+      onError: (error: any) => {
+        if (error?.status === 403) {
+          otpSend(
+            { email: data.email },
+            {
+              onSuccess: () => {
+                router.push(`/auth/verify-email?email=${data.email}`);
+              },
+
+              onError: (error) => {
+                toast.error(error.message || "Error while send otp!");
+              },
+            },
+          );
+          return;
+        }
+
         toast.error(error.message || "Error while login!");
       },
     });
   }
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 8 }}
@@ -117,7 +136,7 @@ const Login = () => {
             className={cn("", "w-full mt-2")}
             disabled={isPending}
           >
-            {isPending ? "Signing in…" : "Sign in"}
+            {(isPending || otpSendPending) ? "Signing in…" : "Sign in"}
           </Button>
         </FieldGroup>
       </form>

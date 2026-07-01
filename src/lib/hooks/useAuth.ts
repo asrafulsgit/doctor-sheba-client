@@ -7,6 +7,7 @@ import { IPatient } from "@/types/patient";
 import { RegisterFormValues } from "@/components/auth/Register";
 import { ResetPasswordFormValues } from "@/components/auth/ResetPassword";
 import { ForgotPasswordFormValues } from "@/components/auth/ForgotPassword";
+import { OtpFormValues } from "@/components/auth/VerifyEmail";
 
 export function useLogin() {
   const queryClient = useQueryClient();
@@ -59,6 +60,25 @@ export function useResetPassword(token : string) {
       api<ApiResponse<IPatient>>(`/auth/reset-password?token=${token}`, {
         method: "POST",
         body: JSON.stringify({password : data.password}),
+      }),
+  });
+}
+
+export function useVerfiyEmailOTPSend() {
+  return useMutation({
+    mutationFn: (data: ForgotPasswordFormValues) =>
+      api<ApiResponse<null>>("/auth/verify-email/otp-send", {
+        method: "POST",
+        body: JSON.stringify(data),
+      }),
+  });
+}
+export function useVerfiyEmailOTPVerification() {
+  return useMutation({
+    mutationFn: (data: OtpFormValues & ForgotPasswordFormValues) =>
+      api<ApiResponse<null>>("/auth/verify-email/otp-verification", {
+        method: "POST",
+        body: JSON.stringify(data),
       }),
   });
 }

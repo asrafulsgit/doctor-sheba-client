@@ -32,7 +32,7 @@ export async function api<T>(
 
     const data = await res.json().catch(() => null);
 
-    if (!res.ok) {
+    if (!res.ok) { 
       throw new ApiError(res.status, data?.message ?? res.statusText);
     }
 
