@@ -56,9 +56,7 @@ export function PublicNavBar() {
 
             {!isLoading && user ? (
               <Button asChild>
-                <Link href={ROLE_HOME[user.role as UserRole]}>
-                  Open Dashboard
-                </Link>
+                <Link href={ROLE_HOME[user.role as UserRole]}>Dashboard</Link>
               </Button>
             ) : (
               <>

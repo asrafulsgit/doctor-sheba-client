@@ -52,7 +52,7 @@ function Badge({
 type Status = AppointmentStatus | PaymentStatus | "ACTIVE" | "BLOCKED";
 
 const styles: Record<Status, string> = {
-  SCHEDULED: "bg-info-soft text-info",
+  SCHEDULED: "bg-info-soft text-info-one",
   INPROGRESS: "bg-warning-soft text-warning-foreground",
   COMPLETED: "bg-success-soft text-success",
   CANCELED: "bg-destructive-soft text-destructive",

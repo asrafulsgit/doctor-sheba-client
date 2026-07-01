@@ -200,7 +200,6 @@ export function HealthTipDetailSkeleton() {
   );
 }
 
- 
 export function DashboardTopNavbarSkeleton() {
   return (
     <header className="sticky top-0 z-40 border-b border-border bg-background">
@@ -235,7 +234,7 @@ export function DashboardTopNavbarSkeleton() {
     </header>
   );
 }
- 
+
 export function DashboardSidebarSkeleton() {
   return (
     <aside className="sticky top-16 hidden h-[calc(100vh-4rem)] w-64 shrink-0 border-r border-border bg-background lg:block">
@@ -253,10 +252,42 @@ export function DashboardSidebarSkeleton() {
                 index === 0 ? "w-28" : index % 2 === 0 ? "w-24" : "w-32"
               }`}
             />
-            {index === 0 && <Skeleton className="ml-auto h-3.5 w-3.5 rounded-sm" />}
+            {index === 0 && (
+              <Skeleton className="ml-auto h-3.5 w-3.5 rounded-sm" />
+            )}
           </div>
         ))}
       </nav>
     </aside>
   );
+}
+
+export function DashBoardHeaderSkeleton() {
+  return (
+    <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+      <div>
+        <div className="h-8 w-64 rounded bg-muted" />
+        <div className="mt-3 h-4 w-96 rounded bg-muted" />
+      </div>
+
+      <div className="h-10 w-52 rounded-lg bg-muted" />
+    </div>
+  );
+}
+
+export function StatsSkeleton() {
+  return Array.from({ length: 4 }).map((_, i) => (
+    <div key={i} className="rounded-2xl border border-border bg-card p-5">
+      <div className="flex items-center justify-between">
+        <div>
+          <div className="h-4 w-24 rounded bg-muted" />
+          <div className="mt-3 h-8 w-16 rounded bg-muted" />
+        </div>
+
+        <div className="h-12 w-12 rounded-xl bg-muted" />
+      </div>
+
+      <div className="mt-4 h-3 w-24 rounded bg-muted" />
+    </div>
+  ));
 }

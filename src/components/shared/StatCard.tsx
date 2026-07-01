@@ -19,9 +19,9 @@ export interface StatCardProps {
 
 const TONES: Record<NonNullable<StatCardProps["tone"]>, string> = {
   primary: "bg-primary-soft text-primary",
-  success: "bg-success-soft text-success",
+  success: "bg-success-soft text-success-one",
   warning: "bg-warning-soft text-warning-foreground",
-  info: "bg-info-soft text-info",
+  info: "bg-info-soft text-info-one",
   destructive: "bg-destructive-soft text-destructive",
   secondary: "bg-secondary-soft text-secondary",
 };
@@ -36,7 +36,8 @@ const StatCard = ({
 }: StatCardProps) => {
   const up = (trend ?? 0) >= 0;
   return (
-    <div className="group relative overflow-hidden rounded-2xl border border-border bg-card p-5 shadow-soft transition-all hover:-translate-y-0.5 hover:shadow-elevated">
+    <div className="group relative overflow-hidden rounded-2xl border border-border 
+    bg-card p-3 sm:p-5 shadow-soft transition-all hover:-translate-y-0.5 hover:shadow-elevated">
       <div className="flex items-start justify-between gap-3">
         <div
           className={cn(
