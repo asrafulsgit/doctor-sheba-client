@@ -56,7 +56,7 @@ const styles: Record<Status, string> = {
   INPROGRESS: "bg-warning-soft text-warning-foreground",
   COMPLETED: "bg-success-soft text-success",
   CANCELED: "bg-destructive-soft text-destructive",
-  PAID: "bg-success-soft text-success",
+  PAID: "bg-success-soft text-success-one",
   UNPAID: "bg-warning-soft text-warning-foreground",
   ACTIVE: "bg-success-soft text-success",
   BLOCKED: "bg-destructive-soft text-destructive",

@@ -1,5 +1,7 @@
-import { IDoctorFilter } from "@/types/doctors"; 
+import { AppointmentStatus } from "@/types/appointment";
+import { IDoctorFilter } from "@/types/doctors";
 import { IHealthTipFilter } from "@/types/health-tips";
+import { PaymentStatus } from "@/types/payment";
 
 export const queryKeys = {
   // ─── Auth ────────────────────────────────────────────────────────────────
@@ -49,6 +51,8 @@ export const queryKeys = {
     lists: () => ["appointments", "list"] as const,
     list: (filters: AppointmentFilters) =>
       ["appointments", "list", filters] as const,
+    myAppointmentList: (filters: AppointmentFilters) =>
+      ["appointments","myAppointments", "list", filters] as const,
     details: () => ["appointments", "detail"] as const,
     detail: (id: string) => ["appointments", "detail", id] as const,
     upcoming: (userId: string, role: "doctor" | "patient") =>
@@ -65,8 +69,7 @@ export const queryKeys = {
     list: (filters: PrescriptionFilters) =>
       ["prescriptions", "list", filters] as const,
     detail: (id: string) => ["prescriptions", "detail", id] as const,
-    byPatient: () =>
-      ["prescriptions", "patient"] as const,
+    byPatient: () => ["prescriptions", "patient"] as const,
     byAppointment: (appointmentId: string) =>
       ["prescriptions", "appointment", appointmentId] as const,
   },
@@ -97,7 +100,8 @@ export const queryKeys = {
   // ─── Health Tips ───────────────────────────────────────────────────
   healthTips: {
     all: ["health-tips"] as const,
-    list: (filters: IHealthTipFilter) => ["health-tips", "list", filters] as const,
+    list: (filters: IHealthTipFilter) =>
+      ["health-tips", "list", filters] as const,
     detail: (slug: string) => ["health-tips", "detail", slug] as const,
   },
 
@@ -118,8 +122,6 @@ export interface DateRange {
   to: string;
 }
 
-
-
 export interface PatientFilters {
   search?: string;
   status?: "active" | "inactive";
@@ -128,11 +130,11 @@ export interface PatientFilters {
 }
 
 export interface AppointmentFilters {
-  status?: "pending" | "confirmed" | "completed" | "cancelled";
-  doctorId?: string;
-  patientId?: string;
-  dateFrom?: string;
-  dateTo?: string;
+  searchTerm?: string;
+  paymentStatus?: PaymentStatus;
+  status?: AppointmentStatus;
+  startDate?: string;
+  endDate?: string;
   page?: number;
   limit?: number;
 }

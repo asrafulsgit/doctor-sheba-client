@@ -1,167 +1,93 @@
+"use client";
 import DashboardHeader from "@/components/shared/DashboardHeader";
-import { EmptyState } from "@/components/shared/PageState";
-import { StatusBadge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { APPOINTMENTS } from "@/constants/patient/data";
+import { Input } from "@/components/ui/input";
 import {
-  Calendar,
-  MapPin,
-  MoreHorizontal,
-  Stethoscope,
-  Video,
-} from "lucide-react";
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import useQueryManager from "@/hooks/UseQueryManager";
 
-const tabItems = ["upcoming", "completed", "cancelled"] as const;
-const fmt = (iso: string) =>
-  new Date(iso).toLocaleDateString("en-GB", {
-    day: "2-digit",
-    month: "short",
-    year: "numeric",
-  });
+import AppointmentTable from "./AppointmentTable";
+import { AppointmentFilters } from "@/lib/query/query-keys";
+import { useMyAppointments } from "@/lib/hooks/useAppointment";
+import AppointmnetSkeleton from "./AppointmnetSkeleton";
+import { Button } from "@/components/ui/button";
+import RowSkeleton from "@/components/shared/SkeletonSet";
 
 const PatientAppointments = () => {
-  const upcoming = APPOINTMENTS.filter(
-    (a) => a.status === "SCHEDULED" || a.status === "INPROGRESS",
-  );
-  const completed = APPOINTMENTS.filter((a) => a.status === "COMPLETED");
-  const cancelled = APPOINTMENTS.filter((a) => a.status === "CANCELED");
+  const { setQuery, getQuery, getAllQueries, clearQuery } = useQueryManager();
+  const allQueries: AppointmentFilters = getAllQueries();
+  const { data, isLoading, isError, error } = useMyAppointments(allQueries);
+  const appointments = data?.data;
+
+  const searchQueryHandler = (value: string) => {
+    setQuery("searchTerm", value);
+  };
+
   return (
     <>
       <DashboardHeader
         title="My Appointments"
         description="Track and manage your visits."
       />
-      <Tabs defaultValue="upcoming">
-        <TabsList>
-          <TabsTrigger value="upcoming">Upcoming ({upcoming.length})</TabsTrigger>
-          <TabsTrigger value="completed">Completed ({completed.length})</TabsTrigger>
-          <TabsTrigger value="cancelled">Cancelled ({cancelled.length})</TabsTrigger>
-        </TabsList>
-        <TabsContent value="upcoming" className="mt-6">
-          <List items={upcoming} />
-        </TabsContent>
-        <TabsContent value="completed" className="mt-6">
-          <List items={completed} />
-        </TabsContent>
-        <TabsContent value="cancelled" className="mt-6">
-          {cancelled.length ? (
-            <List items={cancelled} />
-          ) : (
-            <EmptyState
-              icon={Calendar}
-              title="No cancelled appointments"
-              description="A clean record."
-            />
-          )}
-        </TabsContent>
-      </Tabs>
+      {/* Filters */}
+      <div className="flex flex-col md:flex-row gap-3 ">
+        <Input
+          placeholder="Search by name..."
+          value={getQuery("searchTerm") ?? ""}
+          onChange={(e) => searchQueryHandler(e.target.value)}
+        />
+
+        <div className="flex flex-wrap md:flex-nowrap gap-3">
+          <Select
+            defaultValue={getQuery("status") ?? ""}
+            onValueChange={(v) => setQuery("status", v)}
+          >
+            <SelectTrigger>
+              <SelectValue placeholder="All Status" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="SCHEDULED">Scheduled</SelectItem>
+              <SelectItem value="INPROGRESS">Inprogress</SelectItem>
+              <SelectItem value="COMPLETED">Completed</SelectItem>
+              <SelectItem value="CANCELED">Canceled</SelectItem>
+            </SelectContent>
+          </Select>
+
+          <Select
+            defaultValue={getQuery("limit") ?? ""}
+            onValueChange={(v) => setQuery("limit", v)}
+          >
+            <SelectTrigger>
+              <SelectValue placeholder="Limit" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="10">10</SelectItem>
+              <SelectItem value="20">20</SelectItem>
+              <SelectItem value="50">50</SelectItem>
+              <SelectItem value="100">100</SelectItem>
+              <SelectItem value="150">150</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+        <Button variant="outline" onClick={clearQuery}>
+          Reset Filters
+        </Button>
+      </div>
+
+      {/* Table */}
+      {isLoading ? (
+        <div className="mt-2">
+          <RowSkeleton />
+        </div>
+      ) : (
+        <AppointmentTable appointments={appointments ?? []} />
+      )}
     </>
   );
 };
-
-function List({ items }: { items: typeof APPOINTMENTS }) {
-  if (!items.length)
-    return (
-      <EmptyState
-        icon={Calendar}
-        title="Nothing here yet"
-        description="When you have bookings, they'll show up here."
-      />
-    );
-  return (
-    <div className="space-y-3">
-      {items.map((a) => (
-        <div
-          key={a.id}
-          className="flex flex-wrap items-center gap-4 rounded-2xl border border-border bg-card p-4 shadow-soft transition hover:shadow-elevated"
-        >
-          <div className="grid h-12 w-12 place-items-center rounded-xl bg-primary-soft text-primary">
-            <Stethoscope className="h-5 w-5" />
-          </div>
-          <div className="min-w-0 flex-1">
-            <div className="flex flex-wrap items-center gap-2">
-              <p className="font-semibold text-foreground">{a.doctorName}</p>
-              <StatusBadge status={a.status} />
-              <StatusBadge status={a.paymentStatus} />
-            </div>
-            <p className="text-sm text-muted-foreground">
-              {a.specialty} · {a.reason}
-            </p>
-            <div className="mt-1 flex flex-wrap items-center gap-3 text-xs text-muted-foreground">
-              <span className="inline-flex items-center gap-1">
-                <Calendar className="h-3 w-3" />
-                {fmt(a.date)}
-              </span>
-              <span>
-                {a.startTime} – {a.endTime}
-              </span>
-              <span className="inline-flex items-center gap-1">
-                {a.mode === "VIDEO" ? (
-                  <Video className="h-3 w-3" />
-                ) : (
-                  <MapPin className="h-3 w-3" />
-                )}
-                {a.mode === "VIDEO" ? "Video" : "In-person"}
-              </span>
-              <span>৳{a.fee}</span>
-            </div>
-          </div>
-          <div className="flex items-center gap-2">
-            {a.status === "SCHEDULED" && (
-              <Button size="sm" variant="outline">
-                Reschedule
-              </Button>
-            )}
-            {(a.status === "SCHEDULED" || a.status === "INPROGRESS") &&
-              a.mode === "VIDEO" && (
-                <Button size="sm">
-                  <Video className="h-4 w-4" />
-                  Join
-                </Button>
-              )}
-            <Button size="icon" variant="ghost">
-              <MoreHorizontal className="h-4 w-4" />
-            </Button>
-          </div>
-        </div>
-      ))}
-    </div>
-  );
-}
-
-// seo optimization
-// export const Route = createFileRoute("/patient/appointments")({
-//   head: () => ({ meta: [{ title: "My Appointments — DoctorSheba" }] }),
-// });
-
-// const tabItems = ["upcoming", "completed", "cancelled"] as const;
-
-// const PatientAppointments = () => {
-//   return (
-//     <>
-//       <DashboardHeader
-//         title="My Appointments"
-//         description="Track and manage your visits."
-//       />
-//       <Tabs defaultValue="upcoming">
-//         <TabsList>
-//           <TabsTrigger value="upcoming">Upcoming</TabsTrigger>
-//           <TabsTrigger value="completed">Completed</TabsTrigger>
-//           <TabsTrigger value="cancelled">Cancelled</TabsTrigger>
-//         </TabsList>
-//         {tabItems.map((t) => (
-//           <TabsContent key={t} value={t} className="mt-6">
-//             <EmptyState
-//               icon={Calendar}
-//               title={`No ${t} appointments`}
-//               description="When you book a visit, you'll find it here."
-//             />
-//           </TabsContent>
-//         ))}
-//       </Tabs>
-//     </>
-//   );
-// };
 
 export default PatientAppointments;

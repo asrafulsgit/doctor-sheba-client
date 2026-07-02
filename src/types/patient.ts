@@ -1,3 +1,6 @@
+import { IDoctor } from "./doctors";
+import { ISchedule } from "./schedule";
+import { ISpecialty } from "./specialties";
 import { AppointmentStatus } from "./user";
 
 export interface IPatient {
@@ -48,43 +51,9 @@ export interface UpcomingAppointment {
   createdAt: string;
   updatedAt: string;
 
-  doctor: {
-    id: string;
-    name: string;
-    email: string;
-    profilePhoto: string | null;
-    contactNumber: string;
-    address: string;
-    experience: number;
-    gender: string;
-    registrationNumber: string;
-    appointmentFee: number;
-    currentWorkingPlace: string;
-    designation: string;
-    qualification: string;
-    isDeleted: boolean;
-    averageRating: number;
-    createdAt: string;
-    updatedAt: string;
+  doctor: IDoctor;
 
-    doctorSpecialities: {
-      id: string;
-      doctorId?: string;
-      specialities?: {
-        id: string;
-        title: string;
-        icon?: string | null;
-      };
-    }[];
-  };
-
-  schedule: {
-    id: string;
-    startDateTime: string;
-    endDateTime: string;
-    createdAt: string;
-    updatedAt: string;
-  };
+  schedule: ISchedule;
 }
 
 export interface RecentPrescription {
@@ -97,10 +66,10 @@ export interface RecentPrescription {
   instructions: string;
   followUpDate: string | null;
   diagnosis: string;
-  medications: Medication[];
+  medications: IMedication[];
 }
 
-export interface Medication {
+export interface IMedication {
   id: string;
   prescriptionId: string;
   name: string;
