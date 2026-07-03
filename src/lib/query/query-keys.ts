@@ -17,6 +17,7 @@ export const queryKeys = {
     all: ["doctors"] as const,
     lists: () => ["doctors", "list"] as const,
     list: (filters: IDoctorFilter) => ["doctors", "list", filters] as const,
+    myDoctorsList: (filters: IDoctorFilter) => ["doctors", "myDoctors","list", filters] as const,
     details: () => ["doctors", "detail"] as const,
     detail: (id: string) => ["doctors", "detail", id] as const,
     schedule: (id: string, dateRange?: DateRange) =>
