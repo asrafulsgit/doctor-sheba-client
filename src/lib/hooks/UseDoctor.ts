@@ -19,3 +19,11 @@ export function useMyDoctors(filters: IDoctorFilter = {}) {
     staleTime: 1000 * 60 * 10,
   });
 }
+
+export function useDoctorProfile(id: string) {
+  return useQuery({
+    queryKey: queryKeys.doctors.detail(id),
+    queryFn: () => api<ApiResponse<IDoctor>>(`/doctor/${id}`),
+    staleTime: 1000 * 60 * 5,
+  });
+}

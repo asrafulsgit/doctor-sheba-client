@@ -18,7 +18,7 @@ const MyDoctorCard = ({ doctor }: { doctor: IDoctor }) => {
             {doctor.name}
           </p>
           <p className="truncate text-xs text-muted-foreground">
-            {doctor.doctorSpecialities && doctor?.doctorSpecialities[0]?.title}{" "}
+            {doctor.doctorSpecialities && doctor?.doctorSpecialities[0]?.specialities.title}{" "}
             · {doctor.experience}+ yrs
           </p>
         </div>

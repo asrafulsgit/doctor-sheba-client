@@ -1,9 +1,7 @@
+import DoctorProfile from "@/components/doctor/doctorProfile/DoctorProfile";
+
 const page = () => {
-  return (
-    <div>
-      <h1>doctor profile</h1>
-    </div>
-  );
+  return <DoctorProfile />;
 };
 
 export default page;
