@@ -21,8 +21,9 @@ const DoctorProfile = () => {
   const { data, isLoading, isError, error } = useDoctorProfile(
     params.id as string,
   );
-  const doctor = data?.data;
-
+  const doctor = data?.data?.doctor;
+  const reviews = data?.data?.reviews;
+    
   if (isLoading) {
     return <DoctorProfileSkeleton />;
   }
@@ -167,30 +168,14 @@ const DoctorProfile = () => {
               </span>
             </div>
             <div className="mt-4 space-y-4">
-              {[
-                {
-                  name: "Sadia A.",
-                  rating: 5,
-                  text: "Very kind, listened carefully and explained everything in plain language.",
-                },
-                {
-                  name: "Rakib H.",
-                  rating: 5,
-                  text: "Professional and on time. Booking was effortless.",
-                },
-                {
-                  name: "Mim T.",
-                  rating: 4,
-                  text: "Helpful prescription, follow-up scheduled directly through the app.",
-                },
-              ].map((r) => (
+              {reviews?.length ?  reviews?.map((r) => (
                 <div
-                  key={r.name}
+                  key={r.id}
                   className="rounded-lg border border-border bg-surface p-4"
                 >
                   <div className="flex items-center justify-between">
                     <p className="text-sm font-medium text-foreground">
-                      {r.name}
+                      {r.patient.name}
                     </p>
                     <div className="flex items-center gap-0.5 text-warning">
                       {Array.from({ length: 5 }).map((_, i) => (
@@ -201,9 +186,9 @@ const DoctorProfile = () => {
                       ))}
                     </div>
                   </div>
-                  <p className="mt-2 text-sm text-muted-foreground">{r.text}</p>
+                  <p className="mt-2 text-sm text-muted-foreground">{r.comment}</p>
                 </div>
-              ))}
+              )) : <p className="mt-4 text-center text-sm text-muted-foreground">No review.</p>}
             </div>
           </Reveal>
         </div>
