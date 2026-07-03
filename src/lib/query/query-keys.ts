@@ -52,7 +52,9 @@ export const queryKeys = {
     list: (filters: AppointmentFilters) =>
       ["appointments", "list", filters] as const,
     myAppointmentList: (filters: AppointmentFilters) =>
-      ["appointments","myAppointments", "list", filters] as const,
+      ["appointments", "myAppointments", "list", filters] as const,
+    myAppointment: (id: string) =>
+      ["appointments", "myAppointments", id] as const,
     details: () => ["appointments", "detail"] as const,
     detail: (id: string) => ["appointments", "detail", id] as const,
     upcoming: (userId: string, role: "doctor" | "patient") =>
@@ -72,6 +74,12 @@ export const queryKeys = {
     byPatient: () => ["prescriptions", "patient"] as const,
     byAppointment: (appointmentId: string) =>
       ["prescriptions", "appointment", appointmentId] as const,
+  },
+
+  meta: {
+    patientMeta: ["patientMeta"] as const,
+    doctorMeta: ["doctorMeta"] as const,
+    adminMeta: ["patientMeta"] as const,
   },
 
   // ─── Notifications ────────────────────────────────────────────────────────

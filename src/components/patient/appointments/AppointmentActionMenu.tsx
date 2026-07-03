@@ -14,11 +14,12 @@ import { ReactNode, useState } from "react";
 import { IAppointment } from "@/types/appointment";
 import { CustomAlertDialog, CustomDialog } from "@/hooks/useDialog";
 import { AlertDialogAction } from "@/components/ui/alert-dialog";
-import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import { StatusBadge } from "@/components/ui/badge";
 import { AppointmentStatus } from "@/types/user";
 import { PaymentStatus } from "@/types/payment";
+import { useUpdateAppointmentStatus } from "@/lib/hooks/useAppointment";
+import { toast } from "sonner";
 
 type AppointmentActionMenuProps = {
   appointment: Partial<IAppointment>;
@@ -35,6 +36,21 @@ export const AppointmentActionMenu = ({
   const formattedAppointmentDate = appointmentDate
     ? format(new Date(appointmentDate), "dd MMM yyyy hh:mm a")
     : "Unknown date";
+
+  const { mutate: cancelAppointment, isPending } = useUpdateAppointmentStatus();
+  const handleCancel = (appointmentId: string) => {
+    cancelAppointment(
+      { appointmentId, status: "CANCELED" },
+      {
+        onSuccess: () => {
+          toast.success("Appointment cancelled successfully.");
+        },
+        onError: (error: any) => {
+          toast.error(error?.message || "Failed to cancel appointment.");
+        },
+      },
+    );
+  };
 
   return (
     <>
@@ -127,22 +143,20 @@ export const AppointmentActionMenu = ({
         open={isOpenCancel}
         onOpenChange={setIsOpenCancel}
         title="Cancel this appointment?"
-        isLoading={isLoading}
+        isLoading={isPending}
         description={`${appointment.doctor?.name} · ${formattedAppointmentDate}. Refund processed in 5–7 days.`}
         cancelLabel="Cancel"
       >
         <AlertDialogAction
           onClick={(e) => {
             e.preventDefault();
+            handleCancel(appointment.id as string);
             setIsOpenCancel(false);
           }}
-          disabled={isLoading}
-          className={cn(
-            "",
-            "bg-destructive text-destructive-foreground hover:bg-destructive/90",
-          )}
+          disabled={isPending}
+          variant={"destructive"}
         >
-          {isLoading ? "Working…" : "Yes cancel"}
+          {isPending ? "Canceling…" : "Yes, cancel"}
         </AlertDialogAction>
       </CustomAlertDialog>
     </>

@@ -12,8 +12,7 @@ import useQueryManager from "@/hooks/UseQueryManager";
 
 import AppointmentTable from "./AppointmentTable";
 import { AppointmentFilters } from "@/lib/query/query-keys";
-import { useMyAppointments } from "@/lib/hooks/useAppointment";
-import AppointmnetSkeleton from "./AppointmnetSkeleton";
+import { useMyAppointments } from "@/lib/hooks/useAppointment"; 
 import { Button } from "@/components/ui/button";
 import RowSkeleton from "@/components/shared/SkeletonSet";
 
