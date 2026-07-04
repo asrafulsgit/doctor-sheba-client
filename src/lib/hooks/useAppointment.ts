@@ -34,7 +34,8 @@ export function useMyAppointment(id: string) {
     queryKey: queryKeys.appointments.myAppointment(id),
     queryFn: () =>
       api<ApiResponse<IAppointment>>(`/appointment/my-appointments/${id}`),
-    staleTime: 1000 * 60 * 10,
+    staleTime: 1000 * 60 * 5,
+    enabled: !!id,
   });
 }
 

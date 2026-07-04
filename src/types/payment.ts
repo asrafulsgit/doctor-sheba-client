@@ -9,3 +9,15 @@ export interface Payment {
   createdAt: string;
   updatedAt: string;
 }
+ 
+
+export interface IPayment  {
+  id: string;
+  appointmentId: string;
+  amount: number;
+  transactionId: string;
+  status: PaymentStatus;
+  paymentGatewayData: Record<string, any> | null;
+  createdAt: string;
+  updatedAt: string;
+};
