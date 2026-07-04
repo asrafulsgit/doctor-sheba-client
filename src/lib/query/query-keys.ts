@@ -17,7 +17,8 @@ export const queryKeys = {
     all: ["doctors"] as const,
     lists: () => ["doctors", "list"] as const,
     list: (filters: IDoctorFilter) => ["doctors", "list", filters] as const,
-    myDoctorsList: (filters: IDoctorFilter) => ["doctors", "myDoctors","list", filters] as const,
+    myDoctorsList: (filters: IDoctorFilter) =>
+      ["doctors", "myDoctors", "list", filters] as const,
     details: () => ["doctors", "detail"] as const,
     detail: (id: string) => ["doctors", "detail", id] as const,
     schedule: (id: string, dateRange?: DateRange) =>
@@ -63,6 +64,10 @@ export const queryKeys = {
     today: (doctorId: string) => ["appointments", "today", doctorId] as const,
     calendar: (doctorId: string, month: string) =>
       ["appointments", "calendar", doctorId, month] as const,
+  },
+  bookings: {
+    all: ["bookings"] as const,
+    doctorSchedules: (id: string) => ["bookings", "schedules", id] as const,
   },
 
   // ─── Prescriptions ────────────────────────────────────────────────────────

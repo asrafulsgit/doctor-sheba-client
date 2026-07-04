@@ -24,10 +24,17 @@ export interface Doctor {
 }
 
 export interface IDoctorSchedule {
+  doctorId: string;
+  scheduleId: string;
   isBooked: boolean;
+  createdAt: string;
+  updatedA: string;
   schedule: {
+    id: string;
     startDateTime: string;
     endDateTime: string;
+    createdAt: string;
+    updatedAt: string;
   };
 }
 
