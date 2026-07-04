@@ -4,6 +4,20 @@ import { api } from "../api/api-client";
 import { ApiResponse } from "@/types/api-response";
 import { AppointmentStatus, IAppointment } from "@/types/appointment";
 
+type Booking = {
+  doctorId: string;
+  scheduleId: string;
+};
+export function useBooking() {
+  return useMutation({
+    mutationFn: (data: Booking) =>
+      api<ApiResponse<{ session_url: string | null }>>("/appointment", {
+        method: "POST",
+        body: JSON.stringify(data),
+      }),
+  });
+}
+
 export function useMyAppointments(filters: AppointmentFilters = {}) {
   return useQuery({
     queryKey: queryKeys.appointments.myAppointmentList(filters),
