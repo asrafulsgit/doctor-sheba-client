@@ -18,20 +18,22 @@ import PaymentSuccessSkeleton from "./SuccesSkeleton";
 import AppointmentDetailsCard from "./AppointmentDetailsCard";
 import PaymentDetailscard from "./PaymentDetailscard";
 import { EmptyState } from "@/components/shared/PageState";
+import useQueryManager from "@/hooks/UseQueryManager";
 
 const PaymentSuccess = () => {
-  const params = useParams();
+  const { getQuery } = useQueryManager();
   const router = useRouter();
-  const appointmentId = params.appointmentId as string;
-  const paymentId = params.paymentId as string;
+  const appointmentId = getQuery("appointmentId") as string;
+  const paymentId = getQuery("paymentId") as string;
   const {
     data,
     isLoading: appointmentLoading,
     isError,
-    error
+    error,
   } = useMyAppointment(appointmentId);
   const appointment = data?.data;
   const payment = appointment?.payments.find((p) => p.id === paymentId);
+
   if (!appointmentId || !paymentId) {
     router.push("/not-found");
     return null;
@@ -40,19 +42,19 @@ const PaymentSuccess = () => {
     return <PaymentSuccessSkeleton />;
   }
 
-   if (isError) {
-      return (
-        <EmptyState
-          title={error.message || "Error while getting appointment"}
-          description=""
-        />
-      );
-    }
+  if (isError) {
+    return (
+      <EmptyState
+        title={error.message || "Error while getting appointment"}
+        description=""
+      />
+    );
+  }
 
   return (
     <section className="mx-auto max-w-3xl px-4 py-16 sm:px-6 lg:px-8">
       <div className="text-center">
-        <div className="mx-auto grid h-16 w-16 place-items-center rounded-full bg-success-soft text-success">
+        <div className="mx-auto grid h-16 w-16 place-items-center rounded-full bg-success-soft text-success-one">
           <CheckCircle2 className="h-8 w-8" />
         </div>
         <h1 className="mt-5 text-3xl font-semibold tracking-tight text-foreground">

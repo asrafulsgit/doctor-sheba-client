@@ -1,6 +1,7 @@
 import { UserRole } from "@/types/user";
 import {
   AUTH_ROUTES,
+  AUTHENTICATED_ROUTES,
   PROTECTED_ROUTES,
   PUBLIC_ROUTES,
   ROLE_HOME,
@@ -15,6 +16,12 @@ export function isAuthRoute(pathname: string): boolean {
 
 export function isPublicRoute(pathname: string): boolean {
   return PUBLIC_ROUTES.some(
+    (route) => pathname === route || pathname.startsWith(route + "/"),
+  );
+}
+
+export function isAuthenticatedRoute(pathname: string): boolean {
+  return AUTHENTICATED_ROUTES.some(
     (route) => pathname === route || pathname.startsWith(route + "/"),
   );
 }

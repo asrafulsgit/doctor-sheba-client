@@ -4,6 +4,7 @@ import {
   getDeniedRedirect,
   getRoleHome,
   isAuthRoute,
+  isAuthenticatedRoute,
   isPublicRoute,
   isStaticAsset,
   matchProtectedRoute,
@@ -77,7 +78,17 @@ export async function proxy(request: NextRequest): Promise<NextResponse> {
     return response;
   }
 
-  // ── 7. Protected route guard ────────────────────────────────────────────
+  // ── 7. Authenticated routes (any role) — require login but allow any role ──
+  if (isAuthenticatedRoute(pathname)) {
+    if (!authObject.verification || !userRole) {
+      // Not authenticated → redirect to login
+      return buildRedirect(request, "/auth/login", response);
+    }
+    // Authenticated → allow access regardless of role
+    return response;
+  }
+
+  // ── 8. Protected route guard ────────────────────────────────────────────
   const routeConfig = matchProtectedRoute(pathname);
 
   if (routeConfig) {

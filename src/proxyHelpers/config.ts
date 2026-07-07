@@ -23,6 +23,14 @@ export const PUBLIC_ROUTES = [
   "/privacy",
 ];
 
+// ─── Authenticated routes (any role can access) ────────────────────────────
+// Routes that require authentication but don't restrict by role.
+
+export const AUTHENTICATED_ROUTES = [
+  "/booking",
+  "/payment",
+];
+
 // ─── Role home pages (after login redirect) ────────────────────────────────
 
 export const ROLE_HOME: Record<UserRole, string> = {

@@ -1,26 +1,22 @@
+"use client";
 import { useMyAppointment } from "@/lib/hooks/useAppointment";
-import {
-  Calendar,
-  Receipt,
-  RefreshCw,
-  Stethoscope,
-  XCircle,
-} from "lucide-react";
+import { Receipt, RefreshCw, Stethoscope, XCircle } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
 import PaymentSuccessSkeleton from "./SuccesSkeleton";
-import { Row } from "./Success";
-import { format } from "date-fns";
+
 import AppointmentDetailsCard from "./AppointmentDetailsCard";
 import PaymentDetailscard from "./PaymentDetailscard";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { EmptyState } from "@/components/shared/PageState";
+import useQueryManager from "@/hooks/UseQueryManager";
 
 const PaymentCancel = () => {
-  const params = useParams();
+  const { getQuery } = useQueryManager();
   const router = useRouter();
-  const appointmentId = params.appointmentId as string;
-  const paymentId = params.paymentId as string;
+
+  const appointmentId = getQuery("appointmentId") as string;
+  const paymentId = getQuery("paymentId") as string;
   const {
     data,
     isLoading: appointmentLoading,
