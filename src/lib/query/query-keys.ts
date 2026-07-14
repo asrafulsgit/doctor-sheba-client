@@ -78,6 +78,7 @@ export const queryKeys = {
       ["prescriptions", "list", filters] as const,
     detail: (id: string) => ["prescriptions", "detail", id] as const,
     byPatient: () => ["prescriptions", "patient"] as const,
+    myPrescriptions: () => ["prescriptions", "patient","myPrescriptions"] as const,
     byAppointment: (appointmentId: string) =>
       ["prescriptions", "appointment", appointmentId] as const,
   },
