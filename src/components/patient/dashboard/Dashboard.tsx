@@ -33,25 +33,14 @@ import { format } from "date-fns";
 //   head: () => ({ meta: [{ title: "Patient Dashboard — DoctorSheba" }] }),
 //   component: PatientHome,
 // });
-
-const fmtDate = (iso: string) =>
-  new Date(iso).toLocaleDateString("en-GB", {
-    day: "2-digit",
-    month: "short",
-    year: "numeric",
-  });
-const fmtTime = (iso: string) =>
-  new Date(iso).toLocaleTimeString("en-GB", {
-    hour: "2-digit",
-    minute: "2-digit",
-  });
+ 
 
 const PatientDashboard = () => {
   const { data, isLoading } = useMe();
   const user = data?.data;
   const { data: metaData, isLoading: metaDataLoading } = usePatientMetaData();
 
-  // console.log(metaData);
+  
   const meta = metaData?.data;
   const stats = meta?.stats;
   const upcomingAppointments: UpcomingAppointment[] =

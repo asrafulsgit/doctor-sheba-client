@@ -25,7 +25,7 @@ const PrescriptionCard = ({
           <p className="text-xs text-muted-foreground">
             {prescription?.doctor?.name} ·{" "}
             <Calendar className="inline h-3 w-3" />{" "}
-            {format(prescription.createdAt, "dd MM yyyy")}
+            {format(prescription.createdAt, "dd MMM yyyy")}
           </p>
         </div>
         <Button size="sm" variant="outline">
@@ -58,7 +58,7 @@ const PrescriptionCard = ({
       {prescription.followUpDate && (
         <p className="mt-2 text-xs text-warning-foreground inline-flex items-center gap-1">
           <Calendar className="h-3 w-3" />
-          Follow-up: {format(prescription.followUpDate, "dd MM yyyy")}
+          Follow-up: {format(prescription.followUpDate, "dd MMM yyyy")}
         </p>
       )}
     </article>

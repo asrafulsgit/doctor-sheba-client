@@ -2,7 +2,7 @@ import { DashBoardHeaderSkeleton, StatsSkeleton } from "@/components/shared/Skel
 
 export default function PatientDashboardSkeleton() {
   return (
-    <div className="animate-pulse space-y-8">
+    <div className="animate-pulse space-y-8 max-w-7xl">
       {/* Header */}
       <DashBoardHeaderSkeleton />
 

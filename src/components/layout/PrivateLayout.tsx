@@ -129,7 +129,7 @@ const PrivateLayout = ({ children }: { children: ReactNode }) => {
       {/* Top navbar */}
       {!isLoading ? (
         <header className="sticky top-0 z-40 border-b border-border bg-background">
-          <div className="flex h-16 items-center justify-between px-4 sm:px-6">
+          <div className="max-w-7xl mx-auto flex h-16 items-center justify-between px-4 sm:px-6">
             <div className="flex items-center gap-3">
               <Sheet>
                 <SheetTrigger asChild>
@@ -188,7 +188,7 @@ const PrivateLayout = ({ children }: { children: ReactNode }) => {
         <DashboardTopNavbarSkeleton />
       )}
 
-      <div className="mx-auto flex max-w-[1600px]">
+      <div className="mx-auto flex max-w-7xl">
         {/* Sidebar — desktop */}
         {!isLoading ? (
           <aside className="sticky top-16 hidden h-[calc(100vh-4rem)] w-64 shrink-0 border-r border-border bg-background lg:block">

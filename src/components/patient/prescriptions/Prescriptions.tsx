@@ -1,9 +1,9 @@
+"use client";
 import DashboardHeader from "@/components/shared/DashboardHeader";
-import { Button } from "@/components/ui/button";
-import { PRESCRIPTIONS } from "@/constants/patient/data";
 import { useMyPrescriptions } from "@/lib/hooks/useprescription";
-import { Calendar, Download, Pill } from "lucide-react";
 import PrescriptionCard from "./PrescriptionCard";
+import PrescriptionCardSkeleton from "./PrescriptionCardSkeleton";
+import { EmptyState } from "@/components/shared/PageState";
 
 // seo optimization
 // export const Route = createFileRoute("/patient/prescriptions")({
@@ -11,16 +11,10 @@ import PrescriptionCard from "./PrescriptionCard";
 //   component: PatientPrescriptions,
 // });
 
-const fmt = (iso: string) =>
-  new Date(iso).toLocaleDateString("en-GB", {
-    day: "2-digit",
-    month: "short",
-    year: "numeric",
-  });
 const PatientPrescriptions = () => {
   const { data, isPending, isError, error } = useMyPrescriptions();
 
-  const prescriptions = data?.data;
+  const prescriptions = data?.data || [];
   return (
     <>
       <DashboardHeader
@@ -28,11 +22,22 @@ const PatientPrescriptions = () => {
         description="Digital prescriptions from your consultations."
       />
 
-      <div className="grid gap-4 lg:grid-cols-2">
-        {prescriptions?.map((rx) => (
-          <PrescriptionCard prescription={rx} key={rx.id} />
-        ))}
-      </div>
+      {isPending ? (
+        <div className="grid gap-4 md:grid-cols-2">
+          <PrescriptionCardSkeleton />
+        </div>
+      ) : prescriptions?.length ? (
+        <div className="grid gap-4 md:grid-cols-2">
+          {prescriptions?.map((rx) => (
+            <PrescriptionCard prescription={rx} key={rx.id} />
+          ))}
+        </div>
+      ) : (
+        <EmptyState
+          title="No prescription found"
+          description="Try again later"
+        />
+      )}
     </>
   );
 };
