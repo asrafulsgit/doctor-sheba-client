@@ -29,8 +29,7 @@ export const AppointmentActionMenu = ({
   appointment,
 }: AppointmentActionMenuProps) => {
   const [isOpenDetails, setIsOpenDetails] = useState(false);
-  const [isOpenCancel, setIsOpenCancel] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isOpenCancel, setIsOpenCancel] = useState(false); 
 
   const appointmentDate = appointment?.schedule?.startDateTime;
   const formattedAppointmentDate = appointmentDate

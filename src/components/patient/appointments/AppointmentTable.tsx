@@ -12,8 +12,7 @@ import {
 import { StatusBadge } from "@/components/ui/badge";
 
 import { IAppointment } from "@/types/appointment";
-import { EmptyState } from "@/components/shared/PageState";
-import { Calendar, Stethoscope } from "lucide-react";
+import { Stethoscope } from "lucide-react";
 import AppointmentActionMenu from "./AppointmentActionMenu";
 import { format } from "date-fns";
 
@@ -24,15 +23,6 @@ const AppointmentTable = ({
 }: {
   appointments: IAppointment[];
 }) => {
-  if (!appointments.length)
-    return (
-      <EmptyState
-        icon={Calendar}
-        title="Nothing here yet"
-        description="When you have bookings, they'll show up here."
-        className="mt-2"
-      />
-    );
   return (
     <div className="mt-2 overflow-hidden rounded-lg border">
       <Table>

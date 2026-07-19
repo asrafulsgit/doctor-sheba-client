@@ -12,9 +12,11 @@ import useQueryManager from "@/hooks/UseQueryManager";
 
 import AppointmentTable from "./AppointmentTable";
 import { AppointmentFilters } from "@/lib/query/query-keys";
-import { useMyAppointments } from "@/lib/hooks/useAppointment"; 
+import { useMyAppointments } from "@/lib/hooks/useAppointment";
 import { Button } from "@/components/ui/button";
 import RowSkeleton from "@/components/shared/SkeletonSet";
+import { EmptyState } from "@/components/shared/PageState";
+import { Calendar } from "lucide-react";
 
 const PatientAppointments = () => {
   const { setQuery, getQuery, getAllQueries, clearQuery } = useQueryManager();
@@ -82,8 +84,19 @@ const PatientAppointments = () => {
         <div className="mt-2">
           <RowSkeleton />
         </div>
-      ) : (
+      ) : appointments?.length ? (
         <AppointmentTable appointments={appointments ?? []} />
+      ) : (
+        <EmptyState
+          icon={Calendar}
+          title="Nothing here yet"
+          description={
+            isError
+              ? error.message
+              : "When you have bookings, they'll show up here."
+          }
+          className="mt-2"
+        />
       )}
     </>
   );

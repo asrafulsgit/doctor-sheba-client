@@ -1,6 +1,6 @@
 import { IAppointment } from "./appointment";
 import { IDoctor } from "./doctors";
-import { IMedication } from "./patient";
+import { IMedication, IPatient } from "./patient";
 
 export interface IPrescription {
   id: string;
@@ -12,7 +12,8 @@ export interface IPrescription {
   followUpDate?: string;
   createdAt: string;
   updatedAt: string;
-  appointment:  IAppointment;
-  doctor:IDoctor;
-  medications : IMedication[]
+  appointment: IAppointment;
+  doctor?: IDoctor;
+  patient?: IPatient;
+  medications: IMedication[];
 }

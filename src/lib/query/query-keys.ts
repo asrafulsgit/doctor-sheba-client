@@ -65,6 +65,25 @@ export const queryKeys = {
     calendar: (doctorId: string, month: string) =>
       ["appointments", "calendar", doctorId, month] as const,
   },
+  // ─── medical reports ─────────────────────────────────────────────────────────
+  medicalReports: {
+    all: ["MedicalReports"] as const,
+    myMedicalReports: (filters: MedicalReportFilters) =>
+      ["MedicalReports", "list",filters] as const,
+    list: (filters: AppointmentFilters) =>
+      ["appointments", "list", filters] as const,
+    myAppointmentList: (filters: AppointmentFilters) =>
+      ["appointments", "myAppointments", "list", filters] as const,
+    myAppointment: (id: string) =>
+      ["appointments", "myAppointments", id] as const,
+    details: () => ["appointments", "detail"] as const,
+    detail: (id: string) => ["appointments", "detail", id] as const,
+    upcoming: (userId: string, role: "doctor" | "patient") =>
+      ["appointments", "upcoming", userId, role] as const,
+    today: (doctorId: string) => ["appointments", "today", doctorId] as const,
+    calendar: (doctorId: string, month: string) =>
+      ["appointments", "calendar", doctorId, month] as const,
+  },
   bookings: {
     all: ["bookings"] as const,
     doctorSchedules: (id: string) => ["bookings", "schedules", id] as const,
@@ -78,7 +97,8 @@ export const queryKeys = {
       ["prescriptions", "list", filters] as const,
     detail: (id: string) => ["prescriptions", "detail", id] as const,
     byPatient: () => ["prescriptions", "patient"] as const,
-    myPrescriptions: () => ["prescriptions", "patient","myPrescriptions"] as const,
+    myPrescriptions: () =>
+      ["prescriptions", "patient", "myPrescriptions"] as const,
     byAppointment: (appointmentId: string) =>
       ["prescriptions", "appointment", appointmentId] as const,
   },
@@ -152,6 +172,14 @@ export interface AppointmentFilters {
   endDate?: string;
   page?: number;
   limit?: number;
+}
+
+export interface MedicalReportFilters {
+  searchTerm?: string;
+  page?: string;
+  limit?: string;
+  sortBy?: string;
+  sortOrder?: string;
 }
 
 export interface PrescriptionFilters {
