@@ -69,7 +69,7 @@ export const queryKeys = {
   medicalReports: {
     all: ["MedicalReports"] as const,
     myMedicalReports: (filters: MedicalReportFilters) =>
-      ["MedicalReports", "list",filters] as const,
+      ["MedicalReports", "list", filters] as const,
     list: (filters: AppointmentFilters) =>
       ["appointments", "list", filters] as const,
     myAppointmentList: (filters: AppointmentFilters) =>
@@ -144,6 +144,8 @@ export const queryKeys = {
   payments: {
     all: ["payments"] as const,
     list: (filters: PaymentFilters) => ["payments", "list", filters] as const,
+    patientPayments: (filters: PaymentFilters) =>
+      ["payments", "list", "patient", filters] as const,
     detail: (id: string) => ["payments", "detail", id] as const,
     byPatient: (patientId: string) =>
       ["payments", "patient", patientId] as const,
@@ -191,10 +193,10 @@ export interface PrescriptionFilters {
 }
 
 export interface PaymentFilters {
-  status?: "pending" | "completed" | "refunded" | "failed";
-  patientId?: string;
-  dateFrom?: string;
-  dateTo?: string;
-  page?: number;
-  limit?: number;
+  searchTerm?: string;
+  status?: string;
+  page?: string;
+  limit?: string;
+  sortBy?: string;
+  sortOrder?: string;
 }

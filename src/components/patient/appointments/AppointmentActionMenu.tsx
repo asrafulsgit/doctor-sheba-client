@@ -25,7 +25,7 @@ type AppointmentActionMenuProps = {
   appointment: Partial<IAppointment>;
 };
 
-export const AppointmentActionMenu = ({
+const AppointmentActionMenu = ({
   appointment,
 }: AppointmentActionMenuProps) => {
   const [isOpenDetails, setIsOpenDetails] = useState(false);
