@@ -20,6 +20,7 @@ const ReportCard = ({ report }: { report: IMedicalReport }) => {
       {
         onSuccess: () => {
           toast.success("Report deleted");
+          setIsOpenDelete(false);
         },
         onError: (error: any) => {
           toast.error(error?.message || "Failed to delete report.");
@@ -77,7 +78,6 @@ const ReportCard = ({ report }: { report: IMedicalReport }) => {
             onClick={(e) => {
               e.preventDefault();
               handleDelete(report.id as string);
-              setIsOpenDelete(false);
             }}
             disabled={isPending}
             variant={"destructive"}

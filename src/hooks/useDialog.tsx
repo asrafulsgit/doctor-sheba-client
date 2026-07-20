@@ -44,7 +44,7 @@ function UseCustomDialog({
         <DialogHeader>
           <DialogTitle
             className={cn(
-              "flex items-center gap-2 text-xl font-bold",
+              "flex items-center gap-2 text-base font-bold",
               titleClassName,
             )}
           >

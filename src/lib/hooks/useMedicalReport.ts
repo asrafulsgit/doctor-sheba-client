@@ -15,17 +15,43 @@ export function useMyMedicalReports(filters: MedicalReportFilters = {}) {
   });
 }
 
-export function useDeleteMedicalReport() {
- const queryClient = useQueryClient();
+type CreateMedicalReport = {
+  reportName: string;
+  reportFile: File;
+};
+
+export function useUploadMedicalReport() {
+  const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async ({
-      reportId
-    }: {
-      reportId: string;
-    }) => {
+    mutationFn: async (data: CreateMedicalReport) => {
+      const formData = new FormData();
+      formData.append("reportName", data.reportName);
+      formData.append("reportFile", data.reportFile);
+      return api(`/medical-report`, {
+        method: "POST",
+        body: formData,
+      });
+    },
+
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: queryKeys.medicalReports.all,
+      });
+      queryClient.invalidateQueries({
+        queryKey: queryKeys.meta.patientMeta,
+      });
+    },
+  });
+}
+
+export function useDeleteMedicalReport() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async ({ reportId }: { reportId: string }) => {
       return api(`/medical-report/${reportId}`, {
-        method: "DELETE"
+        method: "DELETE",
       });
     },
 

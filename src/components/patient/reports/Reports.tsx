@@ -9,6 +9,9 @@ import RowSkeleton from "@/components/shared/SkeletonSet";
 import { EmptyState } from "@/components/shared/PageState";
 import ReportCard from "./ReportCard";
 import ReportSkeleton from "./ReportSkeleton";
+import UploadReportForm from "./UploadReportForm";
+import { CustomDialog } from "@/hooks/useDialog";
+import { useState } from "react";
 
 // seo optimization
 // export const Route = createFileRoute("/patient/reports")({
@@ -17,6 +20,8 @@ import ReportSkeleton from "./ReportSkeleton";
 // });
 
 const PatientReports = () => {
+  const [isOpenUploadReport, setIsOpenUploadReport] = useState(false);
+
   const { setQuery, getQuery, getAllQueries, clearQuery } = useQueryManager();
   const allQueries: MedicalReportFilters = getAllQueries();
   const { data, isLoading, isError, error } = useMyMedicalReports(allQueries);
@@ -27,14 +32,13 @@ const PatientReports = () => {
         title="Medical Reports"
         description="Lab results, imaging and discharge documents in one place."
         actions={
-          <Button>
+          <Button onClick={() => setIsOpenUploadReport(true)}>
             <Upload className="h-4 w-4" />
             Upload report
           </Button>
         }
       />
 
-      {/* Table */}
       {isLoading ? (
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           <ReportSkeleton />
@@ -56,6 +60,14 @@ const PatientReports = () => {
           className="mt-2"
         />
       )}
+
+      {isOpenUploadReport && <CustomDialog
+        open={isOpenUploadReport}
+        onOpenChange={setIsOpenUploadReport}
+        title="Upload medical report"
+      >
+        <UploadReportForm onClose={()=>setIsOpenUploadReport(false)}/>
+      </CustomDialog>}
     </>
   );
 };
