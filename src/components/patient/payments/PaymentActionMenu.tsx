@@ -34,15 +34,9 @@ type PaymentActionMenuProps = {
 
 const PaymentActionMenu = ({ payment }: PaymentActionMenuProps) => {
   const [isOpenInvoice, setIsOpenInvoice] = useState(false);
-  const [isOpenCancel, setIsOpenCancel] = useState(false);
-
-  const invoiceNumber = `INV-${payment.transactionId}`;
-  const invoiceDate = payment.createdAt
-    ? format(new Date(payment.createdAt), "dd MMM yyyy hh:mm a")
-    : "Unknown date";
-
   const customer = payment?.paymentGatewayData?.customer_details;
   const address = payment?.paymentGatewayData?.customer_details.address;
+
   return (
     <>
       <div className="flex gap-2">
@@ -56,7 +50,6 @@ const PaymentActionMenu = ({ payment }: PaymentActionMenuProps) => {
         {payment.status === "PAID" ? (
           <Button size="sm" variant="ghost" onClick={() => {}}>
             <Download className="h-4 w-4" />
-            Invoice
           </Button>
         ) : (
           <Button size="sm" onClick={() => {}}>
@@ -75,8 +68,10 @@ const PaymentActionMenu = ({ payment }: PaymentActionMenuProps) => {
           {/* billed to */}
           <div className="rounded-lg border border-border bg-muted/30 px-3.5 py-3">
             <div className="mb-2 flex items-center justify-between">
-              <p className="text-[11px] font-medium uppercase tracking-wide 
-              text-muted-foreground">
+              <p
+                className="text-[11px] font-medium uppercase tracking-wide 
+              text-muted-foreground"
+              >
                 Billed to
               </p>
               <div className="flex gap-1.5">
@@ -156,27 +151,6 @@ const PaymentActionMenu = ({ payment }: PaymentActionMenuProps) => {
           </div>
         </div>
       </CustomDialog>
-
-      {/* <CustomAlertDialog
-        open={isOpenCancel}
-        onOpenChange={setIsOpenCancel}
-        title="Cancel this appointment?"
-        isLoading={isPending}
-        description={`${appointment.doctor?.name} · ${formattedAppointmentDate}. Refund processed in 5–7 days.`}
-        cancelLabel="Cancel"
-      >
-        <AlertDialogAction
-          onClick={(e) => {
-            e.preventDefault();
-            handleCancel(appointment.id as string);
-            setIsOpenCancel(false);
-          }}
-          disabled={isPending}
-          variant={"destructive"}
-        >
-          {isPending ? "Canceling…" : "Yes, cancel"}
-        </AlertDialogAction>
-      </CustomAlertDialog> */}
     </>
   );
 };
@@ -187,7 +161,7 @@ type propTypes = {
   value: string | number;
   last?: boolean;
 };
- 
+
 function Row({ icon, label, value, last = false }: propTypes) {
   return (
     <div
@@ -198,8 +172,10 @@ function Row({ icon, label, value, last = false }: propTypes) {
         {icon}
         {label}
       </span>
-      <span className="sm:max-w-[60%] truncate sm:text-right 
-      text-[14px] font-medium text-foreground tabular-nums">
+      <span
+        className="sm:max-w-[60%] truncate sm:text-right 
+      text-[14px] font-medium text-foreground tabular-nums"
+      >
         {value}
       </span>
     </div>

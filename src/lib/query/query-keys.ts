@@ -38,6 +38,7 @@ export const queryKeys = {
     list: (filters: PatientFilters) => ["patients", "list", filters] as const,
     details: () => ["patients", "detail"] as const,
     detail: (id: string) => ["patients", "detail", id] as const,
+    healthProfile: () => ["patients", "healthProfile"] as const,
     medicalHistory: (id: string) =>
       ["patients", "detail", id, "medical-history"] as const,
     vitals: (id: string) => ["patients", "detail", id, "vitals"] as const,
