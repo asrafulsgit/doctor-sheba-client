@@ -6,7 +6,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 import { Switch } from "@/components/ui/switch";
 import { z } from "zod";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { toast } from "sonner";
 import {
   usePatientHealthProfile,
@@ -35,6 +35,7 @@ import {
 } from "@/constants/patient/data";
 import HealthProfileSkeleton from "./HealthProfileSkeleton";
 import { EmptyState } from "@/components/shared/PageState";
+import { Combobox } from "@/components/ui/combobox";
 
 const healthProfileSchema = z.object({
   gender: z.enum(GENDER_OPTIONS, { error: "Gender is required" }),
@@ -104,6 +105,7 @@ const MEDICAL_TOGGLES: {
 const HealthProfileForm = () => {
   const { data, isLoading, isError, error } = usePatientHealthProfile();
   const { mutate: updatePatient, isPending } = useUpdatePatient();
+
   const form = useForm<HealthProfileFormValues>({
     resolver: zodResolver(healthProfileSchema),
     defaultValues,
@@ -111,7 +113,7 @@ const HealthProfileForm = () => {
 
   useEffect(() => {
     if (data?.data) {
-      const profile = data?.data;
+      const profile = data.data;
       form.reset({
         gender: profile.gender,
         dateOfBirth: profile.dateOfBirth?.slice(0, 10) ?? "",
@@ -131,7 +133,7 @@ const HealthProfileForm = () => {
         immunizationStatus: profile.immunizationStatus ?? "",
       });
     }
-  }, [data, form]);
+  }, [data?.data]);
 
   function onSubmit(data: HealthProfileFormValues) {
     const payload = {
@@ -162,6 +164,7 @@ const HealthProfileForm = () => {
       />
     );
   }
+
   return (
     <form
       onSubmit={form.handleSubmit(onSubmit)}
@@ -202,18 +205,19 @@ const HealthProfileForm = () => {
             render={({ field, fieldState }) => (
               <Field data-invalid={fieldState.invalid}>
                 <FieldLabel htmlFor="gender">Gender</FieldLabel>
-                <Select value={field.value} onValueChange={field.onChange}>
-                  <SelectTrigger id="gender" aria-invalid={fieldState.invalid}>
-                    <SelectValue placeholder="Select" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {GENDER_OPTIONS.map((g) => (
-                      <SelectItem key={g} value={g}>
-                        {g.charAt(0) + g.slice(1).toLowerCase()}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                <Combobox
+                  options={
+                    GENDER_OPTIONS?.map((g) => ({
+                      value: g,
+                      label: g.charAt(0) + g.slice(1).toLowerCase(),
+                    })) ?? []
+                  }
+                  value={field.value as string}
+                  onChange={field.onChange}
+                  placeholder="Select"
+                  className="w-full"
+                  isSearhable={false}
+                />
                 {fieldState.invalid && (
                   <FieldError errors={[fieldState.error]} />
                 )}
@@ -227,18 +231,19 @@ const HealthProfileForm = () => {
             render={({ field, fieldState }) => (
               <Field data-invalid={fieldState.invalid}>
                 <FieldLabel htmlFor="blood">Blood group</FieldLabel>
-                <Select value={field.value} onValueChange={field.onChange}>
-                  <SelectTrigger id="blood" aria-invalid={fieldState.invalid}>
-                    <SelectValue placeholder="Select" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {BLOOD_GROUP_OPTIONS.map((bg) => (
-                      <SelectItem key={bg} value={bg}>
-                        {bloodGroupLabels[bg]}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                <Combobox
+                  options={
+                    BLOOD_GROUP_OPTIONS?.map((bg) => ({
+                      value: bg,
+                      label: bloodGroupLabels[bg],
+                    })) ?? []
+                  }
+                  value={field.value as string}
+                  onChange={field.onChange}
+                  placeholder="Select"
+                  className="w-full"
+                  isSearhable={false}
+                />
                 {fieldState.invalid && (
                   <FieldError errors={[fieldState.error]} />
                 )}
@@ -252,18 +257,19 @@ const HealthProfileForm = () => {
             render={({ field, fieldState }) => (
               <Field data-invalid={fieldState.invalid}>
                 <FieldLabel htmlFor="marital">Marital status</FieldLabel>
-                <Select value={field.value} onValueChange={field.onChange}>
-                  <SelectTrigger id="marital" aria-invalid={fieldState.invalid}>
-                    <SelectValue placeholder="Select" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {MARITAL_STATUS_OPTIONS.map((m) => (
-                      <SelectItem key={m} value={m}>
-                        {m.charAt(0) + m.slice(1).toLowerCase()}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                <Combobox
+                  options={
+                    MARITAL_STATUS_OPTIONS?.map((m) => ({
+                      value: m,
+                      label: m.charAt(0) + m.slice(1).toLowerCase(),
+                    })) ?? []
+                  }
+                  value={field.value as string}
+                  onChange={field.onChange}
+                  placeholder="Select"
+                  className="w-full"
+                  isSearhable={false}
+                />
                 {fieldState.invalid && (
                   <FieldError errors={[fieldState.error]} />
                 )}

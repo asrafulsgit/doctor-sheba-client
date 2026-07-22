@@ -33,6 +33,7 @@ interface ComboboxProps {
   disabled?: boolean;
   searchPlaceholder?: string;
   emptyMessage?: string;
+  isSearhable?: boolean;
 }
 
 export const Combobox = React.memo(function Combobox({
@@ -44,6 +45,7 @@ export const Combobox = React.memo(function Combobox({
   disabled = false,
   searchPlaceholder,
   emptyMessage = "No results found.",
+  isSearhable = true,
 }: ComboboxProps) {
   const [open, setOpen] = React.useState(false);
 
@@ -69,7 +71,10 @@ export const Combobox = React.memo(function Combobox({
           aria-expanded={open}
           aria-label={placeholder}
           disabled={disabled}
-          className={cn("justify-between hover:bg-transparent cursor-pointer", className)}
+          className={cn(
+            "justify-between hover:bg-transparent cursor-pointer",
+            className,
+          )}
         >
           <span className="truncate">
             {selectedOption?.label || placeholder}
@@ -84,12 +89,14 @@ export const Combobox = React.memo(function Combobox({
         align="start"
       >
         <Command shouldFilter={true}>
-          <CommandInput
-            placeholder={
-              searchPlaceholder || `Search ${placeholder.toLowerCase()}...`
-            }
-            className="h-9"
-          />
+          {isSearhable && (
+            <CommandInput
+              placeholder={
+                searchPlaceholder || `Search ${placeholder.toLowerCase()}...`
+              }
+              className="h-9"
+            />
+          )}
           <CommandList>
             <CommandEmpty>{emptyMessage}</CommandEmpty>
             <CommandGroup>
