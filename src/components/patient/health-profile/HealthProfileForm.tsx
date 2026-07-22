@@ -8,10 +8,7 @@ import { Switch } from "@/components/ui/switch";
 import { z } from "zod";
 import { useEffect, useMemo } from "react";
 import { toast } from "sonner";
-import {
-  usePatientHealthProfile,
-  useUpdatePatient,
-} from "@/lib/hooks/usePatient";
+import { usePatientProfile, useUpdatePatient } from "@/lib/hooks/usePatient";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -19,14 +16,7 @@ import {
   FieldError,
   FieldGroup,
   FieldLabel,
-} from "@/components/ui/field";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+} from "@/components/ui/field"; 
 import {
   BLOOD_GROUP_OPTIONS,
   bloodGroupLabels,
@@ -103,7 +93,7 @@ const MEDICAL_TOGGLES: {
 ];
 
 const HealthProfileForm = () => {
-  const { data, isLoading, isError, error } = usePatientHealthProfile();
+  const { data, isLoading, isError, error } = usePatientProfile();
   const { mutate: updatePatient, isPending } = useUpdatePatient();
 
   const form = useForm<HealthProfileFormValues>({
@@ -112,8 +102,8 @@ const HealthProfileForm = () => {
   });
 
   useEffect(() => {
-    if (data?.data) {
-      const profile = data.data;
+    if (data?.data?.patientHealthData) {
+      const profile = data.data.patientHealthData;
       form.reset({
         gender: profile.gender,
         dateOfBirth: profile.dateOfBirth?.slice(0, 10) ?? "",

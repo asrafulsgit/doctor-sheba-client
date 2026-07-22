@@ -1,15 +1,15 @@
 import { IDoctor } from "./doctors";
-import { ISchedule } from "./schedule"; 
+import { ISchedule } from "./schedule";
 import { AppointmentStatus, BloodGroup, Gender, MaritalStatus } from "./user";
 
 export interface IPatient {
   id: string;
   name: string;
-  email: string;
+  email: string; 
   contactNumber: string | null;
   address: string | null;
   profilePhoto: string | null;
-  patientHealthData: Partial<IHealthProfile>,
+  patientHealthData: Partial<IHealthProfile>;
   isDeleted: boolean;
   createdAt: string;
   updatedAt: string;
@@ -78,17 +78,16 @@ export interface IMedication {
   duration: string;
 }
 
-
 export interface IHealthProfile {
   id: string;
   patientId: string;
   gender: Gender;
-  dateOfBirth: string;  
+  dateOfBirth: string;
   bloodGroup: BloodGroup;
   hasAllergies: boolean;
   hasDiabetes: boolean;
-  height: string;  
-  weight: string;  
+  height: string;
+  weight: string;
   smokingStatus: boolean;
   dietaryPreferences: string | null;
   pregnancyStatus: boolean;
@@ -98,10 +97,6 @@ export interface IHealthProfile {
   recentAnxiety: boolean;
   recentDepression: boolean;
   maritalStatus: MaritalStatus;
-  createdAt: string;  
-  updatedAt: string;  
+  createdAt: string;
+  updatedAt: string;
 }
-
-
- 
-
