@@ -21,7 +21,7 @@ const TONES: Record<NonNullable<StatCardProps["tone"]>, string> = {
   primary: "bg-primary-soft text-primary",
   success: "bg-success-soft text-success-one",
   warning: "bg-warning-soft text-warning-foreground",
-  info: "bg-info-soft text-info-one",
+  info: "bg-info text-info-foreground",
   destructive: "bg-destructive-soft text-destructive",
   secondary: "bg-secondary-soft text-secondary",
 };

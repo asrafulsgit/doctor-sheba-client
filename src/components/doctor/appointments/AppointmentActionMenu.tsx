@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import {
   Banknote,
   CalendarDays,
+  CheckCircle2,
   Clock,
   Eye,
   Stethoscope,
@@ -20,8 +21,8 @@ import { AppointmentStatus } from "@/types/user";
 import { PaymentStatus } from "@/types/payment";
 import { useUpdateAppointmentStatus } from "@/lib/hooks/useAppointment";
 import { toast } from "sonner";
-import { getDate } from "@/helpers/getDate";
 import Image from "next/image";
+import { getDate } from "@/helpers/getDate";
 
 type AppointmentActionMenuProps = {
   appointment: Partial<IAppointment>;
@@ -31,13 +32,17 @@ const AppointmentActionMenu = ({ appointment }: AppointmentActionMenuProps) => {
   const [isOpenDetails, setIsOpenDetails] = useState(false);
   const [isOpenCancel, setIsOpenCancel] = useState(false);
 
-  const { mutate: cancelAppointment, isPending } = useUpdateAppointmentStatus();
-  const handleCancel = (appointmentId: string) => {
-    cancelAppointment(
-      { appointmentId, status: "CANCELED" },
+  const { mutate: updateAppointment, isPending } = useUpdateAppointmentStatus();
+  const handleAppointmentStatus = (
+    appointmentId: string,
+    status: AppointmentStatus,
+  ) => {
+    updateAppointment(
+      { appointmentId, status: status },
       {
-        onSuccess: () => {
-          toast.success("Appointment cancelled successfully.");
+        onSuccess: (data) => {
+          console.log(data);
+          toast.success(`Appointment  successfully.`);
         },
         onError: (error: any) => {
           toast.error(error?.message || "Failed to cancel appointment.");
@@ -48,7 +53,7 @@ const AppointmentActionMenu = ({ appointment }: AppointmentActionMenuProps) => {
 
   return (
     <>
-      <div className="flex gap-2">
+      <div className="flex justify-end gap-1">
         <Button
           size="sm"
           variant="ghost"
@@ -57,16 +62,37 @@ const AppointmentActionMenu = ({ appointment }: AppointmentActionMenuProps) => {
           <Eye className="h-4 w-4" />
         </Button>
         {appointment.status === "SCHEDULED" && (
+          <>
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={() =>
+                handleAppointmentStatus(appointment.id as string, "INPROGRESS")
+              }
+            >
+              Accept
+            </Button>
+            <Button
+              size="sm"
+              variant="ghost"
+              onClick={() => setIsOpenCancel(true)}
+            >
+              <X className="h-4 w-4" />
+            </Button>
+          </>
+        )}
+        {appointment.status === "INPROGRESS" && (
           <Button
             size="sm"
-            variant="ghost"
-            onClick={() => setIsOpenCancel(true)}
+            onClick={() =>
+              handleAppointmentStatus(appointment.id as string, "COMPLETED")
+            }
           >
-            <X className="h-4 w-4" />
+            <CheckCircle2 className="h-4 w-4" />
+            Complete
           </Button>
         )}
       </div>
-
       <CustomDialog
         open={isOpenDetails}
         onOpenChange={setIsOpenDetails}
@@ -75,11 +101,10 @@ const AppointmentActionMenu = ({ appointment }: AppointmentActionMenuProps) => {
         <div>
           <div className="pb-5">
             <div className="flex items-start gap-3.5">
-              <div className="bg-primary-soft flex h-12 w-12 shrink-0 items-center 
-              justify-center rounded-full text-[15px] font-semibold text-primary">
-                {appointment?.doctor?.profilePhoto ? (
+              <div className="bg-primary-soft flex h-12 w-12 shrink-0 items-center justify-center rounded-full text-[15px] font-semibold text-[#F1F4F0]">
+                {appointment?.patient?.profilePhoto ? (
                   <Image
-                    src={appointment.doctor.profilePhoto ?? ""}
+                    src={appointment.patient.profilePhoto ?? ""}
                     alt="Profile"
                     className="h-full w-full rounded-3xl object-cover"
                     width={12}
@@ -87,17 +112,16 @@ const AppointmentActionMenu = ({ appointment }: AppointmentActionMenuProps) => {
                   />
                 ) : (
                   <span>
-                    {appointment?.doctor?.name.charAt(0).toUpperCase()}
+                    {appointment?.patient?.name.charAt(0).toUpperCase()}
                   </span>
                 )}
               </div>
               <div className="min-w-0 pt-0.5">
                 <h2 className="truncate text-xl font-semibold leading-tight">
-                  {appointment.doctor?.name}
+                  {appointment?.patient?.name}
                 </h2>
                 <p className="mt-0.5 flex items-center gap-1.5 text-[13px] text-[#12261F]/60">
-                  <Stethoscope size={13} strokeWidth={2} />
-                  {appointment.doctor?.designation}
+                  {appointment?.patient?.address}
                 </p>
               </div>
             </div>
@@ -135,11 +159,10 @@ const AppointmentActionMenu = ({ appointment }: AppointmentActionMenuProps) => {
                   : `N/A`
               }
             />
-            <Row icon={<Video size={15} />} label="Mode" value={"Video call"} />
             <Row
-              icon={<Banknote size={15} />}
-              label="Fee"
-              value={`৳${appointment.doctor?.appointmentFee.toLocaleString("en-BD")}`}
+              icon={<Video size={15} />}
+              label="Mode"
+              value={"Video call"}
               last
             />
           </div>
@@ -151,16 +174,13 @@ const AppointmentActionMenu = ({ appointment }: AppointmentActionMenuProps) => {
         onOpenChange={setIsOpenCancel}
         title="Cancel this appointment?"
         isLoading={isPending}
-        description={`${appointment.doctor?.name} · ${getDate(
-          appointment?.schedule?.startDateTime,
-          "dd MMM yyyy hh:mm a",
-        )}. Refund processed in 5–7 days.`}
+        description={`${appointment?.patient?.name} · ${getDate(appointment?.schedule?.startDateTime, "dd MMM yyyy hh:mm a")}`}
         cancelLabel="Cancel"
       >
         <AlertDialogAction
           onClick={(e) => {
             e.preventDefault();
-            handleCancel(appointment.id as string);
+            handleAppointmentStatus(appointment.id as string, "CANCELED");
             setIsOpenCancel(false);
           }}
           disabled={isPending}

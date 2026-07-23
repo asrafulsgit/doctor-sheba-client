@@ -12,12 +12,20 @@ import {
 import { StatusBadge } from "@/components/ui/badge";
 
 import { IAppointment } from "@/types/appointment";
-import { Stethoscope } from "lucide-react";
 import AppointmentActionMenu from "./AppointmentActionMenu";
 import { format } from "date-fns";
 import Image from "next/image";
+import Link from "next/link";
 
-const headers = [" ", "Doctor", "Date/Time", "Fee", "Status", "Action"];
+const headers = [
+  " ",
+  "NAME",
+  "EMAIL",
+  "DATE/TIME",
+  "PAYMENT STATUS",
+  "STATUS",
+  "ACTION",
+];
 
 const AppointmentTable = ({
   appointments,
@@ -45,30 +53,26 @@ const AppointmentTable = ({
             <TableRow key={app.id}>
               <TableCell className="flex gap-2">
                 <div className="grid h-10 w-10 place-items-center rounded-xl bg-primary-soft text-primary">
-                  {app?.doctor?.profilePhoto ? (
+                  {app.patient.profilePhoto ? (
                     <Image
-                      src={app.doctor.profilePhoto ?? ""}
+                      src={app.patient.profilePhoto ?? ""}
                       alt="Profile"
                       className="h-full w-full rounded-2xl object-cover"
                       width={10}
                       height={10}
                     />
                   ) : (
-                    <Stethoscope className="h-4 w-4" />
+                    <span>{app.patient.name.charAt(0).toUpperCase()}</span>
                   )}
-                  
                 </div>
               </TableCell>
               <TableCell>
-                <div className="flex flex-wrap items-center gap-2">
-                  <p className="font-semibold text-foreground">
-                    {app.doctor.name}
-                  </p>
-                  <StatusBadge status={app.paymentStatus} />
-                </div>
-                <p className="text-sm text-muted-foreground">
-                  {app.doctor.designation}
-                </p>
+                <Link href={`/doctor/patients/${app.patient.id}`} className="font-medium text-foreground hover:text-primary hover:underline">
+                {app.patient.name}
+                </Link>
+              </TableCell>
+              <TableCell>
+                <p className="text-foreground">{app.patient.email}</p>
               </TableCell>
               <TableCell>
                 <p>
@@ -84,7 +88,10 @@ const AppointmentTable = ({
                   </span>
                 </p>
               </TableCell>
-              <TableCell>{`BDT ${app.doctor.appointmentFee}`}</TableCell>
+
+              <TableCell>
+                <StatusBadge status={app.paymentStatus} />
+              </TableCell>
 
               <TableCell>
                 <StatusBadge status={app.status} />

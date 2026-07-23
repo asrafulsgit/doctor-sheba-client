@@ -199,7 +199,7 @@ const PrivateLayout = ({ children }: { children: ReactNode }) => {
         )}
 
         {/* Main */}
-        <main className="min-w-0 flex-1 px-4 py-8 sm:px-6 lg:px-10">
+        <main className="min-w-0 flex-1 px-2 py-4 sm:px-4 lg:px-6">
           {children}
         </main>
       </div>

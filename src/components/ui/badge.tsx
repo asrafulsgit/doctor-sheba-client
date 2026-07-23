@@ -54,7 +54,7 @@ type Status = AppointmentStatus | PaymentStatus | "ACTIVE" | "BLOCKED";
 const styles: Record<Status, string> = {
   SCHEDULED: "bg-info-soft text-info-one",
   INPROGRESS: "bg-warning-soft text-warning-foreground",
-  COMPLETED: "bg-success-soft text-success",
+  COMPLETED: "bg-success-soft text-success-one",
   CANCELED: "bg-destructive-soft text-destructive",
   PAID: "bg-success-soft text-success-one",
   UNPAID: "bg-warning-soft text-warning-foreground",

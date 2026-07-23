@@ -22,13 +22,13 @@ const DashboardStats = ({stats} : {stats : Stats}) => {
         icon={Calendar}
         label="Pending appointments"
         value={stats.pendingAppointmentCount || 0}
-        tone="info"
+        tone="success"
       />
       <StatCard
         icon={Users2Icon}
         label="Total patient"
         value={stats.totalPatient || 0}
-        tone="success"
+        tone="info"
       />
       <StatCard
         icon={Star}
