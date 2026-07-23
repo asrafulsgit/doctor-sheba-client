@@ -1,9 +1,17 @@
 import { api } from "@/lib/api/api-client";
 import { queryKeys } from "@/lib/query/query-keys";
 import { ApiResponse } from "@/types/api-response";
-import { IDoctor, IDoctorFilter } from "@/types/doctors";
+import { IDoctor, IDoctorFilter, IDoctorMeta } from "@/types/doctors";
 import { IReview } from "@/types/review";
 import { useQuery } from "@tanstack/react-query";
+
+export function useDoctorMetaData() {
+  return useQuery({
+    queryKey: queryKeys.doctors.all,
+    queryFn: () => api<ApiResponse<IDoctorMeta>>("/meta/doctor"),
+    staleTime: 1000 * 60 * 5,
+  });
+}
 
 export function useDoctors(filters: IDoctorFilter = {}) {
   return useQuery({

@@ -1,4 +1,4 @@
- 
+"use client";
 import {
   Calendar,
   Users,
@@ -12,14 +12,25 @@ import {
   Clock,
   ClipboardList,
   TrendingUp,
-} from "lucide-react"; 
-import { Button } from "@/components/ui/button"; 
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
 import DashboardHeader from "@/components/shared/DashboardHeader";
-import { APPOINTMENTS, DOCTOR_EARNINGS_6M, REVIEWS } from "@/constants/patient/data";
-import { user } from "@/constants/public/user";
+import {
+  APPOINTMENTS,
+  DOCTOR_EARNINGS_6M,
+  REVIEWS,
+} from "@/constants/patient/data";
 import Link from "next/link";
-import StatCard from "@/components/shared/StatCard";
 import { StatusBadge } from "@/components/ui/badge";
+import { useMe } from "@/lib/hooks/useUser";
+import { useDoctorMetaData } from "@/lib/hooks/UseDoctor";
+import DashboardStats from "./DashboardStats";
+import PatientDashboardSkeleton from "@/components/patient/dashboard/skeleton";
+import { format } from "date-fns";
+import { LineChartWithTooltip } from "@/components/shared/LineChartWithTooltip";
+import TodaysAppointments from "./TodaysAppointments";
+import RecentReviews from "./RecentReviews";
+import { PieChartWithTooltip } from "@/components/shared/PieChartWithTooltip";
 
 // seo optimization
 // export const Route = createFileRoute("/doctor/dashboard")({
@@ -27,25 +38,34 @@ import { StatusBadge } from "@/components/ui/badge";
 //   component: DoctorHome,
 // });
 
-const fmt = (iso: string) =>
-  new Date(iso).toLocaleDateString("en-GB", { day: "2-digit", month: "short" });
+const DoctorDashboard = () => {
+  const { data, isLoading } = useMe();
+  const user = data?.data;
+  const { data: metaData, isLoading: metaDataLoading } = useDoctorMetaData();
+  const meta = metaData?.data;
+  const todaysAppointments = meta?.todaysAppointments;
+  const stats = {
+    pendingAppointmentCount: meta?.pendingAppointmentCount || 0,
+    totalPatient: meta?.patientCount || 0,
+    averageRating: meta?.averageRating || 0,
+    totalRating: meta?.reviewCount || 0,
+    todaysAppointment: todaysAppointments?.length || 0,
+  };
 
-const DoctorDashboard = () => { 
-  const doctorId = "doc-001";
-  const myAppts = APPOINTMENTS.filter((a) => a.doctorId === doctorId);
-  const today = new Date().toISOString().slice(0, 10);
-  const todayAppts = myAppts.filter((a) => a.date.slice(0, 10) === today);
-  const pending = myAppts.filter((a) => a.status === "SCHEDULED").length;
-  const completed = myAppts.filter((a) => a.status === "COMPLETED").length;
-  const earnings = myAppts
-    .filter((a) => a.paymentStatus === "PAID")
-    .reduce((s, a) => s + a.fee, 0);
-  const myReviews = REVIEWS.filter((r) => r.doctorId === doctorId);
-  const avgRating = myReviews.length
-    ? (myReviews.reduce((s, r) => s + r.rating, 0) / myReviews.length).toFixed(
-        1,
-      )
-    : "—";
+  const chartData = meta?.last7DaysCompletedAppointments.map((d) => ({
+    label: d.day,
+    value: d.count,
+  }));
+  const chartAppointment = meta?.formattedAppointmentStatusDistribution.map(
+    (a) => ({
+      label: a.status,
+      value: a.count,
+    }),
+  );
+
+  if (metaDataLoading) {
+    return <PatientDashboardSkeleton />;
+  }
   return (
     <>
       <DashboardHeader
@@ -60,38 +80,7 @@ const DoctorDashboard = () => {
           </Button>
         }
       />
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <StatCard
-          icon={Users}
-          label="Today's patients"
-          value={todayAppts.length}
-          tone="primary"
-          hint={`${todayAppts.filter((a) => a.mode === "VIDEO").length} via video`}
-        />
-        <StatCard
-          icon={Calendar}
-          label="Pending appointments"
-          value={pending}
-          tone="info"
-          trend={8}
-        />
-        <StatCard
-          icon={Wallet2}
-          label="Total earnings"
-          value={`৳${earnings.toLocaleString()}`}
-          tone="success"
-          trend={18}
-          hint="This month"
-        />
-        <StatCard
-          icon={Star}
-          label="Average rating"
-          value={avgRating}
-          tone="warning"
-          hint={`${myReviews.length} reviews`}
-        />
-      </div>
-
+      <DashboardStats stats={stats} />
       <div className="mt-8 grid gap-6 lg:grid-cols-3">
         {/* Today's schedule */}
         <section className="rounded-2xl border border-border bg-card p-6 shadow-soft lg:col-span-2">
@@ -106,68 +95,7 @@ const DoctorDashboard = () => {
               View all <ArrowRight className="ml-0.5 inline h-3 w-3" />
             </Link>
           </div>
-          {todayAppts.length === 0 ? (
-            <p className="mt-4 text-sm text-muted-foreground">
-              No appointments scheduled today.
-            </p>
-          ) : (
-            <ol className="mt-4 space-y-3">
-              {todayAppts.map((a) => (
-                <li
-                  key={a.id}
-                  className="flex items-center gap-4 rounded-xl border border-border bg-surface p-4"
-                >
-                  <div className="grid h-12 w-14 shrink-0 place-items-center rounded-lg bg-primary-soft text-primary">
-                    <div className="text-xs font-medium">
-                      {a.startTime.split(":")[0]}
-                    </div>
-                    <div className="text-[10px] -mt-0.5">
-                      {a.startTime.split(":")[1]}
-                    </div>
-                  </div>
-                  <div className="min-w-0 flex-1">
-                    <div className="flex items-center gap-2">
-                      <p className="truncate text-sm font-semibold text-foreground">
-                        {a.patientName}
-                      </p>
-                      <StatusBadge status={a.status} />
-                    </div>
-                    <p className="mt-0.5 text-xs text-muted-foreground">
-                      {a.reason}
-                    </p>
-                    <div className="mt-1.5 flex items-center gap-3 text-[11px] text-muted-foreground">
-                      <span className="inline-flex items-center gap-1">
-                        {a.mode === "VIDEO" ? (
-                          <Video className="h-3 w-3" />
-                        ) : (
-                          <MapPin className="h-3 w-3" />
-                        )}
-                        {a.mode === "VIDEO" ? "Video" : "In-person"}
-                      </span>
-                      <span className="inline-flex items-center gap-1">
-                        <Clock className="h-3 w-3" />
-                        {a.startTime}–{a.endTime}
-                      </span>
-                      <span>৳{a.fee}</span>
-                    </div>
-                  </div>
-                  <div className="flex flex-col gap-2">
-                    {a.status === "INPROGRESS" ? (
-                      <Button size="sm">
-                        <Video className="h-4 w-4" />
-                        Resume
-                      </Button>
-                    ) : (
-                      <Button size="sm" variant="outline">
-                        <ClipboardList className="h-4 w-4" />
-                        Open
-                      </Button>
-                    )}
-                  </div>
-                </li>
-              ))}
-            </ol>
-          )}
+          <TodaysAppointments appointments={todaysAppointments ?? []} />
         </section>
 
         {/* Reviews */}
@@ -178,79 +106,31 @@ const DoctorDashboard = () => {
             </h2>
             <span className="inline-flex items-center gap-1 text-sm font-semibold text-warning-foreground">
               <Star className="h-4 w-4 fill-current" />
-              {avgRating}
+              {stats.averageRating}
             </span>
           </div>
-          <ul className="mt-4 space-y-4">
-            {myReviews.slice(0, 3).map((r) => (
-              <li
-                key={r.id}
-                className="rounded-lg border border-border bg-surface p-3"
-              >
-                <div className="flex items-center justify-between">
-                  <p className="text-sm font-medium text-foreground">
-                    {r.patientName}
-                  </p>
-                  <span className="inline-flex items-center gap-0.5 text-xs text-warning-foreground">
-                    {Array.from({ length: r.rating }).map((_, i) => (
-                      <Star key={i} className="h-3 w-3 fill-current" />
-                    ))}
-                  </span>
-                </div>
-                <p className="mt-1 text-xs text-muted-foreground">
-                  "{r.comment}"
-                </p>
-              </li>
-            ))}
-            {myReviews.length === 0 && (
-              <p className="text-sm text-muted-foreground">No reviews yet.</p>
-            )}
-          </ul>
+          <RecentReviews reviews={meta?.recentReviews ?? []} />
         </section>
       </div>
 
       <div className="mt-6 grid gap-6 lg:grid-cols-3">
-        <section className="rounded-2xl border border-border bg-card p-6 shadow-soft lg:col-span-2">
-          <div className="flex items-center justify-between">
-            <h2 className="text-base font-semibold text-foreground">
-              Weekly appointments
-            </h2>
-            <span className="text-xs text-muted-foreground">Last 7 days</span>
-          </div>
-          <div className="mt-4">
-            {/* <BarChart
-              data={APPOINTMENTS_TREND_7D.map((d) => ({
-                label: d.day,
-                value: d.count,
-              }))}
-            /> */}
-          </div>
+        <section className="lg:col-span-2">
+          <LineChartWithTooltip
+            chartProps={{
+              header: "Weekly appointments",
+              title: "Last 7 days",
+              data: chartData || [],
+            }}
+          />
         </section>
-        <section className="rounded-2xl border border-border bg-card p-6 shadow-soft">
-          <div className="flex items-center justify-between">
-            <h2 className="text-base font-semibold text-foreground">
-              Earnings trend
-            </h2>
-            <TrendingUp className="h-4 w-4 text-success" />
-          </div>
-          <div className="mt-4">
-            {/* <AreaLine
-              data={DOCTOR_EARNINGS_6M.map((d) => ({
-                label: d.month,
-                value: d.value,
-              }))} */}
-              {/* format={(n) => `৳${(n / 1000).toFixed(0)}k`}
-            /> */}
-          </div>
-          <div className="mt-3 flex items-center justify-between text-sm">
-            <span className="text-muted-foreground">This month</span>
-            <span className="font-semibold text-foreground">
-              ৳
-              {DOCTOR_EARNINGS_6M[
-                DOCTOR_EARNINGS_6M.length - 1
-              ].value.toLocaleString()}
-            </span>
-          </div>
+        <section className="shadow-soft">
+          <PieChartWithTooltip
+            chartProps={{
+              header: "Appointments",
+              title: "By status",
+              data: chartAppointment ?? [],
+            }}
+          />
         </section>
       </div>
 

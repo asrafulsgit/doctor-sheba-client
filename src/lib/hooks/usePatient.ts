@@ -6,7 +6,7 @@ import { IPatient, PatientMetadataResponse } from "@/types/patient";
 
 export function usePatientMetaData() {
   return useQuery({
-    queryKey: queryKeys.prescriptions.byPatient(),
+    queryKey: queryKeys.patients.all,
     queryFn: () => api<ApiResponse<PatientMetadataResponse>>("/meta/patient"),
     staleTime: 1000 * 60 * 5,
   });

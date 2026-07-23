@@ -1,3 +1,5 @@
+import { AppointmentStatus, IAppointment } from "./appointment";
+import { IReview } from "./review";
 import { ISpecialty, Specialty } from "./specialties";
 import { Gender } from "./user";
 
@@ -61,6 +63,24 @@ export interface IDoctor {
   doctorSpecialities: ISpecialty[];
 }
 
+export interface IDoctorMeta {
+  appointmentCount: number;
+  reviewCount: number;
+  averageRating: number;
+  pendingAppointmentCount: number;
+  patientCount: number;
+  totalRevenue: number;
+  todaysAppointments: IAppointment[];
+  recentReviews: IReview[];
+  formattedAppointmentStatusDistribution: {
+    status: AppointmentStatus;
+    count: number;
+  }[];
+  last7DaysCompletedAppointments: {
+    day: string;
+    count: 0;
+  }[];
+}
 export interface IDoctorFilter {
   searchTerm?: string;
   designation?: string;
