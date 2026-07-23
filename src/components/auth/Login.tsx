@@ -11,6 +11,9 @@ import { Field, FieldError, FieldGroup, FieldLabel } from "../ui/field";
 import { useLogin, useVerfiyEmailOTPSend } from "@/lib/hooks/useAuth";
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
+import { Label } from "../ui/label";
+import { UserRole } from "@/types/user";
+import { useState } from "react";
 
 // seo optimization
 // export const Route = createFileRoute("/auth/login")({
@@ -33,16 +36,37 @@ export type LoginFormValues = z.infer<typeof loginSchema>;
 
 const Login = () => {
   const router = useRouter();
+  const [role, setRole] = useState<UserRole>(() => "PATIENT" as UserRole);
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
-      email: "",
-      password: "",
+      email: "patient@gmail.com",
+      password: "Patient@@11",
     },
   });
   const { mutate: login, isPending } = useLogin();
   const { mutate: otpSend, isPending: otpSendPending } =
     useVerfiyEmailOTPSend();
+
+  const handleRole = (role: UserRole) => {
+    if (role === "PATIENT")
+      form.reset({
+        password: "Patient@@11",
+        email: "patient@gmail.com",
+      });
+    if (role === "DOCTOR")
+      form.reset({
+        password: "arif123",
+        email: "arif.hossain@gmail.com",
+      });
+    if (role === "ADMIN")
+      form.reset({
+        password: "admin123",
+        email: "admin@gmail.com",
+      });
+
+    setRole(role);
+  };
 
   function onSubmit(data: LoginFormValues) {
     login(data, {
@@ -86,6 +110,7 @@ const Login = () => {
       </p>
 
       <form onSubmit={form.handleSubmit(onSubmit)} className="mt-8 space-y-4">
+        <RoleSelector value={role} onChange={handleRole} />
         <FieldGroup>
           <Controller
             name="email"
@@ -136,7 +161,7 @@ const Login = () => {
             className={cn("", "w-full mt-2")}
             disabled={isPending}
           >
-            {(isPending || otpSendPending) ? "Signing in…" : "Sign in"}
+            {isPending || otpSendPending ? "Signing in…" : "Sign in"}
           </Button>
         </FieldGroup>
       </form>
@@ -153,5 +178,45 @@ const Login = () => {
     </motion.div>
   );
 };
+
+export function RoleSelector({
+  value,
+  onChange,
+}: {
+  value: UserRole;
+  onChange: (v: UserRole) => void;
+}) {
+  const opts: {
+    v: UserRole;
+    label: string;
+  }[] = [
+    { v: "PATIENT" as UserRole, label: "Patient" },
+    { v: "DOCTOR" as UserRole, label: "Doctor" },
+    { v: "ADMIN" as UserRole, label: "Admin" },
+  ];
+  return (
+    <div>
+      <Label className="text-xs uppercase tracking-wide text-muted-foreground">
+        I am a
+      </Label>
+      <div className="mt-1.5 grid grid-cols-3 gap-2">
+        {opts.map((o) => (
+          <button
+            key={o.v}
+            type="button"
+            onClick={() => onChange(o.v)}
+            className={`rounded-md border px-3 py-2 text-sm font-medium transition-colors ${
+              value === o.v
+                ? "border-primary bg-primary text-primary-foreground"
+                : "border-border bg-background text-foreground hover:border-primary/40"
+            }`}
+          >
+            {o.label}
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
 
 export default Login;
