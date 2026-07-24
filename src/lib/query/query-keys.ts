@@ -161,8 +161,7 @@ export interface DateRange {
 }
 
 export interface PatientFilters {
-  search?: string;
-  status?: "active" | "inactive";
+  searchTerm?: string;
   page?: number;
   limit?: number;
 }
