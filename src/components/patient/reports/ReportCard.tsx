@@ -1,6 +1,7 @@
 "use client";
 import { AlertDialogAction } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
+import { downloader } from "@/helpers/downloader";
 import { CustomAlertDialog } from "@/hooks/useDialog";
 import { useDeleteMedicalReport } from "@/lib/hooks/useMedicalReport";
 import { IMedicalReport } from "@/types/medical-report";
@@ -51,7 +52,7 @@ const ReportCard = ({ report }: { report: IMedicalReport }) => {
             size="sm"
             variant="outline"
             className="flex-1"
-            onClick={() => {}}
+            onClick={() => downloader(report.reportLink,`${report.reportName} - ${report.id}`)}
           >
             <Download className="h-4 w-4" />
             Download

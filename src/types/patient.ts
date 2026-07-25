@@ -1,4 +1,6 @@
 import { IDoctor } from "./doctors";
+import { IMedicalReport } from "./medical-report";
+import { IPrescription } from "./prescription";
 import { ISchedule } from "./schedule";
 import { AppointmentStatus, BloodGroup, Gender, MaritalStatus } from "./user";
 
@@ -10,6 +12,8 @@ export interface IPatient {
   address: string | null;
   profilePhoto: string | null;
   patientHealthData: Partial<IHealthProfile>;
+  prescriptions: IPrescription[];
+  medicalReport: IMedicalReport[];
   isDeleted: boolean;
   createdAt: string;
   updatedAt: string;

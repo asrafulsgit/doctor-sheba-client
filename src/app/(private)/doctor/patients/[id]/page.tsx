@@ -1,11 +1,7 @@
-import React from 'react'
+import PatientDetails from "@/components/doctor/patientDetails/PatientDetails";
 
 const page = () => {
-  return (
-    <div>
-      <h1>patient details</h1>
-    </div>
-  )
-}
+  return <PatientDetails />;
+};
 
-export default page
+export default page;

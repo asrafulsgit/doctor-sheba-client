@@ -40,6 +40,7 @@ export function useDoctorProfile(id: string) {
     queryKey: queryKeys.doctors.detail(id),
     queryFn: () => api<ApiResponse<DoctorProfile>>(`/doctor/${id}`),
     staleTime: 1000 * 60 * 5,
+    enabled: !!id,
   });
 }
 
@@ -48,10 +49,26 @@ export type PatientRecord = {
   totalVisits: number;
 } & IPatient;
 
-export function usePatientRecords(filters: PatientFilters) {
+export function usePatientRecords(filters: PatientFilters = {}) {
   return useQuery({
     queryKey: queryKeys.patients.list(filters),
     queryFn: () => api<ApiResponse<PatientRecord[]>>(`/doctor/patient-records`),
     staleTime: 1000 * 60 * 5,
+  });
+}
+
+export type SinglePatientRecord  = {
+  lastVisit: string;
+  totalVisits: number;
+  lastConsultant: IDoctor;
+} & IPatient;
+
+export function usePatientRecord(id: string) {
+  return useQuery({
+    queryKey: queryKeys.patients.detail(id),
+    queryFn: () =>
+      api<ApiResponse<SinglePatientRecord>>(`/doctor/patient-records/${id}`),
+    staleTime: 1000 * 60 * 5,
+    enabled: !!id,
   });
 }

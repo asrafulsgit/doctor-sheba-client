@@ -57,8 +57,8 @@ const PatientRecordTable = ({ patients }: { patients: PatientRecord[] }) => {
                         src={patient.profilePhoto ?? ""}
                         alt="Profile"
                         className="h-full w-full rounded-2xl object-cover"
-                        width={10}
-                        height={10}
+                        width={38}
+                        height={40}
                       />
                     ) : (
                       <span>{patient.name.charAt(0).toUpperCase()}</span>
