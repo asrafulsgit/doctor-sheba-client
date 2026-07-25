@@ -90,6 +90,12 @@ export const queryKeys = {
     doctorSchedules: (id: string) => ["bookings", "schedules", id] as const,
   },
 
+  schedules: {
+    all: ["schedules"] as const,
+    doctorAvailableSchedules: (doctorAvailableSchedulesFilters : DoctorAvailableSchedulesFilters) => ["schedules","doctorAvailableSchedules",doctorAvailableSchedulesFilters] as const,
+    doctorScheduledSchedules: (doctorAvailableSchedulesFilters : DoctorAvailableSchedulesFilters) => ["schedules","doctorScheduledSchedules",doctorAvailableSchedulesFilters] as const,
+  },
+
   // ─── Prescriptions ────────────────────────────────────────────────────────
   prescriptions: {
     all: ["prescriptions"] as const,
@@ -166,6 +172,12 @@ export interface PatientFilters {
   limit?: number;
 }
 
+export interface DoctorAvailableSchedulesFilters {
+  startDate?: string;
+  endDate?: string;
+  page?: number;
+  limit?: number;
+}
 export interface AppointmentFilters {
   searchTerm?: string;
   paymentStatus?: PaymentStatus;

@@ -1,8 +1,8 @@
-import { Plus, Clock } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
+"use client";
 import DashboardHeader from "@/components/shared/DashboardHeader";
-import { getDoctorSchedule } from "@/constants/doctor/data";
+import { useDoctorAvailableSchedules } from "@/lib/hooks/schedule";
+import useQueryManager from "@/hooks/UseQueryManager";
+import { DoctorAvailableSchedulesFilters } from "@/lib/query/query-keys";
 
 // seo optimization
 // export const Route = createFileRoute("/doctor/schedules")({
@@ -10,73 +10,83 @@ import { getDoctorSchedule } from "@/constants/doctor/data";
 //   component: DoctorSchedules,
 // });
 
-const DAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+import { format, parseISO } from "date-fns";
+import { ISchedule } from "@/types/schedule";
+import { getSchedulesByDay } from "@/helpers/getSchedulesByDay";
+import { cn } from "@/lib/utils";
+import {
+  Calendar,
+  CalendarDays,
+  CheckCircle2,
+  Circle,
+  Clock,
+  FileText,
+  Filter,
+  Pill,
+} from "lucide-react";
+import { useState } from "react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import AvailableSchedules from "./AvailableSchedules";
+import ScheduledSchedules from "./ScheduledSchedules";
+import SchedulesFilter from "./SchedulesFilter";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
 
 const DoctorSchedules = () => {
-  const weekDate = (i: number) => {
-    const d = new Date();
-    d.setDate(d.getDate() + i);
-    return d.toLocaleDateString("en-GB", { day: "2-digit", month: "short" });
-  };
   return (
     <>
       <DashboardHeader
         title="Schedules"
         description="Define your weekly availability and time slots."
-        actions={
-          <Button>
-            <Plus className="h-4 w-4" />
-            Add slot
-          </Button>
-        }
       />
-      <div className="overflow-hidden rounded-2xl border border-border bg-card p-4 shadow-soft">
-        <div className="grid grid-cols-7 gap-3">
-          {DAYS.map((day, i) => {
-            const sched = getDoctorSchedule("doc-001", i);
-            return (
-              <div
-                key={day}
-                className="rounded-xl border border-border bg-surface p-3"
-              >
-                <div className="mb-2 flex items-center justify-between">
-                  <p className="text-sm font-semibold text-foreground">{day}</p>
-                  <span className="text-[10px] text-muted-foreground">
-                    {weekDate(i)}
-                  </span>
-                </div>
-                <ul className="space-y-1.5">
-                  {sched.slots.map((s) => {
-                    const t = new Date(s.startTime).toLocaleTimeString(
-                      "en-GB",
-                      { hour: "2-digit", minute: "2-digit" },
-                    );
-                    return (
-                      <li
-                        key={s.id}
-                        className={cn(
-                          "flex items-center gap-1.5 rounded-md px-2 py-1.5 text-xs",
-                          s.isBooked
-                            ? "bg-primary-soft text-primary"
-                            : "bg-background text-foreground border border-border",
-                        )}
-                      >
-                        <Clock className="h-3 w-3" />
-                        {t}
-                        {s.isBooked && (
-                          <span className="ml-auto text-[9px] uppercase">
-                            Booked
-                          </span>
-                        )}
-                      </li>
-                    );
-                  })}
-                </ul>
-              </div>
-            );
-          })}
+      <Tabs defaultValue="available">
+        <div className="flex  justify-between items-center">
+          <TabsList>
+            <TabsTrigger value="available">
+              <Calendar className="h-4 w-4 mr-1" />
+              Available
+            </TabsTrigger>
+            <TabsTrigger value="scheduled">
+              <CalendarDays className="h-4 w-4 mr-1" />
+              Scheduled
+            </TabsTrigger>
+          </TabsList>
+
+          <div className="flex gap-2 sm:hidden">
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button variant="outline" size={"icon"}>
+                  <Filter />
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="sm:max-w-md">
+                <DialogHeader>
+                  <DialogTitle>Filters</DialogTitle>
+                </DialogHeader>
+                <SchedulesFilter />
+              </DialogContent>
+            </Dialog>
+          </div>
+
+          <div className="hidden sm:flex gap-3">
+            <SchedulesFilter />
+          </div>
         </div>
-      </div>
+
+        <TabsContent value="available" className="mt-4">
+          <AvailableSchedules />
+        </TabsContent>
+
+        <TabsContent value="scheduled" className="mt-4">
+          <ScheduledSchedules />
+        </TabsContent>
+      </Tabs>
     </>
   );
 };

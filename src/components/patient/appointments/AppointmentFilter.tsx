@@ -146,6 +146,7 @@ const FilterContent = () => {
                   setQuery("endDate", getDate(selectedDate, "yyyy-MM-dd"));
                   setEndDate(selectedDate);
                 }}
+                disabled={startDate ? { before: startDate } : undefined}
                 showWeekNumber
               />
             </DropdownMenuContent>
