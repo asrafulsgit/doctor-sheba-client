@@ -22,6 +22,7 @@ const DoctorPatients = () => {
   const allQueries: PatientFilters = getAllQueries();
   const { data, isLoading, isError, error } = usePatientRecords(allQueries);
   const patients = data?.data;
+   
   return (
     <>
       <DashboardHeader

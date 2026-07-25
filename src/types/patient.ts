@@ -5,7 +5,7 @@ import { AppointmentStatus, BloodGroup, Gender, MaritalStatus } from "./user";
 export interface IPatient {
   id: string;
   name: string;
-  email: string; 
+  email: string;
   contactNumber: string | null;
   address: string | null;
   profilePhoto: string | null;

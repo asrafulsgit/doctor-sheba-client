@@ -9,15 +9,24 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import Image from "next/image";
-import Link from "next/link";
-import { IPatient } from "@/types/patient";
+import Link from "next/link"; 
 import { bloodGroupLabels } from "@/constants/patient/data";
 import { Button } from "@/components/ui/button";
 import { Eye } from "lucide-react";
+import { PatientRecord } from "@/lib/hooks/UseDoctor";
+import { getDate } from "@/helpers/getDate";
 
-const headers = ["PATIENT", "DOB / GENDER", "BLOOD", "CONTACT", "ACTION"];
+const headers = [
+  "PATIENT",
+  "DOB / GENDER",
+  "BLOOD",
+  "CONTACT",
+  "MY LAST VISIT",
+  "MY VISITS",
+  "ACTION",
+];
 
-const PatientRecordTable = ({ patients }: { patients: IPatient[] }) => {
+const PatientRecordTable = ({ patients }: { patients: PatientRecord[] }) => {
   return (
     <div className="mt-2 overflow-hidden rounded-lg border">
       <Table>
@@ -26,7 +35,7 @@ const PatientRecordTable = ({ patients }: { patients: IPatient[] }) => {
             {headers.map((h) => (
               <TableHead
                 key={h}
-                className="uppercase text-xs text-muted-foreground px-4"
+                className="uppercase text-xs text-muted-foreground px-2"
               >
                 {h}
               </TableHead>
@@ -67,14 +76,23 @@ const PatientRecordTable = ({ patients }: { patients: IPatient[] }) => {
               </TableCell>
               <TableCell className="text-muted-foreground">
                 {patient?.patientHealthData?.dateOfBirth || "N/A"} ·{" "}
-                {patient?.patientHealthData?.gender === "MALE"? "Male" : "Female"}
+                {patient?.patientHealthData?.gender === "MALE"
+                  ? "Male"
+                  : "Female"}
               </TableCell>
               <TableCell className="text-muted-foreground">
-                {patient?.patientHealthData?.bloodGroup &&
-                  bloodGroupLabels[patient.patientHealthData.bloodGroup]}
+               {patient?.patientHealthData?.bloodGroup && <span className="rounded-md bg-destructive-soft px-2 py-0.5 text-xs font-medium text-destructive">
+                  { bloodGroupLabels[patient.patientHealthData.bloodGroup]}
+                </span>}
               </TableCell>
               <TableCell className="text-muted-foreground">
-                {patient.contactNumber}
+                {patient.contactNumber ?? "N/A"}
+              </TableCell>
+              <TableCell className="text-muted-foreground">
+                {patient?.lastVisit ? getDate(patient.lastVisit, "dd MMM yyyy") : "N/A"}
+              </TableCell>
+              <TableCell className="font-medium">
+                {patient.totalVisits}
               </TableCell>
 
               <TableCell className="text-center">
