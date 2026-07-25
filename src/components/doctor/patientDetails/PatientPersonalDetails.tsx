@@ -1,7 +1,6 @@
 import { bloodGroupLabels } from "@/constants/patient/data";
 import { getDate } from "@/helpers/getDate";
-import { SinglePatientRecord } from "@/lib/hooks/UseDoctor";
-import { IHealthProfile, IPatient } from "@/types/patient";
+import { SinglePatientRecord } from "@/lib/hooks/UseDoctor"; 
 import { Cake, Calendar, Mail, MapPin, Phone, User2 } from "lucide-react";
 import Image from "next/image";
 
@@ -42,14 +41,14 @@ const PatientPersonalDetails = ({
             <Mail className="h-4 w-4" />
             {patient?.email}
           </p>
-          <p className="flex items-center gap-2">
+          {patient?.contactNumber && <p className="flex items-center gap-2">
             <Phone className="h-4 w-4" />
             {patient?.contactNumber}
-          </p>
-          <p className="flex items-center gap-2">
+          </p>}
+          {patient?.address && <p className="flex items-center gap-2">
             <MapPin className="h-4 w-4" />
             {patient?.address}
-          </p>
+          </p>}
           <p className="flex items-center gap-2">
             <User2 className="h-4 w-4" />
             {patient.patientHealthData?.gender === "MALE" ? "Male" : "Female"}

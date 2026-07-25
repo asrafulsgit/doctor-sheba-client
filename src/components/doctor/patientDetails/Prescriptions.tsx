@@ -74,7 +74,7 @@ const Prescriptions = ({
             </Table>
           </div>
           {prescription.instructions && (
-            <p className="mt-3 rounded-lg bg-surface p-3 text-sm">
+            <p className="rounded-lg bg-surface pt-2 text-sm">
               <span className="font-medium">Instructions: </span>
               <span className="text-muted-foreground">
                 {prescription.instructions}

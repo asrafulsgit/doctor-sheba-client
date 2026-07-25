@@ -22,7 +22,7 @@ const HealthDetails = ({
           </span>
           <h3 className="text-base font-semibold">Health snapshot</h3>
         </div>
-        <div className="mt-4 grid gap-3 sm:grid-cols-2 md:grid-cols-4">
+        <div className="mt-4 grid gap-2 md:gap-3 grid-cols-2 md:grid-cols-4">
           {health?.bloodGroup && (
             <KV k="Blood group" v={bloodGroupLabels[health?.bloodGroup]} />
           )}
