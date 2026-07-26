@@ -92,8 +92,22 @@ export const queryKeys = {
 
   schedules: {
     all: ["schedules"] as const,
-    doctorAvailableSchedules: (doctorAvailableSchedulesFilters : DoctorAvailableSchedulesFilters) => ["schedules","doctorAvailableSchedules",doctorAvailableSchedulesFilters] as const,
-    doctorScheduledSchedules: (doctorAvailableSchedulesFilters : DoctorAvailableSchedulesFilters) => ["schedules","doctorScheduledSchedules",doctorAvailableSchedulesFilters] as const,
+    doctorAvailableSchedules: (
+      doctorAvailableSchedulesFilters: DoctorAvailableSchedulesFilters,
+    ) =>
+      [
+        "schedules",
+        "doctorAvailableSchedules",
+        doctorAvailableSchedulesFilters,
+      ] as const,
+    doctorScheduledSchedules: (
+      doctorAvailableSchedulesFilters: DoctorAvailableSchedulesFilters,
+    ) =>
+      [
+        "schedules",
+        "doctorScheduledSchedules",
+        doctorAvailableSchedulesFilters,
+      ] as const,
   },
 
   // ─── Prescriptions ────────────────────────────────────────────────────────
@@ -104,8 +118,8 @@ export const queryKeys = {
       ["prescriptions", "list", filters] as const,
     detail: (id: string) => ["prescriptions", "detail", id] as const,
     byPatient: () => ["prescriptions", "patient"] as const,
-    myPrescriptions: () =>
-      ["prescriptions", "patient", "myPrescriptions"] as const,
+    myPrescriptions: (filters : PrescriptionFilters) =>
+      ["prescriptions", "patient", "myPrescriptions",filters] as const,
     byAppointment: (appointmentId: string) =>
       ["prescriptions", "appointment", appointmentId] as const,
   },
@@ -197,11 +211,11 @@ export interface MedicalReportFilters {
 }
 
 export interface PrescriptionFilters {
-  patientId?: string;
-  doctorId?: string;
-  status?: "active" | "expired" | "dispensed";
-  page?: number;
-  limit?: number;
+  searchTerm?: string;
+  page?: string;
+  limit?: string;
+  sortBy?: string;
+  sortOrder?: string;
 }
 
 export interface PaymentFilters {

@@ -4,6 +4,8 @@ import { useMyPrescriptions } from "@/lib/hooks/useprescription";
 import PrescriptionCard from "./PrescriptionCard";
 import PrescriptionCardSkeleton from "./PrescriptionCardSkeleton";
 import { EmptyState } from "@/components/shared/PageState";
+import { PrescriptionFilters } from "@/lib/query/query-keys";
+import useQueryManager from "@/hooks/UseQueryManager";
 
 // seo optimization
 // export const Route = createFileRoute("/patient/prescriptions")({
@@ -12,7 +14,9 @@ import { EmptyState } from "@/components/shared/PageState";
 // });
 
 const PatientPrescriptions = () => {
-  const { data, isPending, isError, error } = useMyPrescriptions();
+  const { getAllQueries } = useQueryManager();
+  const filters: PrescriptionFilters = getAllQueries();
+  const { data, isLoading, isError, error } = useMyPrescriptions(filters);
 
   const prescriptions = data?.data || [];
   return (
@@ -22,7 +26,7 @@ const PatientPrescriptions = () => {
         description="Digital prescriptions from your consultations."
       />
 
-      {isPending ? (
+      {isLoading ? (
         <div className="grid gap-4 md:grid-cols-2">
           <PrescriptionCardSkeleton />
         </div>

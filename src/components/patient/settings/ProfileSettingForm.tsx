@@ -90,7 +90,6 @@ const ProfileSettingForm = () => {
   }
 
   function onSubmit(values: ProfileFormValues) {
-    console.log(values);
     const payload = new FormData();
     payload.append("name", values.name);
     if (values.contactNumber)
@@ -135,8 +134,10 @@ const ProfileSettingForm = () => {
         render={({ field, fieldState }) => (
           <div className="mt-5 mb-2 rounded-xl border border-border/60 bg-surface p-4">
             <div className="relative w-fit">
-              <div className="grid h-20 w-20 place-items-center overflow-hidden rounded-full 
-              bg-primary-soft text-2xl font-semibold text-primary ring-2 ring-border">
+              <div
+                className="grid h-20 w-20 place-items-center overflow-hidden rounded-full 
+              bg-primary-soft text-2xl font-semibold text-primary ring-2 ring-border"
+              >
                 {avatarPreview || currentAvatarUrl ? (
                   <img
                     src={avatarPreview ?? currentAvatarUrl ?? ""}

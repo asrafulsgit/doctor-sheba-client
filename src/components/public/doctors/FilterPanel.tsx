@@ -28,8 +28,8 @@ const FilterPanel = () => {
           <Combobox
             options={
               specialties?.map((s) => ({
-                value: s?.specialities.title,
-                label: s?.specialities.title,
+                value: s?.title,
+                label: s?.title,
               })) ?? []
             }
             value={getQuery("specialty") as string}

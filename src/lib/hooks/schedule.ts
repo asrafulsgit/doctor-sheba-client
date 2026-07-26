@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   DoctorAvailableSchedulesFilters,
   queryKeys,
@@ -51,5 +51,43 @@ export function useDoctorScheduledSchedules(
         params: filters,
       }),
     staleTime: 1000 * 60 * 5,
+  });
+}
+
+export function useCreateDoctorSchedules() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (data: { schedules: string[] }) => {
+      return api("/doctor-schedule", {
+        method: "POST",
+        body: JSON.stringify(data),
+      });
+    },
+
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: queryKeys.schedules.all,
+      });
+    },
+  });
+}
+
+export function useDeleteDoctorSchedules() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (data: { schedules: string[] }) => {
+      return api("/doctor-schedule", {
+        method: "DELETE",
+        body: JSON.stringify(data),
+      });
+    },
+
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: queryKeys.schedules.all,
+      });
+    },
   });
 }

@@ -1,9 +1,9 @@
-import { IPayment } from "@/types/payment";
+import { IPayment, Payment } from "@/types/payment";
 import { Row } from "./Success";
 import { StatusBadge } from "@/components/ui/badge";
 import { Wallet2 } from "lucide-react";
 
-const PaymentDetailscard = ({ payment }: { payment: IPayment }) => {
+const PaymentDetailscard = ({ payment }: { payment: Payment }) => {
   return (
     <dl className="mt-4 space-y-3 text-sm">
       <Row

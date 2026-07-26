@@ -1,6 +1,6 @@
 import { IDoctor } from "./doctors";
 import { IPatient } from "./patient";
-import { IPayment, PaymentStatus } from "./payment";
+import { IPayment, Payment, PaymentStatus } from "./payment";
 import { ISchedule } from "./schedule";
 
 export type AppointmentStatus =
@@ -20,7 +20,7 @@ export interface IAppointment {
   status: AppointmentStatus;
   paymentStatus: PaymentStatus;
   schedule: ISchedule;
-  payments: IPayment[];
+  payments: Payment[];
   createdAt: string;
   updatedAt: string;
 }
