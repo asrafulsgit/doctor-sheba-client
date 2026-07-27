@@ -1,13 +1,12 @@
 "use client";
-
-import CreatePrescriptionForm from "./CreatePrescriptionForm";
 import { useMyAppointment } from "@/lib/hooks/useAppointment";
 import { useParams } from "next/navigation";
 import { EmptyState } from "@/components/shared/PageState";
 import PatientDetails from "./PatientDetails";
+import UpdatePrescriptionForm from "./UpdatePrescriptionForm";
 import { CreatePrescriptionFromSkeleton } from "./CreatePrescriptionFromSkeleton";
 
-const CreatePrescription = () => {
+const UpdatePrescription = () => {
   const appointmentId = useParams().appointmentId as string;
   const { data, isLoading, isError, error } = useMyAppointment(appointmentId);
   const appointment = data?.data;
@@ -17,10 +16,8 @@ const CreatePrescription = () => {
   if (!appointment || isError) {
     return (
       <EmptyState
-        title="Appointment not found"
-        description={
-          isError ? error.message : "Error while getting appointment"
-        }
+        title={isError ? error.message : "Appointment not found"}
+        description={"Error while getting appointment, Please try again!"}
       />
     );
   }
@@ -28,9 +25,9 @@ const CreatePrescription = () => {
     <>
       {appointment && <PatientDetails appointment={appointment} />}
 
-      <CreatePrescriptionForm />
+      <UpdatePrescriptionForm />
     </>
   );
 };
 
-export default CreatePrescription;
+export default UpdatePrescription;

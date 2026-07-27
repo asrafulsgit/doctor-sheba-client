@@ -1,7 +1,6 @@
 import { Input } from "@/components/ui/input";
 import { useDebounce } from "@/hooks/useDebounce";
-import useQueryManager from "@/hooks/UseQueryManager";
-import { PrescriptionFilters } from "@/lib/query/query-keys";
+import useQueryManager from "@/hooks/UseQueryManager"; 
 import { Loader2, Search } from "lucide-react";
 import React, { useEffect, useState } from "react";
 

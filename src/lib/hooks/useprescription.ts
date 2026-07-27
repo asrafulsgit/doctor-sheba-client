@@ -3,7 +3,6 @@ import { PrescriptionFilters, queryKeys } from "../query/query-keys";
 import { api } from "../api/api-client";
 import { ApiResponse } from "@/types/api-response";
 import { IPrescription } from "@/types/prescription";
-import { PrescriptionFormValues } from "@/components/doctor/prescriptions/CreatePrescriptionForm";
 
 export function useMyPrescriptions(filters: PrescriptionFilters) {
   return useQuery({
@@ -13,6 +12,15 @@ export function useMyPrescriptions(filters: PrescriptionFilters) {
         params: filters,
       }),
     staleTime: 1000 * 60 * 5,
+  });
+}
+
+export function usePrescription(id: string) {
+  return useQuery({
+    queryKey: queryKeys.prescriptions.detail(id),
+    queryFn: () => api<ApiResponse<IPrescription>>(`/prescription/${id}`),
+    staleTime: 1000 * 60 * 5,
+    enabled: !!id,
   });
 }
 
@@ -26,7 +34,7 @@ type CreatePrescription = {
     duration: string;
   }[];
   instructions: string;
-  followUp?: string;
+  followUpDate?: string;
 };
 
 export function useCreatePrescription() {
@@ -36,6 +44,37 @@ export function useCreatePrescription() {
     mutationFn: async (data: CreatePrescription) => {
       return api("/prescription", {
         method: "POST",
+        body: JSON.stringify(data),
+      });
+    },
+
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: queryKeys.prescriptions.all,
+      });
+    },
+  });
+}
+
+type UpdatePrescription = {
+  diagnosis?: string;
+  medications?: {
+    name: string;
+    dosage: string;
+    frequency: string;
+    duration: string;
+  }[];
+  instructions?: string;
+  followUpDate?: string;
+};
+
+export function useUpdatePrescription(id: string) {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (data: UpdatePrescription) => {
+      return api(`/prescription/${id}`, {
+        method: "PATCH",
         body: JSON.stringify(data),
       });
     },

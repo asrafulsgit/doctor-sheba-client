@@ -1,12 +1,18 @@
 "use client";
-
-import { Button } from "@/components/ui/button";
-import { Calendar } from "@/components/ui/calendar";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useParams, useRouter } from "next/navigation";
+import { Controller, useFieldArray, useForm } from "react-hook-form";
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+  blankMed,
+  prescriptionFormSchema,
+  PrescriptionFormValues,
+} from "./CreatePrescriptionForm";
+
+import { toast } from "sonner";
+import {
+  usePrescription,
+  useUpdatePrescription,
+} from "@/lib/hooks/usePrescription";
 import {
   Field,
   FieldError,
@@ -15,49 +21,23 @@ import {
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { useCreatePrescription } from "@/lib/hooks/usePrescription";
-import { cn } from "@/lib/utils";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { Button } from "@/components/ui/button";
 import { Plus, X } from "lucide-react";
-import { useParams, useRouter } from "next/navigation";
-import { Controller, useFieldArray, useForm } from "react-hook-form";
-import { toast } from "sonner";
-import { z } from "zod";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Calendar } from "@/components/ui/calendar";
+import { useEffect } from "react";
+import { PrescriptionForm } from "./CreatePrescriptionFromSkeleton";
+import { EmptyState } from "@/components/shared/PageState";
 
-export const medicationSchema = z.object({
-  name: z.string().min(1, "Medication name is required"),
-  dosage: z.string().min(1, "Dosage is required"),
-  frequency: z.string().min(1, "Frequency is required"),
-  duration: z.string().min(1, "Duration is required"),
-});
-
-export const prescriptionFormSchema = z.object({
-  diagnosis: z.string().min(1, "Diagnosis is required").max(500),
-  medications: z
-    .array(medicationSchema)
-    .min(1, "At least one medication is required"),
-  instructions: z.string("Instructions is required").max(500).or(z.literal("")),
-  followUpDate: z
-    .string()
-    .optional()
-    .refine(
-      (val) => !val || !Number.isNaN(Date.parse(val)),
-      "Invalid follow-up date",
-    ),
-});
-
-export type PrescriptionFormValues = z.infer<typeof prescriptionFormSchema>;
-
-export const blankMed = (): z.infer<typeof medicationSchema> => ({
-  name: "",
-  dosage: "",
-  frequency: "",
-  duration: "",
-});
-
-const CreatePrescriptionForm = () => {
-  const appointmentId = useParams().appointmentId as string;
+const UpdatePrescriptionForm = () => {
+  const parmas = useParams();
+  const appointmentId = parmas.appointmentId as string;
+  const prescriptionId = parmas.prescriptionId as string;
   const router = useRouter();
   const form = useForm<PrescriptionFormValues>({
     resolver: zodResolver(prescriptionFormSchema),
@@ -73,30 +53,53 @@ const CreatePrescriptionForm = () => {
     control: form.control,
     name: "medications",
   });
+  const { data, isLoading, isError, error } = usePrescription(prescriptionId);
+  const { mutate: updatePrescription, isPending } =
+    useUpdatePrescription(prescriptionId);
 
-  const { mutate: createPrescription, isPending } = useCreatePrescription();
+  useEffect(() => {
+    if (data?.data) {
+      const prescription = data.data;
+      form.reset({
+        diagnosis: prescription.diagnosis ?? "",
+        instructions: prescription.instructions ?? "",
+        followUpDate: prescription.followUpDate ?? "",
+        medications: prescription.medications ?? "",
+      });
+    }
+  }, [data?.data]);
 
   const onSubmit = (data: PrescriptionFormValues) => {
-    if (!appointmentId)
+    if (!appointmentId || !prescriptionId)
       return toast.error(
-        "Appointment not found, Please pick an appointment and try again",
+        "Appointment or prescription not found, Please pick an appointment and try again",
       );
-    createPrescription(
+    updatePrescription(
       {
         ...data,
-        appointmentId,
       },
       {
         onSuccess: () => {
-          toast.success("Prescription created");
+          toast.success("Prescription updated");
           router.push("/doctor/prescriptions");
         },
         onError: (err: any) => {
-          toast.error(err?.message || "Error while creating prescription!");
+          toast.error(err?.message || "Error while updating prescription!");
         },
       },
     );
   };
+
+  if (isLoading) {
+    return <PrescriptionForm />;
+  }
+  if (!data?.data || isError) {
+    <EmptyState
+      title={isError ? error.message : "Prescription not found"}
+      description={"Error while getting presction, Please try again!"}
+    />;
+  }
+
   return (
     <form onSubmit={form.handleSubmit(onSubmit)}>
       <FieldGroup className="mt-5">
@@ -327,20 +330,12 @@ const CreatePrescriptionForm = () => {
 
       {/* ── Actions ────────────────────────────────────────────── */}
       <div className="flex justify-end gap-2 pt-2">
-        <Button
-          type="button"
-          variant="outline"
-          onClick={() => form.reset()}
-          disabled={form.formState.isSubmitting}
-        >
-          Reset
-        </Button>
         <Button type="submit" disabled={form.formState.isSubmitting}>
-          {isPending ? "Saving…" : "Save Prescription"}
+          {isPending ? "Updating…" : "Update Prescription"}
         </Button>
       </div>
     </form>
   );
 };
 
-export default CreatePrescriptionForm;
+export default UpdatePrescriptionForm;

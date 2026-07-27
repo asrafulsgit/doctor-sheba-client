@@ -40,7 +40,7 @@ function UseCustomDialog({
 }: CustomDialogProps) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className={cn("sm:max-w-[420px]", contentClassName)}>
+      <DialogContent className={cn("sm:max-w-105", contentClassName)}>
         <DialogHeader>
           <DialogTitle
             className={cn(

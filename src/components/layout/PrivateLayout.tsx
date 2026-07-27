@@ -129,7 +129,7 @@ const PrivateLayout = ({ children }: { children: ReactNode }) => {
       {/* Top navbar */}
       {!isLoading ? (
         <header className="sticky top-0 z-40 border-b border-border bg-background">
-          <div className="max-w-7xl mx-auto flex h-16 items-center justify-between px-4 sm:px-6">
+          <div className="max-w-7xl mx-auto flex h-16 items-center justify-between px-2 sm:px-4 lg:px-6">
             <div className="flex items-center gap-3">
               <Sheet>
                 <SheetTrigger asChild>

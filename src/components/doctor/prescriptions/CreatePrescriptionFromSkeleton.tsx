@@ -1,10 +1,11 @@
 import { Skeleton } from "@/components/ui/skeleton";
 
-const CreatePrescriptionFromSkeleton = () => {
+export const CreatePrescriptionFromSkeleton = () => {
   return (
     <div className="space-y-4">
       {/* ── Patient info card skeleton ─────────────────────────── */}
-      <div className="flex items-center justify-between rounded-lg border border-border bg-surface px-3 py-2">
+      <div className="mb-5 flex items-center justify-between rounded-lg 
+      border border-border bg-surface px-3 py-2">
         <div className="min-w-0 w-full space-y-2">
           <Skeleton className="h-4 w-40" />
           <Skeleton className="h-3 w-56" />
@@ -12,7 +13,14 @@ const CreatePrescriptionFromSkeleton = () => {
           <Skeleton className="h-3 w-44" />
         </div>
       </div>
+      <PrescriptionForm />
+    </div>
+  );
+};
 
+export const PrescriptionForm = () => {
+  return (
+    <>
       {/* ── Form skeleton ──────────────────────────────────────── */}
       <div className="space-y-6">
         {/* Diagnosis */}
@@ -62,8 +70,6 @@ const CreatePrescriptionFromSkeleton = () => {
         <Skeleton className="h-9 w-16" />
         <Skeleton className="h-9 w-32" />
       </div>
-    </div>
+    </>
   );
 };
-
-export default CreatePrescriptionFromSkeleton;

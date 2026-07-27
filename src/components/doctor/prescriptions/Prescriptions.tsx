@@ -3,7 +3,7 @@ import { Plus, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import DashboardHeader from "@/components/shared/DashboardHeader";
 import { EmptyState } from "@/components/shared/PageState";
-import { useMyPrescriptions } from "@/lib/hooks/useprescription";
+import { useMyPrescriptions } from "@/lib/hooks/usePrescription";
 import PrescriptionCard from "./PrescriptionCard";
 import useQueryManager from "@/hooks/UseQueryManager";
 import { PrescriptionFilters } from "@/lib/query/query-keys";
@@ -11,7 +11,6 @@ import PrescriptionFilter from "./PrescriptionFilter";
 import PrescriptionCardSkeleton from "@/components/patient/prescriptions/PrescriptionCardSkeleton";
 import { useState } from "react";
 import { CustomDialog } from "@/hooks/useDialog";
-import { Input } from "@/components/ui/input";
 import AppointmentPicker from "./AppointmentPicker";
 
 // export const Route = createFileRoute("/doctor/prescriptions")({
