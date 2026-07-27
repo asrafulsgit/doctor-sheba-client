@@ -6,9 +6,10 @@ export interface IReview {
   rating: number;
   comment: string;
   patient: {
+    id : string;
     name: string;
     profilePhoto: string | null;
   };
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: string;
+  updatedAt: string;
 }

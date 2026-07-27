@@ -118,8 +118,8 @@ export const queryKeys = {
       ["prescriptions", "list", filters] as const,
     detail: (id: string) => ["prescriptions", "detail", id] as const,
     byPatient: () => ["prescriptions", "patient"] as const,
-    myPrescriptions: (filters : PrescriptionFilters) =>
-      ["prescriptions", "patient", "myPrescriptions",filters] as const,
+    myPrescriptions: (filters: PrescriptionFilters) =>
+      ["prescriptions", "patient", "myPrescriptions", filters] as const,
     byAppointment: (appointmentId: string) =>
       ["prescriptions", "appointment", appointmentId] as const,
   },
@@ -161,6 +161,13 @@ export const queryKeys = {
     detail: (slug: string) => ["health-tips", "detail", slug] as const,
   },
 
+  // ─── reviews ───────────────────────────────────────────────────
+  reviews: {
+    all: ["reviews"] as const,
+    myReviewlist: (filters: IReviewFilter) =>
+      ["reviews", "my-reviews","list", filters] as const
+  },
+
   // ─── Payments ─────────────────────────────────────────────────────────────
   payments: {
     all: ["payments"] as const,
@@ -189,6 +196,12 @@ export interface PatientFilters {
 export interface DoctorAvailableSchedulesFilters {
   startDate?: string;
   endDate?: string;
+  page?: number;
+  limit?: number;
+}
+export interface IReviewFilter {
+  sortBy?: string;
+  sortOrder?: string;
   page?: number;
   limit?: number;
 }
