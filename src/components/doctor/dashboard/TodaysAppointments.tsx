@@ -1,5 +1,6 @@
 import { StatusBadge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { getDate } from "@/helpers/getDate";
 import { IAppointment } from "@/types/appointment"; 
 import { format } from "date-fns";
 import { ClipboardList, Clock, Video } from "lucide-react";
@@ -12,12 +13,13 @@ const TodaysAppointments = ({appointments} :{appointments : IAppointment[]}) => 
           key={a.id}
           className="flex items-center gap-4 rounded-xl border border-border bg-surface p-4"
         >
-          <div className="grid h-12 w-14 shrink-0 place-items-center rounded-lg bg-primary-soft text-primary">
-            <div className="text-xs font-medium">
-              {a.schedule.startDateTime.split(":")[0]}
+          <div className="grid h-12 w-14 shrink-0 place-items-center 
+          rounded-lg bg-primary-soft text-primary">
+            <div className="font-medium">
+              {getDate(a.schedule.startDateTime,"hh")}
             </div>
-            <div className="text-[10px] -mt-0.5">
-              {a.schedule.startDateTime.split(":")[1]}
+            <div className="-mt-2">
+              {getDate(a.schedule.startDateTime,"mm")}
             </div>
           </div>
           <div className="min-w-0 flex-1">

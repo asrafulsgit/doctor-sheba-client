@@ -165,7 +165,7 @@ export const queryKeys = {
   reviews: {
     all: ["reviews"] as const,
     myReviewlist: (filters: IReviewFilter) =>
-      ["reviews", "my-reviews","list", filters] as const
+      ["reviews", "my-reviews", "list", filters] as const,
   },
 
   // ─── Payments ─────────────────────────────────────────────────────────────
@@ -174,6 +174,8 @@ export const queryKeys = {
     list: (filters: PaymentFilters) => ["payments", "list", filters] as const,
     patientPayments: (filters: PaymentFilters) =>
       ["payments", "list", "patient", filters] as const,
+    myEarnings: (filters: PaymentFilters) =>
+      ["payments", "list", "my-earnings", filters] as const,
     detail: (id: string) => ["payments", "detail", id] as const,
     byPatient: (patientId: string) =>
       ["payments", "patient", patientId] as const,
@@ -238,4 +240,6 @@ export interface PaymentFilters {
   limit?: string;
   sortBy?: string;
   sortOrder?: string;
+  startDate?: string;
+  endDate?: string;
 }

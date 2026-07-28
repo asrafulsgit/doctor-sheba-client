@@ -1,5 +1,6 @@
 import { AppointmentStatus } from "./appointment";
 import { IDoctor } from "./doctors";
+import { IPatient } from "./patient";
 
 export type PaymentStatus = "PAID" | "UNPAID";
 // export interface Payment {
@@ -51,8 +52,8 @@ export interface Payment {
   appointment: {
     id: string;
     status: AppointmentStatus;
-
     doctor: IDoctor;
+    patient: IPatient;
   };
 }
 

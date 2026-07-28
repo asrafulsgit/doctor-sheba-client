@@ -5,7 +5,7 @@ import { CreditCard, Download, Wallet2 } from "lucide-react";
 
 import useQueryManager from "@/hooks/UseQueryManager";
 import { PaymentFilters } from "@/lib/query/query-keys";
-import { usePatientPayments } from "@/lib/hooks/payment";
+import { usePatientPayments } from "@/lib/hooks/usePayment";
 import RowSkeleton, { StatsSkeleton } from "@/components/shared/SkeletonSet";
 import PaymentTable from "./PaymentTable";
 import { EmptyState } from "@/components/shared/PageState";
