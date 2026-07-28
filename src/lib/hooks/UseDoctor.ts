@@ -4,7 +4,7 @@ import { ApiResponse } from "@/types/api-response";
 import { IDoctor, IDoctorFilter, IDoctorMeta } from "@/types/doctors";
 import { IPatient } from "@/types/patient";
 import { IReview } from "@/types/review";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 export function useDoctorMetaData() {
   return useQuery({
@@ -31,14 +31,14 @@ export function useMyDoctors(filters: IDoctorFilter = {}) {
   });
 }
 
-type DoctorProfile = {
+type DoctorDetail = {
   doctor: IDoctor;
   reviews: IReview[];
 };
-export function useDoctorProfile(id: string) {
+export function useDoctorDetails(id: string) {
   return useQuery({
     queryKey: queryKeys.doctors.detail(id),
-    queryFn: () => api<ApiResponse<DoctorProfile>>(`/doctor/${id}`),
+    queryFn: () => api<ApiResponse<DoctorDetail>>(`/doctor/${id}`),
     staleTime: 1000 * 60 * 5,
     enabled: !!id,
   });
@@ -57,7 +57,7 @@ export function usePatientRecords(filters: PatientFilters = {}) {
   });
 }
 
-export type SinglePatientRecord  = {
+export type SinglePatientRecord = {
   lastVisit: string;
   totalVisits: number;
   lastConsultant: IDoctor;
@@ -70,5 +70,32 @@ export function usePatientRecord(id: string) {
       api<ApiResponse<SinglePatientRecord>>(`/doctor/patient-records/${id}`),
     staleTime: 1000 * 60 * 5,
     enabled: !!id,
+  });
+}
+
+export function useDoctorProfile() {
+  return useQuery({
+    queryKey: queryKeys.doctors.profile(),
+    queryFn: () => api<ApiResponse<IDoctor>>(`/doctor/profile`),
+    staleTime: 1000 * 60 * 5,
+  });
+}
+
+export function useUpdateDoctor() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (data: FormData) => {
+      return api("/doctor", {
+        method: "PATCH",
+        body : data,
+      });
+    },
+
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: queryKeys.doctors.all,
+      });
+    },
   });
 }

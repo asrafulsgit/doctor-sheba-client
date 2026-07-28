@@ -1,7 +1,6 @@
 "use client";
 import { Reveal } from "@/components/shared/Reveal";
-import { Button } from "@/components/ui/button";
-import { useDoctorProfile } from "@/lib/hooks/UseDoctor";
+import { Button } from "@/components/ui/button"; 
 import {
   ArrowRight,
   Award,
@@ -15,10 +14,11 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import { DoctorProfileSkeleton } from "./DoctorProfileSkeleton";
 import { EmptyState } from "@/components/shared/PageState";
+import { useDoctorDetails } from "@/lib/hooks/UseDoctor";
 
 const DoctorProfile = () => {
   const params = useParams();
-  const { data, isLoading, isError, error } = useDoctorProfile(
+  const { data, isLoading, isError, error } = useDoctorDetails(
     params.id as string,
   );
   const doctor = data?.data?.doctor;

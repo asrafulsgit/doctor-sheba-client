@@ -16,6 +16,7 @@ export const queryKeys = {
   doctors: {
     all: ["doctors"] as const,
     lists: () => ["doctors", "list"] as const,
+    profile: () => ["doctors", "profile"] as const,
     list: (filters: IDoctorFilter) => ["doctors", "list", filters] as const,
     myDoctorsList: (filters: IDoctorFilter) =>
       ["doctors", "myDoctors", "list", filters] as const,
