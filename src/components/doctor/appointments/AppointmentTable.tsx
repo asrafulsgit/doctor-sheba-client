@@ -58,8 +58,8 @@ const AppointmentTable = ({
                       src={app.patient.profilePhoto ?? ""}
                       alt="Profile"
                       className="h-full w-full rounded-2xl object-cover"
-                      width={10}
-                      height={10}
+                      width={40}
+                      height={40}
                     />
                   ) : (
                     <span>{app.patient.name.charAt(0).toUpperCase()}</span>

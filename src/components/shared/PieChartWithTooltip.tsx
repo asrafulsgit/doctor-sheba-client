@@ -11,6 +11,8 @@ import {
 } from "@/components/ui/card";
 import {
   ChartContainer,
+  ChartLegend,
+  ChartLegendContent,
   ChartTooltip,
   ChartTooltipContent,
   type ChartConfig,
@@ -75,20 +77,11 @@ export function PieChartWithTooltip<T>({
                 />
               }
             />
-            <Pie data={dataWithFill} dataKey="value" nameKey="label">
-              <LabelList
-                dataKey="label"
-                className="fill-background"
-                stroke="none"
-                fontSize={12}
-                formatter={(value) => {
-                  const key =
-                    typeof value === "string" ? value : String(value ?? "");
-                  const configLabel = chartConfig[key]?.label;
-                  return typeof configLabel === "string" ? configLabel : key;
-                }}
-              />
-            </Pie>
+            <Pie data={dataWithFill} dataKey="value" nameKey="label" />
+            <ChartLegend
+              content={<ChartLegendContent nameKey="label" />}
+              className="-translate-y-2 flex-wrap gap-2 *:basis-1/4 *:justify-center"
+            />
           </PieChart>
         </ChartContainer>
       </CardContent>

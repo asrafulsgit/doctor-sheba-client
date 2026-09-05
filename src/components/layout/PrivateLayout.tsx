@@ -42,6 +42,7 @@ import {
 } from "../shared/SkeletonSet";
 import { useLogout } from "@/lib/hooks/useAuth";
 import { toast } from "sonner";
+import Image from "next/image";
 
 interface NavItem {
   to: string;
@@ -171,7 +172,17 @@ const PrivateLayout = ({ children }: { children: ReactNode }) => {
                 </span>
               </div>
               <div className="grid h-9 w-9 place-items-center rounded-full bg-primary-soft text-sm font-semibold text-primary">
-                {user?.name.slice(0, 1).toUpperCase()}
+                {user?.profilePhoto ? (
+                  <Image
+                    src={user.profilePhoto ?? ""}
+                    alt="Profile"
+                    className="h-full w-full rounded-2xl object-cover"
+                    width={36}
+                    height={36}
+                  />
+                ) : (
+                  <span>{user?.name.charAt(0).toUpperCase()}</span>
+                )}
               </div>
               <Button
                 variant="ghost"
