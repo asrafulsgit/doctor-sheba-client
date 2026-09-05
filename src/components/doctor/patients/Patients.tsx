@@ -18,7 +18,6 @@ import PatientRecordTable from "./PatientRecordTable";
 
 const DoctorPatients = () => {
   const { getQuery, getAllQueries } = useQueryManager();
-
   const allQueries: PatientFilters = getAllQueries();
   const { data, isLoading, isError, error } = usePatientRecords(allQueries);
   const patients = data?.data;

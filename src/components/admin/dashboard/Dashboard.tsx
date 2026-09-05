@@ -66,19 +66,13 @@ const AdminDashboard = () => {
         }
       />
 
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
-        <DashboardStats stats={meta?.stats} />
-      </div>
+      <div className="space-y-4 sm:space-y-6">
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <DashboardStats stats={meta?.stats} />
+        </div>
 
-      <div className="mt-8 grid gap-6 lg:grid-cols-3">
-        <section className="rounded-2xl border border-border bg-card p-6 shadow-soft lg:col-span-2">
-          <div className="flex items-center justify-between">
-            <h2 className="text-base font-semibold text-foreground">
-              Revenue trend
-            </h2>
-            <span className="text-xs text-muted-foreground">Last 6 months</span>
-          </div>
-          <div className="mt-4">
+        <div className="grid gap-6 lg:grid-cols-3">
+          <section className="lg:col-span-2">
             <AreaChartLinear
               chartProps={{
                 header: "Revenue trend",
@@ -86,10 +80,8 @@ const AdminDashboard = () => {
                 data: monthlyRevenue ?? [],
               }}
             />
-          </div>
-        </section>
+          </section>
 
-        <section className="rounded-2xl border border-border bg-card p-6 shadow-soft">
           <PieChartWithTooltip
             chartProps={{
               header: "Appointments",
@@ -97,12 +89,12 @@ const AdminDashboard = () => {
               data: appointmentsByStatus ?? [],
             }}
           />
-        </section>
+        </div>
+
+        <RecentAppointmentsTable appointments={meta.recentAppointments} />
+
+        <TopDoctors doctors={meta.topPerformingDoctors} />
       </div>
-
-      <RecentAppointmentsTable appointments={meta.recentAppointments} />
-
-      <TopDoctors doctors={meta.topPerformingDoctors} />
     </>
   );
 };

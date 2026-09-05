@@ -1,5 +1,6 @@
 import { IDoctor } from "@/types/doctors";
 import { Star } from "lucide-react";
+import Image from "next/image";
 
 const TopDoctors = ({ doctors }: { doctors: IDoctor[] }) => {
   return (
@@ -7,14 +8,25 @@ const TopDoctors = ({ doctors }: { doctors: IDoctor[] }) => {
       <h2 className="text-base font-semibold text-foreground">
         Top performing doctors
       </h2>
-      <div className="mt-4 grid gap-3 sm:grid-cols-2">
+      <div className="mt-4 grid gap-3 sm:grid-cols-3">
         {doctors.map((d) => (
           <div
             key={d.id}
             className="flex items-center gap-3 rounded-xl border border-border bg-surface p-3"
           >
-            <div className="grid h-10 w-10 place-items-center rounded-full bg-primary text-sm font-semibold text-primary-foreground">
-              {d.name.split(" ").slice(-1)[0][0]}
+            <div className="grid h-10 w-10 place-items-center rounded-full 
+            text-sm font-semibold text-primary-foreground">
+              {d?.profilePhoto ? (
+                <Image
+                  src={d.profilePhoto ?? ""}
+                  alt="Profile"
+                  className="h-full w-full rounded-2xl object-cover"
+                  width={40}
+                  height={40}
+                />
+              ) : (
+                <span className="bg-primary">{d?.name.charAt(0).toUpperCase()}</span>
+              )}
             </div>
             <div className="min-w-0 flex-1">
               <p className="truncate text-sm font-semibold text-foreground">
