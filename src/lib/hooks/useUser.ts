@@ -1,7 +1,8 @@
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { api } from "../api/api-client";
 import { ApiResponse } from "@/types/api-response";
 import { queryKeys } from "../query/query-keys";
+import { DoctorFormValues } from "@/components/admin/doctors/CreateDoctorForm";
 
 export function useMe() {
   return useQuery({
@@ -12,4 +13,19 @@ export function useMe() {
   });
 }
 
+export function useDoctorRegister() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (data: DoctorFormValues) =>
+      api<ApiResponse<null>>("/user/create-doctor", {
+        method: "POST",
+        body: JSON.stringify(data),
+      }),
 
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: queryKeys.doctors.all,
+      });
+    },
+  });
+}

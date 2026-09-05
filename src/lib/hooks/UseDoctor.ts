@@ -22,6 +22,14 @@ export function useDoctors(filters: IDoctorFilter = {}) {
   });
 }
 
+export function useDoctorsAdmin(filters: IDoctorFilter = {}) {
+  return useQuery({
+    queryKey: queryKeys.doctors.adminList(filters),
+    queryFn: () => api<ApiResponse<IDoctor[]>>("/doctor/admin", { params: filters }),
+    staleTime: 1000 * 60 * 5,
+  });
+}
+
 export function useMyDoctors(filters: IDoctorFilter = {}) {
   return useQuery({
     queryKey: queryKeys.doctors.myDoctorsList(filters),
@@ -88,7 +96,26 @@ export function useUpdateDoctor() {
     mutationFn: async (data: FormData) => {
       return api("/doctor", {
         method: "PATCH",
-        body : data,
+        body: data,
+      });
+    },
+
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: queryKeys.doctors.all,
+      });
+    },
+  });
+}
+
+export function useSuspendOrActivateDoctor() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (data: { id: string; isDelete: boolean }) => {
+      return api(`/doctor/${data.id}`, {
+        method: "DELETE",
+        body: JSON.stringify({ isDelete: data.isDelete }),
       });
     },
 

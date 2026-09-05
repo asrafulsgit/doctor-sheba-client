@@ -3,6 +3,7 @@ import { Star } from "lucide-react";
 import Image from "next/image";
 
 const TopDoctors = ({ doctors }: { doctors: IDoctor[] }) => {
+ 
   return (
     <section className="rounded-2xl border border-border bg-card p-6 shadow-soft">
       <h2 className="text-base font-semibold text-foreground">
@@ -25,7 +26,7 @@ const TopDoctors = ({ doctors }: { doctors: IDoctor[] }) => {
                   height={40}
                 />
               ) : (
-                <span className="bg-primary">{d?.name.charAt(0).toUpperCase()}</span>
+                <span className="bg-primary">{d?.name?.charAt(0).toUpperCase()}</span>
               )}
             </div>
             <div className="min-w-0 flex-1">

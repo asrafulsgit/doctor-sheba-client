@@ -181,7 +181,7 @@ const PrivateLayout = ({ children }: { children: ReactNode }) => {
                     height={36}
                   />
                 ) : (
-                  <span>{user?.name.charAt(0).toUpperCase()}</span>
+                  <span>{user?.name?.charAt(0).toUpperCase()}</span>
                 )}
               </div>
               <Button

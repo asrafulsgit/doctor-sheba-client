@@ -18,6 +18,7 @@ export const queryKeys = {
     lists: () => ["doctors", "list"] as const,
     profile: () => ["doctors", "profile"] as const,
     list: (filters: IDoctorFilter) => ["doctors", "list", filters] as const,
+    adminList: (filters: IDoctorFilter) => ["doctors", "admin_list", filters] as const,
     myDoctorsList: (filters: IDoctorFilter) =>
       ["doctors", "myDoctors", "list", filters] as const,
     details: () => ["doctors", "detail"] as const,
