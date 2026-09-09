@@ -83,7 +83,7 @@ const DoctorDashboard = () => {
       <DashboardStats stats={stats} />
       <div className="mt-8 grid gap-6 lg:grid-cols-3">
         {/* Today's schedule */}
-        <section className="rounded-2xl border border-border bg-card p-6 shadow-soft lg:col-span-2">
+        <section className="rounded-2xl border border-border bg-card p-3 sm:p-6 shadow-soft lg:col-span-2">
           <div className="flex items-center justify-between">
             <h2 className="text-base font-semibold text-foreground">
               Today's schedule
@@ -99,7 +99,7 @@ const DoctorDashboard = () => {
         </section>
 
         {/* Reviews */}
-        <section className="rounded-2xl border border-border bg-card p-6 shadow-soft">
+        <section className="rounded-2xl border border-border bg-card p-3 sm:p-6 shadow-soft">
           <div className="flex items-center justify-between">
             <h2 className="text-base font-semibold text-foreground">
               Recent reviews
@@ -135,7 +135,7 @@ const DoctorDashboard = () => {
       </div>
 
       {/* Quick actions */}
-      <section className="mt-6 rounded-2xl border border-border bg-card p-6 shadow-soft">
+      <section className="mt-6 rounded-2xl border border-border bg-card p-3 sm:p-6 shadow-soft">
         <h2 className="text-base font-semibold text-foreground">
           Quick actions
         </h2>

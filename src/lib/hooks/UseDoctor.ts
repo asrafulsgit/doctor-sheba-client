@@ -25,7 +25,7 @@ export function useDoctors(filters: IDoctorFilter = {}) {
 export function useDoctorsAdmin(filters: IDoctorFilter = {}) {
   return useQuery({
     queryKey: queryKeys.doctors.adminList(filters),
-    queryFn: () => api<ApiResponse<IDoctor[]>>("/doctor/admin", { params: filters }),
+    queryFn: () => api<ApiResponse<IDoctor[]>>("/doctor/all", { params: filters }),
     staleTime: 1000 * 60 * 5,
   });
 }

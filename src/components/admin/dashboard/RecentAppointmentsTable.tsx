@@ -1,8 +1,18 @@
 import { StatusBadge } from "@/components/ui/badge";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { getDate } from "@/helpers/getDate";
 import { IAppointment } from "@/types/appointment";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
+
+const headers = ["Patient", "Doctor", "Date", "Status", "Fee"];
 
 const RecentAppointmentsTable = ({
   appointments,
@@ -10,7 +20,7 @@ const RecentAppointmentsTable = ({
   appointments: IAppointment[];
 }) => {
   return (
-    <section className="rounded-2xl border border-border bg-card p-6 shadow-soft">
+    <section className="rounded-2xl border border-border bg-card p-3 sm:p-6 shadow-soft">
       <div className="flex items-center justify-between">
         <h2 className="text-base font-semibold text-foreground">
           Recent appointments
@@ -23,38 +33,42 @@ const RecentAppointmentsTable = ({
         </Link>
       </div>
       <div className="mt-4 overflow-hidden rounded-xl border border-border">
-        <table className="w-full text-sm">
-          <thead className="bg-surface text-xs uppercase text-muted-foreground">
-            <tr>
-              <th className="px-4 py-2.5 text-left font-medium">Patient</th>
-              <th className="px-4 py-2.5 text-left font-medium">Doctor</th>
-              <th className="px-4 py-2.5 text-left font-medium">Date</th>
-              <th className="px-4 py-2.5 text-left font-medium">Status</th>
-              <th className="px-4 py-2.5 text-right font-medium">Fee</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-border">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              {headers.map((h) => (
+                <TableHead
+                  key={h}
+                  className="uppercase text-xs text-muted-foreground px-2"
+                >
+                  {h}
+                </TableHead>
+              ))}
+            </TableRow>
+          </TableHeader>
+
+          <TableBody>
             {appointments.map((a) => (
-              <tr key={a.id} className="hover:bg-surface/60">
-                <td className="px-4 py-3 font-medium text-foreground">
+              <TableRow key={a.id}>
+                <TableCell className="font-medium text-foreground">
                   {a.patient.name}
-                </td>
-                <td className="px-4 py-3 text-muted-foreground">
+                </TableCell>
+                <TableCell className="text-foreground">
                   {a.doctor.name}
-                </td>
-                <td className="px-4 py-3 text-muted-foreground">
-                  {getDate(a.schedule.startDateTime, "dd MMM · a")}
-                </td>
-                <td className="px-4 py-3">
+                </TableCell>
+                <TableCell className="text-foreground">
+                  {getDate(a.schedule.startDateTime, "dd MMM · hh:mm a")}
+                </TableCell>
+                <TableCell>
                   <StatusBadge status={a.status} />
-                </td>
-                <td className="px-4 py-3 text-right font-medium">
+                </TableCell>
+                <TableCell className="text-foreground">
                   ৳{a.doctor.appointmentFee}
-                </td>
-              </tr>
+                </TableCell>
+              </TableRow>
             ))}
-          </tbody>
-        </table>
+          </TableBody>
+        </Table>
       </div>
     </section>
   );

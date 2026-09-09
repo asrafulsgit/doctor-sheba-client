@@ -43,33 +43,36 @@ export function LineChartWithTooltip<T>({
         )}
       </CardHeader>
       <CardContent>
-        <ChartContainer config={chartConfig} className="h-60 w-full">
-          <BarChart accessibilityLayer data={chartProps.data} >
-            <XAxis
-              dataKey="label"
-              tickLine={false}
-              tickMargin={10}
-              axisLine={false}
-            />
-            <Bar
-              dataKey="value"
-              fill="var(--color-value)"
-              radius={[5, 5, 0, 0]}
-            />
-            <ChartTooltip
-              content={
-                <ChartTooltipContent
-                  hideLabel
-                  hideIndicator
-                  formatter={(value) => `${value}`}
-                  className="min-w-5"
-                />
-              }
-              cursor={false}
-              defaultIndex={1}
-            />
-          </BarChart>
-        </ChartContainer>
+        {/* fixed-height plain div, same pattern as your working AreaChart */}
+        <div className="h-60 w-full min-w-0">
+          <ChartContainer config={chartConfig} className="h-full w-full min-w-0 aspect-auto">
+            <BarChart accessibilityLayer data={chartProps.data}>
+              <XAxis
+                dataKey="label"
+                tickLine={false}
+                tickMargin={10}
+                axisLine={false}
+              />
+              <Bar
+                dataKey="value"
+                fill="var(--color-value)"
+                radius={[5, 5, 0, 0]}
+              />
+              <ChartTooltip
+                content={
+                  <ChartTooltipContent
+                    hideLabel
+                    hideIndicator
+                    formatter={(value) => `${value}`}
+                    className="min-w-5"
+                  />
+                }
+                cursor={false}
+                defaultIndex={1}
+              />
+            </BarChart>
+          </ChartContainer>
+        </div>
       </CardContent>
     </Card>
   );
