@@ -69,3 +69,14 @@ export function useUpdateAppointmentStatus() {
     },
   });
 }
+
+export function useAdminAppointments(filters: AppointmentFilters = {}) {
+  return useQuery({
+    queryKey: queryKeys.appointments.myAppointmentList(filters),
+    queryFn: () =>
+      api<ApiResponse<IAppointment[]>>("/appointment", {
+        params: filters,
+      }),
+    staleTime: 1000 * 60 * 5,
+  });
+}

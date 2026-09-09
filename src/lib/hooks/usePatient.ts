@@ -3,6 +3,7 @@ import { PatientFilters, queryKeys } from "../query/query-keys";
 import { api } from "../api/api-client";
 import { ApiResponse } from "@/types/api-response";
 import { IHealthProfile, IPatient, PatientMetadataResponse } from "@/types/patient";
+import { SinglePatientRecord } from "./UseDoctor";
 
 export function usePatientMetaData() {
   return useQuery({
@@ -88,5 +89,15 @@ export function useSuspendOrActivatePatient() {
         queryKey: queryKeys.patients.all,
       });
     },
+  });
+}
+
+export function usePatientDetails(id: string) {
+  return useQuery({
+    queryKey: queryKeys.patients.detail(id),
+    queryFn: () =>
+      api<ApiResponse<SinglePatientRecord>>(`/patient/${id}`),
+    staleTime: 1000 * 60 * 5,
+    enabled: !!id,
   });
 }

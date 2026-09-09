@@ -59,7 +59,7 @@ const PatientRecordTable = () => {
   } = useSuspendOrActivatePatient();
 
   const handleView = useCallback(
-    (id: string) => router.push(`/doctors/${id}`),
+    (id: string) => router.push(`/admin/patients/${id}`),
     [router],
   );
 
@@ -220,7 +220,7 @@ const PatientRow = memo(function PatientRow({
         {patient.contactNumber ?? "N/A"}
       </TableCell>
       <TableCell className="text-muted-foreground">
-        {patient?.appointments
+        {patient?.appointments[0]?.schedule.startDateTime
           ? getDate(
               patient.appointments[0].schedule.startDateTime,
               "dd MMM yyyy",

@@ -1,6 +1,6 @@
-import DashboardHeader from "@/components/shared/DashboardHeader";
+import DashboardHeader from "@/components/shared/DashboardHeader"; 
+import PatientsFilter from "./PatientsFilter"; 
 import PatientRecordTable from "./PatientRecordTable";
-import PatientsFilter from "./PatientsFilter";
 
 // export const Route = createFileRoute("/admin/patients")({
 //   head: () => ({ meta: [{ title: "Patients — Admin — DoctorSheba" }] }),

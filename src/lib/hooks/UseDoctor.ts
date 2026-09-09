@@ -4,7 +4,7 @@ import { ApiResponse } from "@/types/api-response";
 import { IDoctor, IDoctorFilter, IDoctorMeta } from "@/types/doctors";
 import { IPatient } from "@/types/patient";
 import { IReview } from "@/types/review";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient, type UseQueryResult } from "@tanstack/react-query";
 
 export function useDoctorMetaData() {
   return useQuery({

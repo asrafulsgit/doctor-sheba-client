@@ -1,7 +1,7 @@
-import DoctorPatients from "@/components/doctor/patients/Patients";
+import AdminPatients from "@/components/admin/patients/Patients";
 
 const page = () => {
-  return <DoctorPatients />;
+  return <AdminPatients />;
 };
 
 export default page;
