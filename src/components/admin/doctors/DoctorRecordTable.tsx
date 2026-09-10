@@ -25,7 +25,14 @@ import {
   useSuspendOrActivateDoctor,
 } from "@/lib/hooks/UseDoctor";
 import { IDoctor, IDoctorFilter } from "@/types/doctors";
-import { Edit3, Eye, MoreHorizontal, Power, Star } from "lucide-react";
+import {
+  Edit3,
+  Eye,
+  ListChecks,
+  MoreHorizontal,
+  Power,
+  Star,
+} from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -46,6 +53,7 @@ type DoctorRowProps = {
   doctor: IDoctor;
   isPending: boolean;
   onView: (id: string) => void;
+  onSchedules: (id: string) => void;
   onActivate: (doctor: IDoctor) => void;
   onRequestSuspend: (doctor: IDoctor) => void;
 };
@@ -54,6 +62,7 @@ const DoctorRow = memo(function DoctorRow({
   doctor,
   isPending,
   onView,
+  onSchedules,
   onActivate,
   onRequestSuspend,
 }: DoctorRowProps) {
@@ -114,6 +123,10 @@ const DoctorRow = memo(function DoctorRow({
               <Eye className="h-4 w-4" />
               View
             </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => onSchedules(doctor.id)}>
+              <ListChecks className="h-4 w-4" />
+              Schedules
+            </DropdownMenuItem>
 
             {doctor.isDeleted ? (
               <DropdownMenuItem
@@ -157,6 +170,11 @@ const DoctorRecordTable = () => {
 
   const handleView = useCallback(
     (id: string) => router.push(`/doctors/${id}`),
+    [router],
+  );
+
+  const handleSchedules = useCallback(
+    (id: string) => router.push(`/admin/doctors/schedules/${id}`),
     [router],
   );
 
@@ -236,6 +254,7 @@ const DoctorRecordTable = () => {
                 doctor={doctor}
                 isPending={isPending && variables?.id === doctor.id}
                 onView={handleView}
+                onSchedules={handleSchedules}
                 onActivate={handleActivate}
                 onRequestSuspend={handleRequestSuspend}
               />

@@ -12,7 +12,7 @@ import { IAppointment } from "@/types/appointment";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 
-const headers = ["Patient", "Doctor", "Date", "Status", "Fee"];
+const headers = ["Patient", "Doctor", "Date", "Status", "Payment", "Fee"];
 
 const RecentAppointmentsTable = ({
   appointments,
@@ -61,6 +61,9 @@ const RecentAppointmentsTable = ({
                 </TableCell>
                 <TableCell>
                   <StatusBadge status={a.status} />
+                </TableCell>
+                <TableCell>
+                  <StatusBadge status={a.paymentStatus} />
                 </TableCell>
                 <TableCell className="text-foreground">
                   ৳{a.doctor.appointmentFee}

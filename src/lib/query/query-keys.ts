@@ -94,6 +94,8 @@ export const queryKeys = {
 
   schedules: {
     all: ["schedules"] as const,
+    list: (filters: DoctorAvailableSchedulesFilters) =>
+      ["schedules", "list", filters] as const,
     doctorAvailableSchedules: (
       doctorAvailableSchedulesFilters: DoctorAvailableSchedulesFilters,
     ) =>
@@ -101,6 +103,16 @@ export const queryKeys = {
         "schedules",
         "doctorAvailableSchedules",
         doctorAvailableSchedulesFilters,
+      ] as const,
+    doctorSelectedSchedules: (
+      doctorAvailableSchedulesFilters: DoctorAvailableSchedulesFilters,
+      id : string
+    ) =>
+      [
+        "schedules",
+        "doctorSelectedSchedules",
+        doctorAvailableSchedulesFilters,
+        id
       ] as const,
     doctorScheduledSchedules: (
       doctorAvailableSchedulesFilters: DoctorAvailableSchedulesFilters,

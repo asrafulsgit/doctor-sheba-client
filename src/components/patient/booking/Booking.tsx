@@ -38,7 +38,7 @@ const Booking = () => {
 
   const [slot, setSlot] = useState<SelectedSlot | null>(null);
 
-  const { data, isLoading, isError, error } = useDoctorSchedules(doctorId);
+  const { data, isLoading, isError, error } = useDoctorSchedules({},doctorId);
 
   const doctor = data?.data?.doctor;
   const schedules = data?.data?.doctorSchedules;
