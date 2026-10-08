@@ -18,7 +18,8 @@ export const queryKeys = {
     lists: () => ["doctors", "list"] as const,
     profile: () => ["doctors", "profile"] as const,
     list: (filters: IDoctorFilter) => ["doctors", "list", filters] as const,
-    adminList: (filters: IDoctorFilter) => ["doctors", "admin_list", filters] as const,
+    adminList: (filters: IDoctorFilter) =>
+      ["doctors", "admin_list", filters] as const,
     myDoctorsList: (filters: IDoctorFilter) =>
       ["doctors", "myDoctors", "list", filters] as const,
     details: () => ["doctors", "detail"] as const,
@@ -106,13 +107,13 @@ export const queryKeys = {
       ] as const,
     doctorSelectedSchedules: (
       doctorAvailableSchedulesFilters: DoctorAvailableSchedulesFilters,
-      id : string
+      id: string,
     ) =>
       [
         "schedules",
         "doctorSelectedSchedules",
         doctorAvailableSchedulesFilters,
-        id
+        id,
       ] as const,
     doctorScheduledSchedules: (
       doctorAvailableSchedulesFilters: DoctorAvailableSchedulesFilters,
@@ -180,6 +181,11 @@ export const queryKeys = {
     all: ["reviews"] as const,
     myReviewlist: (filters: IReviewFilter) =>
       ["reviews", "my-reviews", "list", filters] as const,
+  },
+
+  // ─── users ───────────────────────────────────────────────────
+  users: {
+    all: ["users"] as const,
   },
 
   // ─── Payments ─────────────────────────────────────────────────────────────

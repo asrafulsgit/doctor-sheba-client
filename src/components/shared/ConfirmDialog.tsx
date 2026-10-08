@@ -1,9 +1,16 @@
 import * as React from "react";
 import {
-  AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent,
-  AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle,
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { cn } from "@/lib/utils";
+import { Loader } from "lucide-react";
 
 interface ConfirmDialogProps {
   open: boolean;
@@ -13,35 +20,58 @@ interface ConfirmDialogProps {
   confirmLabel?: string;
   cancelLabel?: string;
   destructive?: boolean;
-  onConfirm: () => void | Promise<void>;
+  onConfirm: () => void | boolean | Promise<void | boolean>;
 }
 
 export function ConfirmDialog({
-  open, onOpenChange, title, description,
-  confirmLabel = "Confirm", cancelLabel = "Cancel",
-  destructive, onConfirm,
+  open,
+  onOpenChange,
+  title,
+  description,
+  confirmLabel = "Confirm",
+  cancelLabel = "Cancel",
+  destructive,
+  onConfirm,
 }: ConfirmDialogProps) {
   const [loading, setLoading] = React.useState(false);
   const handle = async () => {
     setLoading(true);
-    try { await onConfirm(); onOpenChange(false); }
-    finally { setLoading(false); }
+    try {
+      const confirmed = await onConfirm();
+      if (confirmed !== false) onOpenChange(false);
+    } finally {
+      setLoading(false);
+    }
   };
   return (
     <AlertDialog open={open} onOpenChange={onOpenChange}>
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>{title}</AlertDialogTitle>
-          {description && <AlertDialogDescription>{description}</AlertDialogDescription>}
+          {description && (
+            <AlertDialogDescription>{description}</AlertDialogDescription>
+          )}
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel disabled={loading}>{cancelLabel}</AlertDialogCancel>
+          <AlertDialogCancel disabled={loading}>
+            {cancelLabel}
+          </AlertDialogCancel>
           <AlertDialogAction
-            onClick={(e) => { e.preventDefault(); void handle(); }}
+            onClick={(e) => {
+              e.preventDefault();
+              void handle();
+            }}
             disabled={loading}
-            className={cn(destructive && "bg-destructive text-destructive-foreground hover:bg-destructive/90")}
+            variant={"destructive"}
           >
-            {loading ? "Working…" : confirmLabel}
+            {loading ? (
+              <>
+                <Loader className="h-4 w-4" />
+                <span>Deleting</span>
+              </>
+            ) : (
+              confirmLabel
+            )}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

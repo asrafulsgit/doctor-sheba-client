@@ -12,12 +12,11 @@ import {
   X,
 } from "lucide-react";
 import { ReactNode, useState } from "react";
-import { IAppointment } from "@/types/appointment";
+import { AppointmentStatus, IAppointment } from "@/types/appointment";
 import { CustomAlertDialog, CustomDialog } from "@/hooks/useDialog";
 import { AlertDialogAction } from "@/components/ui/alert-dialog";
 import { format } from "date-fns";
 import { StatusBadge } from "@/components/ui/badge";
-import { AppointmentStatus } from "@/types/user";
 import { PaymentStatus } from "@/types/payment";
 import { useUpdateAppointmentStatus } from "@/lib/hooks/useAppointment";
 import { toast } from "sonner";

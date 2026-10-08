@@ -33,6 +33,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { StatusBadge } from "@/components/ui/badge";
 
 const headers = [
   "PATIENT",
@@ -41,6 +42,7 @@ const headers = [
   "CONTACT",
   "LAST VISIT",
   "VISITS",
+  "STATUS",
   "ACTION",
 ];
 
@@ -229,6 +231,9 @@ const PatientRow = memo(function PatientRow({
       </TableCell>
       <TableCell className="font-medium">
         {patient._count.appointments}
+      </TableCell>
+      <TableCell className="font-medium">
+        <StatusBadge status={patient.user.status} />
       </TableCell>
 
       <TableCell className="text-center">

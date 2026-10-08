@@ -1,5 +1,6 @@
+import { AppointmentStatus } from "@/types/appointment";
 import { PaymentStatus } from "@/types/payment";
-import { AppointmentStatus, BloodGroup } from "@/types/user";
+import {  BloodGroup } from "@/types/user";
 
 export interface PatientRecord {
   id: string;

@@ -12,7 +12,7 @@ import { IMedicalReport } from "@/types/medical-report";
 import { Eye } from "lucide-react";
 import Link from "next/link";
 
-const headers = ["NAME", "DATE", "ACTION"];
+const headers = ["NAME", "DATE"];
 
 const Reports = ({ reports }: { reports: IMedicalReport[] }) => {
   return (
@@ -28,6 +28,9 @@ const Reports = ({ reports }: { reports: IMedicalReport[] }) => {
                 {h}
               </TableHead>
             ))}
+            <TableHead className="uppercase text-xs text-right text-muted-foreground px-2">
+              ACTION
+            </TableHead>
           </TableRow>
         </TableHeader>
 
@@ -38,7 +41,7 @@ const Reports = ({ reports }: { reports: IMedicalReport[] }) => {
               <TableCell className="font-medium">
                 {getDate(report.updatedAt, "dd MMM yyyy")}
               </TableCell>
-              <TableCell>
+              <TableCell className="text-right">
                 <Link
                   href={report.reportLink}
                   target="_blank"

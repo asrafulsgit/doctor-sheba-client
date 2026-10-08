@@ -3,8 +3,6 @@
 import { Button } from "@/components/ui/button";
 import {
   Banknote,
-  CalendarDays,
-  Clock,
   CreditCard,
   Download,
   Eye,
@@ -12,21 +10,14 @@ import {
   Mail,
   MapPin,
   Phone,
-  Receipt,
   Stethoscope,
-  Video,
-  X,
 } from "lucide-react";
 import { ReactNode, useState } from "react";
-import { IAppointment } from "@/types/appointment";
-import { CustomAlertDialog, CustomDialog } from "@/hooks/useDialog";
-import { AlertDialogAction } from "@/components/ui/alert-dialog";
-import { format } from "date-fns";
+import { CustomDialog } from "@/hooks/useDialog";
+
 import { StatusBadge } from "@/components/ui/badge";
-import { AppointmentStatus } from "@/types/user";
 import { Payment, PaymentStatus } from "@/types/payment";
-import { useUpdateAppointmentStatus } from "@/lib/hooks/useAppointment";
-import { toast } from "sonner";
+import { AppointmentStatus } from "@/types/appointment";
 
 type PaymentActionMenuProps = {
   payment: Partial<Payment>;

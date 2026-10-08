@@ -4,7 +4,12 @@ import { ApiResponse } from "@/types/api-response";
 import { IDoctor, IDoctorFilter, IDoctorMeta } from "@/types/doctors";
 import { IPatient } from "@/types/patient";
 import { IReview } from "@/types/review";
-import { useMutation, useQuery, useQueryClient, type UseQueryResult } from "@tanstack/react-query";
+import {
+  useMutation,
+  useQuery,
+  useQueryClient,
+  type UseQueryResult,
+} from "@tanstack/react-query";
 
 export function useDoctorMetaData() {
   return useQuery({
@@ -25,7 +30,8 @@ export function useDoctors(filters: IDoctorFilter = {}) {
 export function useDoctorsAdmin(filters: IDoctorFilter = {}) {
   return useQuery({
     queryKey: queryKeys.doctors.adminList(filters),
-    queryFn: () => api<ApiResponse<IDoctor[]>>("/doctor/all", { params: filters }),
+    queryFn: () =>
+      api<ApiResponse<IDoctor[]>>("/doctor/all", { params: filters }),
     staleTime: 1000 * 60 * 5,
   });
 }

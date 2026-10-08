@@ -19,8 +19,8 @@ const AdminSchedules = () => {
         description="Overview of all schedules."
       />
 
-      <div className="flex justify-between items-center mb-3">
-        <div className="flex gap-3 ">
+      <div className="flex flex-wrap gap-3 justify-between items-center mb-3">
+        <div className="flex gap-3 flex-wrap">
           <DoctorSchedulesFilter />
         </div>
         <Button onClick={() => setOpen(true)}>

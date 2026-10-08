@@ -3,6 +3,7 @@
 import { ConfirmDialog } from "@/components/shared/ConfirmDialog";
 import { EmptyState } from "@/components/shared/PageState";
 import RowSkeleton from "@/components/shared/SkeletonSet";
+import { StatusBadge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -41,12 +42,13 @@ import { toast } from "sonner";
 
 const headers = [
   "DOCTOR",
-  "Specialty",
+  "SPECIALTY",
   "BMDC",
-  "Hospital",
-  "Fee",
-  "Rating",
-  "ACTION",
+  "HOSPITAL",
+  "FEE",
+  "RATING",
+  "STATUS",
+  "ACTIONS",
 ];
 
 type DoctorRowProps = {
@@ -109,6 +111,9 @@ const DoctorRow = memo(function DoctorRow({
           <Star className="h-3 w-3 fill-current" />
           {doctor.averageRating}
         </span>
+      </TableCell>
+      <TableCell>
+        <StatusBadge status={doctor.user.status} />
       </TableCell>
 
       <TableCell>

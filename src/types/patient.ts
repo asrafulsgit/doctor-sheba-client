@@ -1,8 +1,9 @@
+import { AppointmentStatus } from "./appointment";
 import { IDoctor } from "./doctors";
 import { IMedicalReport } from "./medical-report";
 import { IPrescription } from "./prescription";
 import { ISchedule } from "./schedule";
-import { AppointmentStatus, BloodGroup, Gender, MaritalStatus } from "./user";
+import { BloodGroup, Gender, MaritalStatus } from "./user";
 
 export interface IPatient {
   id: string;

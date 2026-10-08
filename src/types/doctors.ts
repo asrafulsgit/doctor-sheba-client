@@ -1,7 +1,7 @@
 import { AppointmentStatus, IAppointment } from "./appointment";
 import { IReview } from "./review";
 import { ISpecialty, Specialty } from "./specialties";
-import { Gender } from "./user";
+import { Gender, User } from "./user";
 
 export interface Doctor {
   id: string;
@@ -61,6 +61,7 @@ export interface IDoctor {
 
   doctorSchedules: IDoctorSchedule[];
   doctorSpecialities: ISpecialty[];
+  user: User;
 }
 
 export interface IDoctorMeta {

@@ -4,6 +4,7 @@ import { api } from "../api/api-client";
 import { ApiResponse } from "@/types/api-response";
 import { IHealthProfile, IPatient, PatientMetadataResponse } from "@/types/patient";
 import { SinglePatientRecord } from "./UseDoctor";
+import { User } from "@/types/user";
 
 export function usePatientMetaData() {
   return useQuery({
@@ -57,6 +58,7 @@ export type AdminPatient = {
   _count: {
     appointments: number;
   };
+  user : User
 }
 
 export interface Appointment {
