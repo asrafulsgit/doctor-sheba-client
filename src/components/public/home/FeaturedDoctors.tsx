@@ -10,14 +10,6 @@ import { ApiResponse } from "@/types/api-response";
 import { EmptyState } from "@/components/shared/PageState";
 
 const FeaturedDoctors = async () => {
-  let doctors: IDoctor[] = [];
-  let errorMessage: string = "";
-  try {
-    const res = await api<ApiResponse<IDoctor[]>>("/doctor");
-    doctors = res?.data || [];
-  } catch (error: any) {
-    errorMessage = error?.message;
-  }
   return (
     <section className="border-b border-border bg-background py-20">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -33,23 +25,53 @@ const FeaturedDoctors = async () => {
             </Link>
           </Button>
         </div>
-        {doctors.length !== 0 ? (
-          <StaggerGroup className="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {doctors.map((doctor) => (
-              <StaggerItem key={doctor.id}>
-                <DoctorCard doctor={doctor} />
-              </StaggerItem>
-            ))}
-          </StaggerGroup>
-        ) : (
-          <EmptyState
-            title="Unable to load specialties"
-            description={errorMessage || "Please try again later."}
-            className="mt-3"
-          />
-        )}
+
+        <DoctorsGrid />
       </div>
     </section>
+  );
+};
+
+const DoctorsGrid = async () => {
+  let doctors: IDoctor[] = [];
+  let isError: any = null;
+  try {
+    const res = await api<ApiResponse<IDoctor[]>>("/doctor", {
+      params: { limit: 6 },
+    });
+    doctors = res?.data || [];
+  } catch (error: any) {
+    isError = error;
+  }
+
+  if (doctors.length === 0) {
+    return (
+      <EmptyState
+        title="No doctors found"
+        description={"Please try again later."}
+        className="mt-3"
+      />
+    );
+  }
+
+  if (isError) {
+    return (
+      <EmptyState
+        title="Unable to load doctors"
+        description={isError.message || "Please try again later."}
+        className="mt-3"
+      />
+    );
+  }
+
+  return (
+    <StaggerGroup className="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+      {doctors.map((doctor) => (
+        <StaggerItem key={doctor.id}>
+          <DoctorCard doctor={doctor} />
+        </StaggerItem>
+      ))}
+    </StaggerGroup>
   );
 };
 

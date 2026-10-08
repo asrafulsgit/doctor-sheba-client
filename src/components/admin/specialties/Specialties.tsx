@@ -1,7 +1,7 @@
 "use client";
 
 import { Plus } from "lucide-react";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { ConfirmDialog } from "@/components/shared/ConfirmDialog";
@@ -25,44 +25,65 @@ const AdminSpecialties = () => {
   const [deletingSpecialty, setDeletingSpecialty] = useState<Specialty | null>(
     null,
   );
-  const createSpecialty = useCreateSpecialty();
-  const updateSpecialty = useUpdateSpecialty();
-  const deleteSpecialty = useDeleteSpecialty();
+  const { mutate: createSpecialty, isPending: isCreating } =
+    useCreateSpecialty();
+  const { mutate: updateSpecialty, isPending: isUpdating } =
+    useUpdateSpecialty();
+  const { mutate: deleteSpecialty } = useDeleteSpecialty();
 
-  const handleCreate = async (data: SpecialtyInput) => {
-    try {
-      await createSpecialty.mutateAsync(data);
-      toast.success("Specialty added");
-      setCreateOpen(false);
-    } catch (error: any) {
-      toast.error(error ? error.message : "Unable to add specialty");
-    }
-  };
+  const handleCreate = useCallback(
+    async (data: SpecialtyInput) => {
+      createSpecialty(data, {
+        onSuccess: () => {
+          toast.success("Specialty added");
+          setCreateOpen(false);
+        },
+        onError: (error: Error) =>
+          toast.error(error ? error.message : "Unable to add specialty"),
+      });
+    },
+    [createSpecialty],
+  );
 
-  const handleEdit = async (data: SpecialtyInput) => {
-    if (!editingSpecialty) return;
+  const handleEdit = useCallback(
+    async (data: SpecialtyInput) => {
+      if (!editingSpecialty) return;
 
-    try {
-      await updateSpecialty.mutateAsync({ id: editingSpecialty.id, ...data });
-      toast.success("Specialty updated");
-      setEditingSpecialty(null);
-    } catch (error: any) {
-      toast.error(error ? error.message : "Unable to update specialty");
-    }
-  };
+      updateSpecialty(
+        { id: editingSpecialty.id, ...data },
+        {
+          onSuccess: () => {
+            toast.success("Specialty updated");
+            setEditingSpecialty(null);
+          },
+          onError: (error: Error) =>
+            toast.error(error ? error.message : "Unable to update specialty"),
+        },
+      );
+    },
+    [editingSpecialty, updateSpecialty],
+  );
 
-  const handleDelete = async () => {
+  const handleDelete = useCallback(async () => {
     if (!deletingSpecialty) return;
 
-    try {
-      await deleteSpecialty.mutateAsync(deletingSpecialty.id);
-      toast.success("Specialty deleted");
-      setDeletingSpecialty(null);
-    } catch (error: any) {
-      toast.error(error ? error.message : "Unable to delete specialty");
-      throw error;
-    }
-  };
+    deleteSpecialty(deletingSpecialty.id, {
+      onSuccess: () => {
+        toast.success("Specialty deleted");
+        setDeletingSpecialty(null);
+      },
+      onError: (error: Error) =>
+        toast.error(error ? error.message : "Unable to delete specialty"),
+    });
+  }, [deleteSpecialty, deletingSpecialty]);
+
+  const handleEditDialogOpenChange = useCallback((open: boolean) => {
+    if (!open) setEditingSpecialty(null);
+  }, []);
+
+  const handleDeleteDialogOpenChange = useCallback((open: boolean) => {
+    if (!open) setDeletingSpecialty(null);
+  }, []);
 
   return (
     <>
@@ -82,36 +103,42 @@ const AdminSpecialties = () => {
         onDelete={setDeletingSpecialty}
       />
 
-      <SpecialtyFormDialog
-        key="create-specialty"
-        open={createOpen}
-        onOpenChange={setCreateOpen}
-        title="Add specialty"
-        description="Add a specialty to the platform."
-        submitLabel="Create specialty"
-        isPending={createSpecialty.isPending}
-        onSubmit={handleCreate}
-      />
-      <SpecialtyFormDialog
-        key={editingSpecialty?.id ?? "edit-specialty"}
-        open={!!editingSpecialty}
-        onOpenChange={(open) => !open && setEditingSpecialty(null)}
-        title="Edit specialty"
-        description="Update the specialty details."
-        submitLabel="Save changes"
-        specialty={editingSpecialty ?? undefined}
-        isPending={updateSpecialty.isPending}
-        onSubmit={handleEdit}
-      />
-      <ConfirmDialog
-        open={!!deletingSpecialty}
-        onOpenChange={(open) => !open && setDeletingSpecialty(null)}
-        title="Delete this specialty?"
-        description={`This will permanently remove ${deletingSpecialty?.title ?? "this specialty"}.`}
-        confirmLabel="Delete"
-        destructive = {true}
-        onConfirm={handleDelete}
-      />
+      {createOpen && (
+        <SpecialtyFormDialog
+          key="create-specialty"
+          open
+          onOpenChange={setCreateOpen}
+          title="Add specialty"
+          description="Add a specialty to the platform."
+          submitLabel="Create specialty"
+          isPending={isCreating}
+          onSubmit={handleCreate}
+        />
+      )}
+      {editingSpecialty && (
+        <SpecialtyFormDialog
+          key={editingSpecialty.id}
+          open
+          onOpenChange={handleEditDialogOpenChange}
+          title="Edit specialty"
+          description="Update the specialty details."
+          submitLabel="Save changes"
+          specialty={editingSpecialty}
+          isPending={isUpdating}
+          onSubmit={handleEdit}
+        />
+      )}
+      {deletingSpecialty && (
+        <ConfirmDialog
+          open
+          onOpenChange={handleDeleteDialogOpenChange}
+          title="Delete this specialty?"
+          description={`This will permanently remove ${deletingSpecialty.title}.`}
+          confirmLabel="Delete"
+          destructive
+          onConfirm={handleDelete}
+        />
+      )}
     </>
   );
 };

@@ -142,7 +142,7 @@ export const queryKeys = {
   meta: {
     patientMeta: ["patientMeta"] as const,
     doctorMeta: ["doctorMeta"] as const,
-    adminMeta: ["patientMeta"] as const,
+    adminMeta: ["adminMeta"] as const,
   },
 
   // ─── Notifications ────────────────────────────────────────────────────────
@@ -186,6 +186,7 @@ export const queryKeys = {
   // ─── users ───────────────────────────────────────────────────
   users: {
     all: ["users"] as const,
+    adminList: ["users","admins"] as const,
   },
 
   // ─── Payments ─────────────────────────────────────────────────────────────

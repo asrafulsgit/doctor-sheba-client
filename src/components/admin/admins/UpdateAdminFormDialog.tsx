@@ -1,8 +1,8 @@
-import { Specialty } from "@/types/specialties";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Edit3, Loader, Plus } from "lucide-react";
+import { Loader } from "lucide-react";
 import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
+import { memo } from "react";
 import {
   Dialog,
   DialogContent,
@@ -19,43 +19,58 @@ import {
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { memo } from "react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { User } from "@/types/user";
 
-const specialtyFormSchema = z.object({
-  title: z.string().trim().min(1, "Title is required"),
-  icon: z.string().trim().min(1, "Icon name is required"),
+const adminFormSchema = z.object({
+  name: z.string().trim().min(1, "Name is required"),
+  contactNumber: z.string().trim().optional(),
+  role: z.enum(["ADMIN", "SUPER_ADMIN"]),
 });
 
-type SpecialtyFormValues = z.infer<typeof specialtyFormSchema>;
+export type UpateAdminFormValues = z.infer<typeof adminFormSchema>;
 
-type SpecialtyFormDialogProps = {
+type AdminFormDialogProps = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   title: string;
   description: string;
   submitLabel: string;
-  specialty?: Specialty;
+  admin?: User;
   isPending: boolean;
-  onSubmit: (data: SpecialtyFormValues) => Promise<void>;
+  onSubmit: (data: UpateAdminFormValues) => Promise<void>;
 };
-const SpecialtyFormDialog = ({
+
+const UpdateAdminFormDialog = ({
   open,
   onOpenChange,
   title,
   description,
   submitLabel,
-  specialty,
+  admin,
   isPending,
   onSubmit,
-}: SpecialtyFormDialogProps) => {
-  const form = useForm<SpecialtyFormValues>({
-    resolver: zodResolver(specialtyFormSchema),
+}: AdminFormDialogProps) => {
+  const defaultRole: UpateAdminFormValues["role"] =
+    admin && (admin.role === "ADMIN" || admin.role === "SUPER_ADMIN")
+      ? admin.role
+      : "ADMIN";
+
+  const form = useForm<UpateAdminFormValues>({
+    resolver: zodResolver(adminFormSchema),
     defaultValues: {
-      title: specialty?.title ?? "",
-      icon: specialty?.icon ?? "Tag",
+      name: admin?.admin.name ?? "",
+      contactNumber: admin?.admin.contactNumber ?? "",
+      role: defaultRole,
     },
   });
-  
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent>
@@ -66,14 +81,32 @@ const SpecialtyFormDialog = ({
         <form onSubmit={form.handleSubmit(onSubmit)}>
           <FieldGroup className="mt-4">
             <Controller
-              name="title"
+              name="name"
               control={form.control}
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor="specialty-title">Title</FieldLabel>
+                  <FieldLabel htmlFor="admin-name">Name</FieldLabel>
                   <Input
                     {...field}
-                    id="specialty-title"
+                    id="admin-name"
+                    aria-invalid={fieldState.invalid}
+                  />
+                  {fieldState.invalid && (
+                    <FieldError errors={[fieldState.error]} />
+                  )}
+                </Field>
+              )}
+            />
+
+            <Controller
+              name="contactNumber"
+              control={form.control}
+              render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid}>
+                  <FieldLabel htmlFor="admin-phone">Contact number</FieldLabel>
+                  <Input
+                    {...field}
+                    id="admin-phone"
                     aria-invalid={fieldState.invalid}
                   />
                   {fieldState.invalid && (
@@ -83,16 +116,23 @@ const SpecialtyFormDialog = ({
               )}
             />
             <Controller
-              name="icon"
+              name="role"
               control={form.control}
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor="specialty-icon">Icon name</FieldLabel>
-                  <Input
-                    {...field}
-                    id="specialty-icon"
-                    aria-invalid={fieldState.invalid}
-                  />
+                  <FieldLabel htmlFor="admin-role">Role</FieldLabel>
+                  <Select value={field.value} onValueChange={field.onChange}>
+                    <SelectTrigger
+                      id="admin-role"
+                      aria-invalid={fieldState.invalid}
+                    >
+                      <SelectValue placeholder="Select a role" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="ADMIN">Admin</SelectItem>
+                      <SelectItem value="SUPER_ADMIN">Super admin</SelectItem>
+                    </SelectContent>
+                  </Select>
                   {fieldState.invalid && (
                     <FieldError errors={[fieldState.error]} />
                   )}
@@ -126,4 +166,4 @@ const SpecialtyFormDialog = ({
   );
 };
 
-export default memo(SpecialtyFormDialog);
+export default memo(UpdateAdminFormDialog);

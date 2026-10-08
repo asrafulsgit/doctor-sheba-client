@@ -66,7 +66,9 @@ export type PatientRecord = {
 export function usePatientRecords(filters: PatientFilters = {}) {
   return useQuery({
     queryKey: queryKeys.patients.list(filters),
-    queryFn: () => api<ApiResponse<PatientRecord[]>>(`/doctor/patient-records`),
+    queryFn: () => api<ApiResponse<PatientRecord[]>>(`/doctor/patient-records`,{
+      params : filters
+    }),
     staleTime: 1000 * 60 * 5,
   });
 }

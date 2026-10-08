@@ -1,4 +1,6 @@
-import { PaymentStatus } from "./payment";
+import { Admin } from "./admin";
+import { IDoctor } from "./doctors";
+import { IPatient } from "./patient";
 
 export enum UserRole {
   PATIENT = "PATIENT",
@@ -30,4 +32,8 @@ export interface User {
   status: UserStatus;
   createdAt: string;
   updatedAt: string;
+
+  admin: Admin;
+  patient: IPatient;
+  doctor: IDoctor;
 }

@@ -3,7 +3,6 @@ import { api } from "../api/api-client";
 import { ApiResponse } from "@/types/api-response";
 import { queryKeys } from "../query/query-keys";
 import { DoctorFormValues } from "@/components/admin/doctors/CreateDoctorForm";
-import { User } from "@/types/user";
 
 export function useMe() {
   return useQuery({
@@ -31,11 +30,28 @@ export function useDoctorRegister() {
   });
 }
 
-export function useUsers() {
-  return useQuery({
-    queryKey: queryKeys.users.all,
-    queryFn: () =>
-      api<ApiResponse<User[]>>(`/user`),
-    staleTime: 1000 * 60 * 5,
+export type AdminInput = {
+  name: string;
+  email: string;
+  contactNumber?: string;
+  role: "ADMIN" | "SUPER_ADMIN";
+};
+
+export const useCreateAdmin = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (data: AdminInput) => {
+      return api<ApiResponse<null>>(`/user/create-admin`, {
+        method: "POST",
+        body: JSON.stringify(data),
+      });
+    },
+
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: queryKeys.users.adminList,
+      });
+    },
   });
-}
+};

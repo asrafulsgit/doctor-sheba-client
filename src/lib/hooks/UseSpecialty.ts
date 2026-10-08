@@ -18,11 +18,12 @@ export function useCreateSpecialty() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (data: SpecialtyInput) =>
-      api<ApiResponse<Specialty>>("/specialties", {
+    mutationFn: async (data: SpecialtyInput) => {
+      return api<ApiResponse<Specialty>>("/specialties", {
         method: "POST",
         body: JSON.stringify(data),
-      }),
+      });
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: queryKeys.specialties.all,
@@ -35,11 +36,12 @@ export function useUpdateSpecialty() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ id, ...data }: SpecialtyInput & { id: string }) =>
-      api<ApiResponse<Specialty>>(`/specialties/${id}`, {
+    mutationFn: async ({ id, ...data }: SpecialtyInput & { id: string }) => {
+      return api<ApiResponse<Specialty>>(`/specialties/${id}`, {
         method: "PATCH",
         body: JSON.stringify(data),
-      }),
+      });
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: queryKeys.specialties.all,
@@ -52,10 +54,11 @@ export function useDeleteSpecialty() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (id: string) =>
-      api<ApiResponse<Specialty>>(`/specialties/${id}`, {
+    mutationFn: async (id: string) => {
+      return api<ApiResponse<Specialty>>(`/specialties/${id}`, {
         method: "DELETE",
-      }),
+      });
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: queryKeys.specialties.all,

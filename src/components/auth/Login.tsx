@@ -61,7 +61,7 @@ const Login = () => {
       });
     if (role === "ADMIN")
       form.reset({
-        password: "admin123",
+        password: "Admin11@@",
         email: "admin@gmail.com",
       });
 

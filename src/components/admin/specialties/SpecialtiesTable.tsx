@@ -15,6 +15,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { memo } from "react";
 
 type SpecialtiesTableProps = {
   onEdit: (specialty: Specialty) => void;
@@ -24,7 +25,7 @@ type SpecialtiesTableProps = {
 const SpecialtiesTable = ({ onEdit, onDelete }: SpecialtiesTableProps) => {
   const { data, isLoading, isError, error } = useSpecialties();
   const specialties = data?.data ?? [];
-
+  
   if (isLoading) {
     return <RowSkeleton />;
   }
@@ -66,9 +67,9 @@ const SpecialtiesTable = ({ onEdit, onDelete }: SpecialtiesTableProps) => {
         <TableBody>
           {specialties.map((specialty) => {
             const SpecialtyIcon =
-              (LucideIcons[
-                specialty.icon as keyof typeof LucideIcons
-              ] as LucideIcon | undefined) ?? Tags;
+              (LucideIcons[specialty.icon as keyof typeof LucideIcons] as
+                | LucideIcon
+                | undefined) ?? Tags;
 
             return (
               <TableRow key={specialty.id}>
@@ -118,4 +119,4 @@ const SpecialtiesTable = ({ onEdit, onDelete }: SpecialtiesTableProps) => {
   );
 };
 
-export default SpecialtiesTable;
+export default memo(SpecialtiesTable);

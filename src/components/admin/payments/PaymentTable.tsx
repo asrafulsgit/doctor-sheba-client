@@ -11,6 +11,7 @@ import {
 import { getDate } from "@/helpers/getDate";
 import { Payment } from "@/types/payment";
 import Link from "next/link";
+import { memo } from "react";
 
 const headers = ["Txn ID", "Date", "Patient", "Doctor", "Method", "Status"];
 const PaymentTable = ({
@@ -96,4 +97,4 @@ const PaymentTable = ({
   );
 };
 
-export default PaymentTable;
+export default memo(PaymentTable);

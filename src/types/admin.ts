@@ -23,3 +23,14 @@ export type AdminMeta = {
 
   topPerformingDoctors: IDoctor[];
 };
+
+export type Admin = {
+  id: string;
+  name: string;
+  email: string;
+  profilePhoto?: string;
+  contactNumber?: string;
+  isDeleted: boolean;
+  createdAt: string;
+  updatedAt: string;
+};

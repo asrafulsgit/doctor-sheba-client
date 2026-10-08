@@ -66,7 +66,7 @@ export function ConfirmDialog({
           >
             {loading ? (
               <>
-                <Loader className="h-4 w-4" />
+                <Loader className="h-4 w-4 animate-spin" />
                 <span>Deleting</span>
               </>
             ) : (

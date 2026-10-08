@@ -19,6 +19,8 @@ import { EmptyState } from "@/components/shared/PageState";
 import { IDoctorFilter } from "@/types/doctors";
 import useQueryManager from "@/hooks/UseQueryManager";
 import { useDoctors } from "@/lib/hooks/UseDoctor";
+import SearchDoctors from "./SearchDoctors";
+import DoctorsGrid from "./DoctorsGrid";
 
 // seo optimization
 // export const Route = createFileRoute("/doctors/")({
@@ -43,12 +45,6 @@ import { useDoctors } from "@/lib/hooks/UseDoctor";
 // });
 
 const Doctors = () => {
-  const { getQuery, getAllQueries, setQuery } = useQueryManager();
-  const allQueries: IDoctorFilter = getAllQueries();
-  const searchTerm = getQuery("searchTerm");
-  const { data, isLoading, isError, error } = useDoctors(allQueries);
-  const doctors = data?.data;
-
   return (
     <>
       <PublicPageHeader
@@ -56,19 +52,7 @@ const Doctors = () => {
         title="Find a doctor who fits your needs"
         description="Search by name, specialty, experience, gender, and current schedule availability."
       >
-        <div className="relative mt-7 max-w-2xl">
-          <Search
-            className="absolute left-4 top-1/2 size-5 -translate-y-1/2 text-muted-foreground"
-            aria-hidden="true"
-          />
-          <Input
-            aria-label="Search doctors by name"
-            placeholder="Search by doctor name"
-            value={searchTerm ?? ""}
-            onChange={(event) => setQuery("searchTerm", event.target.value)}
-            className="h-13 bg-surface pl-12 pr-12 text-base"
-          />
-        </div>
+        <SearchDoctors />
       </PublicPageHeader>
       <main className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
         <div className="mb-6 flex items-center justify-between gap-4">
@@ -76,10 +60,6 @@ const Doctors = () => {
             <h2 className="text-xl font-semibold text-foreground">
               Available doctors
             </h2>
-            <p className="mt-1 text-sm text-muted-foreground">
-              {doctors?.length} {doctors?.length === 1 ? "doctor" : "doctors"}{" "}
-              match your search
-            </p>
           </div>
           <Sheet>
             <SheetTrigger asChild>
@@ -111,22 +91,7 @@ const Doctors = () => {
             </div>
           </aside>
           <section aria-live="polite">
-            {isLoading ? (
-              <div className="grid min-h-[470px] gap-6 sm:grid-cols-2 xl:grid-cols-3">
-                <DoctorCardSkeleton rows={3} />
-              </div>
-            ) : doctors?.length ? (
-              <div className="grid min-h-[470px] gap-6 sm:grid-cols-2 xl:grid-cols-3">
-                {doctors.map((doctor) => (
-                  <DoctorCard key={doctor.id} doctor={doctor} />
-                ))}
-              </div>
-            ) : (
-              <EmptyState
-                title="No doctors match these filters"
-                description="Try removing a filter or searching with a different doctor name."
-              />
-            )}
+            <DoctorsGrid />
           </section>
         </div>
       </main>
