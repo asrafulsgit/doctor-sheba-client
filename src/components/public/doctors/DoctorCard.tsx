@@ -13,49 +13,53 @@ export function DoctorCard({ doctor }: { doctor: IDoctor }) {
       : "https://png.pngtree.com/png-vector/20241225/ourmid/pngtree-doctor-woman-with-stethoscope-and-headset-icon-image-vector-illustration-design-png-image_14818447.png";
   return (
     <Card
-      className="group h-full overflow-hidden border-border shadow-xs 
-    py-0
+      className="group h-full gap-2 rounded-md sm:rounded-lg overflow-hidden border-border shadow-xs py-0
     transition-[transform,box-shadow] duration-200  hover:shadow-md"
     >
       <div className="relative aspect-[4/3] overflow-hidden bg-surface-muted">
         <Image
           src={doctor.profilePhoto ?? defaultImage}
           alt={`Portrait of ${doctor.name}`}
-          width={768}
-          height={896}
+          width={1200}
+          height={1200}
           loading="lazy"
-          className="h-full w-full object-cover object-top transition-transform 
+          className="h-full w-full object-contain transition-transform 
           duration-500 group-hover:scale-[1.025]"
         />
         {/* <span className="absolute left-4 top-4 rounded-full border border-border bg-surface/95 px-3 py-1 text-xs font-medium text-foreground shadow-xs">
           {doctor?.available ? "Available to book" : "Next slots soon"}
         </span> */}
       </div>
-      <CardContent className="px-4 pb-4">
-        <div className="flex items-start justify-between gap-3">
-          <div>
-            <p className="text-sm font-medium text-primary">
+      <CardContent className="px-1 sm:px-2 pb-1 sm:pb-2">
+        <div>
+          <div className="flex justify-between">
+            <p className="text-[10px] sm:text-xs font-medium text-primary">
               {doctor?.doctorSpecialities
                 ?.map((specialty) => specialty.specialities.title)
                 .join(", ")}
             </p>
-            <h3 className="mt-1 text-xl font-semibold tracking-tight text-foreground">
-              {doctor.name}
-            </h3>
-            <p className="mt-1 text-sm text-muted-foreground">
-              {doctor.designation}
-            </p>
+
+            <span
+              className="inline-flex items-center gap-0.5 rounded-md bg-warning-soft px-1 
+          py-0.5 text-[10px] sm:text-xs font-semibold text-warning-foreground"
+            >
+              <Star className="size-3 fill-current" aria-hidden="true" />{" "}
+              {doctor?.averageRating?.toFixed(1)}
+            </span>
           </div>
-          <span className="inline-flex items-center gap-1 rounded-md bg-warning-soft px-2 
-          py-1 text-sm font-semibold text-warning-foreground">
-            <Star className="size-3.5 fill-current" aria-hidden="true" />{" "}
-            {doctor?.averageRating?.toFixed(1)}
-          </span>
+
+          <h3 className="text-xs sm:text-base font-semibold tracking-tight text-foreground">
+            {doctor.name}
+          </h3>
+          <p className="text-[10px] sm:text-xs text-muted-foreground">
+            {doctor.designation}
+          </p>
         </div>
-        <div className="mt-5 grid grid-cols-2 gap-3 border-y border-border py-4 text-sm">
-          <span className="inline-flex items-center gap-2 text-muted-foreground">
+
+        <div className="mt-1 sm:mt-2 grid grid-cols-2 gap-3 border-y border-border py-1 sm:py-2 text-[10px] sm:text-xs">
+          <span className="inline-flex items-center gap-1 sm:gap-2 text-muted-foreground">
             <BriefcaseMedical
-              className="size-4 text-primary"
+              className="size-3.5 sm:size-4 text-primary"
               aria-hidden="true"
             />{" "}
             {doctor.experience} years
@@ -64,13 +68,26 @@ export function DoctorCard({ doctor }: { doctor: IDoctor }) {
             ৳{doctor?.appointmentFee?.toLocaleString("en-BD")}
           </span>
         </div>
-        <div className="mt-5 grid grid-cols-2 gap-2">
-          <Button variant="outline" asChild>
-            <Link href={`/doctors/${doctor.id}`}>View profile</Link>
+
+        <div className="mt-1 sm:mt-2 grid grid-cols-2 gap-2">
+          <Button
+            variant="outline"
+            className="h-6 rounded-sm px-2 text-[10px] sm:text-xs sm:h-8 sm:rounded-md sm:px-3"
+            asChild
+          >
+            <Link href={`/doctors/${doctor.id}`}>Profile</Link>
           </Button>
-          <Button asChild>
+
+          <Button
+            className="h-6 rounded-sm px-2 text-[10px] sm:text-xs sm:h-8 sm:rounded-md sm:px-3"
+            asChild
+          >
             <Link href={`/doctors/${doctor.id}`}>
-              <CalendarDays aria-hidden="true" /> Book
+             <CalendarDays
+  className="hidden sm:block"
+  aria-hidden="true"
+/>
+              Book
             </Link>
           </Button>
         </div>

@@ -25,7 +25,7 @@ import {
 import { getDate } from "@/helpers/getDate";
 import { useDebounce } from "@/hooks/useDebounce";
 import useQueryManager from "@/hooks/UseQueryManager";
-import { Filter, Loader2 } from "lucide-react";
+import { Filter, Loader } from "lucide-react";
 import { useEffect, useState } from "react";
 
 const AppointmentFilter = () => {
@@ -48,7 +48,7 @@ const AppointmentFilter = () => {
             onChange={(e) => setSearchInput(e.target.value)}
           />
           {isSearching && (
-            <Loader2 className="absolute right-2 top-1/2 -translate-y-1/2 h-4 w-4 animate-spin text-muted-foreground" />
+            <Loader className="absolute right-2 top-1/2 -translate-y-1/2 h-4 w-4 animate-spin text-muted-foreground" />
           )}
           <div className="flex gap-2 md:hidden">
             <Dialog>

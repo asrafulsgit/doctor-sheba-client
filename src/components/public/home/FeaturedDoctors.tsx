@@ -11,7 +11,7 @@ import { EmptyState } from "@/components/shared/PageState";
 
 const FeaturedDoctors = async () => {
   return (
-    <section className="border-b border-border bg-background py-20">
+    <section className="sm:border-b border-border bg-background py-10 sm:py-20">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col justify-between gap-5 sm:flex-row sm:items-end">
           <SectionHeading
@@ -19,7 +19,7 @@ const FeaturedDoctors = async () => {
             title="Meet doctors across key specialties"
             description="Compare experience, specialty, ratings, and consultation fees before choosing."
           />
-          <Button variant="outline" asChild>
+          <Button variant="outline" asChild className="hidden sm:block">
             <Link href="/doctors">
               View all doctors <ArrowRight />
             </Link>

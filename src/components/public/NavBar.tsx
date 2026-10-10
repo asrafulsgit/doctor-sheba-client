@@ -24,9 +24,12 @@ export function PublicNavBar() {
 
   return (
     <>
-      <div className="bg-primary px-4 py-2 text-center text-xs font-medium text-primary-foreground">
-        <span className="inline-flex items-center gap-2">
-          <Phone className="size-3.5" aria-hidden="true" />
+      <div
+        className="flex gap-1 justify-center items-center text-center bg-primary py-2  px-2
+      text-xs font-medium text-primary-foreground"
+      >
+        <Phone className="size-3.5 hidden sm:block" aria-hidden="true" />
+        <span>
           For medical emergencies, contact your local emergency service.
         </span>
       </div>
@@ -77,7 +80,7 @@ export function PublicNavBar() {
                 <Menu />
               </Button>
             </SheetTrigger>
-            <SheetContent side="right">
+            <SheetContent side="right" className="overflow-y-auto">
               <SheetHeader>
                 <SheetTitle>
                   <Logo />

@@ -1,9 +1,10 @@
-import { DoctorCard } from "@/components/shared/DoctorCard";
+ 
 import { EmptyState } from "@/components/shared/PageState";
 import { DoctorCardSkeleton } from "@/components/shared/SkeletonSet";
 import useQueryManager from "@/hooks/UseQueryManager";
 import { useDoctors } from "@/lib/hooks/UseDoctor";
 import { IDoctorFilter } from "@/types/doctors";
+import { DoctorCard } from "./DoctorCard";
 
 const DoctorsGrid = () => {
   const { getAllQueries } = useQueryManager();
@@ -34,7 +35,7 @@ const DoctorsGrid = () => {
     );
   }
   return (
-    <div className="grid min-h-117.5 gap-6 sm:grid-cols-2 xl:grid-cols-3">
+    <div className="grid gap-1 sm:gap-4 grid-cols-2  md:grid-cols-3">
       {doctors?.map((doctor) => (
         <DoctorCard key={doctor.id} doctor={doctor} />
       ))}

@@ -1,11 +1,10 @@
-"use client";
 import { Input } from "@/components/ui/input";
 import { useDebounce } from "@/hooks/useDebounce";
 import useQueryManager from "@/hooks/UseQueryManager";
 import { Loader, Search } from "lucide-react";
 import { useEffect, useState } from "react";
 
-const SearchDoctors = () => {
+const HealthTipFilter = () => {
   const { getQuery, setQuery } = useQueryManager();
   const [searchInput, setSearchInput] = useState(getQuery("searchTerm") ?? "");
   const debouncedSearch = useDebounce(searchInput, 1000);
@@ -20,8 +19,8 @@ const SearchDoctors = () => {
         aria-hidden="true"
       />
       <Input
-        aria-label="Search doctors by name"
-        placeholder="Search by doctor name"
+        aria-label="Search tips by title, description, excerpt..."
+        placeholder="Search by tips title, description, excerpt..."
         value={searchInput ?? ""}
         onChange={(e) => setSearchInput(e.target.value)}
         className="h-13 bg-surface pl-12 pr-12 text-base"
@@ -34,4 +33,4 @@ const SearchDoctors = () => {
   );
 };
 
-export default SearchDoctors;
+export default HealthTipFilter;

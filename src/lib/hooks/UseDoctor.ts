@@ -1,7 +1,7 @@
 import { api } from "@/lib/api/api-client";
 import { PatientFilters, queryKeys } from "@/lib/query/query-keys";
 import { ApiResponse } from "@/types/api-response";
-import { IDoctor, IDoctorFilter, IDoctorMeta } from "@/types/doctors";
+import { Doctor, IDoctor, IDoctorFilter, IDoctorMeta } from "@/types/doctors";
 import { IPatient } from "@/types/patient";
 import { IReview } from "@/types/review";
 import {
@@ -66,9 +66,10 @@ export type PatientRecord = {
 export function usePatientRecords(filters: PatientFilters = {}) {
   return useQuery({
     queryKey: queryKeys.patients.list(filters),
-    queryFn: () => api<ApiResponse<PatientRecord[]>>(`/doctor/patient-records`,{
-      params : filters
-    }),
+    queryFn: () =>
+      api<ApiResponse<PatientRecord[]>>(`/doctor/patient-records`, {
+        params: filters,
+      }),
     staleTime: 1000 * 60 * 5,
   });
 }
@@ -102,7 +103,7 @@ export function useUpdateDoctor() {
 
   return useMutation({
     mutationFn: async (data: FormData) => {
-      return api("/doctor", {
+      return api<ApiResponse<null>>("/doctor", {
         method: "PATCH",
         body: data,
       });
@@ -121,7 +122,7 @@ export function useSuspendOrActivateDoctor() {
 
   return useMutation({
     mutationFn: async (data: { id: string; isDelete: boolean }) => {
-      return api(`/doctor/${data.id}`, {
+      return api<ApiResponse<null>>(`/doctor/${data.id}`, {
         method: "DELETE",
         body: JSON.stringify({ isDelete: data.isDelete }),
       });
@@ -130,6 +131,25 @@ export function useSuspendOrActivateDoctor() {
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: queryKeys.doctors.all,
+      });
+    },
+  });
+}
+
+export type AISuggestion = {
+  response: string;
+  specialties: string[];
+  doctors: IDoctor[];
+};
+
+export function useAiSuggestedDoctors() {
+  return useMutation({
+    mutationFn: async (data: { text: string; signal?: AbortSignal }) => {
+      const { signal, ...body } = data;
+      return api<ApiResponse<AISuggestion>>(`/doctor/suggestion`, {
+        method: "POST",
+        body: JSON.stringify(body),
+        signal,
       });
     },
   });

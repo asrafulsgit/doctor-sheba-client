@@ -3,12 +3,14 @@ import { Reveal } from '../../shared/Reveal'
 import { Briefcase } from 'lucide-react'
 import { Button } from '../../ui/button'
 import Link from 'next/link'
+import { cn } from '@/lib/utils'
 
 const BecomeADoctor = () => {
   return (
-   <section className="border-b border-border bg-surface py-20">
+   <section className="sm:border-b border-border bg-surface py-10 sm:py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid items-center gap-10 rounded-3xl border border-border bg-card p-8 shadow-soft lg:grid-cols-5 lg:p-12">
+          <div className="grid items-center gap-8 sm:gap-10 rounded-3xl border border-border 
+          bg-card p-5 sm:p-8 shadow-soft lg:grid-cols-5 lg:p-12">
             <Reveal className="lg:col-span-3">
               <span className="inline-flex items-center gap-2 rounded-full border border-border bg-primary-soft px-3 py-1 text-xs font-medium text-primary">
                 <Briefcase className="h-3.5 w-3.5" />
@@ -22,10 +24,10 @@ const BecomeADoctor = () => {
                 — without the paperwork. Join 500+ verified doctors already on the platform.
               </p>
               <div className="mt-6 flex flex-wrap gap-3">
-                <Button asChild size="lg">
+                <Button asChild size="lg" className={cn("px-6 sm:px-8")} >
                   <Link href="/auth/register">Join as a doctor</Link>
                 </Button>
-                <Button asChild size="lg" variant="outline">
+                <Button asChild size="lg" className={cn("px-6 sm:px-8")} variant="outline">
                   <Link href="/about">Learn more</Link>
                 </Button>
               </div>

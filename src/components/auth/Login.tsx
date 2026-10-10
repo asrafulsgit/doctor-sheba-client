@@ -72,6 +72,24 @@ const Login = () => {
     login(data, {
       onSuccess: () => {
         toast.success("Login successful");
+        const redirect = new URLSearchParams(window.location.search).get(
+          "redirect",
+        );
+
+        if (redirect) {
+          try {
+            const destination = new URL(redirect, window.location.origin);
+            if (destination.origin === window.location.origin) {
+              router.push(
+                `${destination.pathname}${destination.search}${destination.hash}`,
+              );
+              return;
+            }
+          } catch {
+            // Invalid redirect values fall back to the home page.
+          }
+        }
+
         router.push("/");
       },
       onError: (error: any) => {

@@ -82,7 +82,7 @@ export async function proxy(request: NextRequest): Promise<NextResponse> {
   if (isAuthenticatedRoute(pathname)) {
     if (!authObject.verification || !userRole) {
       // Not authenticated → redirect to login
-      return buildRedirect(request, "/auth/login", response);
+      return redirectToLogin(request, response);
     }
     // Authenticated → allow access regardless of role
     return response;
@@ -94,7 +94,7 @@ export async function proxy(request: NextRequest): Promise<NextResponse> {
   if (routeConfig) {
     // 7a. Not authenticated → redirect to login with return URL
     if (!authObject.verification || !userRole) {
-      return buildRedirect(request, "/auth/login", response);
+      return redirectToLogin(request, response);
     }
 
     // 7b. Authenticated but wrong role → redirect to their own dashboard
@@ -107,6 +107,19 @@ export async function proxy(request: NextRequest): Promise<NextResponse> {
   }
 
   return response;
+}
+
+function redirectToLogin(
+  request: NextRequest,
+  sourceResponse: NextResponse,
+): NextResponse {
+  const loginUrl = new URL("/auth/login", request.url);
+  loginUrl.searchParams.set(
+    "redirect",
+    `${request.nextUrl.pathname}${request.nextUrl.search}`,
+  );
+
+  return buildRedirect(request, loginUrl.toString(), sourceResponse);
 }
 
 // ─── Redirect helper — preserves security headers ───────────────────────────

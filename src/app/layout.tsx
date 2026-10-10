@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Manrope, Source_Sans_3 } from "next/font/google";
+import { Inter, Manrope } from "next/font/google";
 import "./globals.css";
 import { QueryProvider } from "@/providers/QueryProvider";
 import { Toaster } from "@/components/ui/sonner";
@@ -9,7 +9,7 @@ const manrope = Manrope({
   subsets: ["latin"],
 });
 
-const sourceSans = Source_Sans_3({
+const sourceSans = Inter({
   variable: "--font-sans",
   subsets: ["latin"],
 });

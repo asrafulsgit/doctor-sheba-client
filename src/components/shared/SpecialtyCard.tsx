@@ -1,5 +1,5 @@
-import { Specialty } from "@/lib/hooks/UseSpecialty";
-import { ISpecialty } from "@/types/specialties";
+ 
+import { Specialty } from "@/types/specialties";
 import * as LucideIcons from "lucide-react";
 import Link from "next/link";
 

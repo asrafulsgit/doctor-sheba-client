@@ -16,13 +16,15 @@ export function isAuthRoute(pathname: string): boolean {
 
 export function isPublicRoute(pathname: string): boolean {
   return PUBLIC_ROUTES.some(
-    (route) => pathname === route || pathname.startsWith(route + "/"),
+    (route) => pathname === route,
   );
 }
 
 export function isAuthenticatedRoute(pathname: string): boolean {
-  return AUTHENTICATED_ROUTES.some(
-    (route) => pathname === route || pathname.startsWith(route + "/"),
+  return (
+    AUTHENTICATED_ROUTES.some(
+      (route) => pathname === route || pathname.startsWith(route + "/"),
+    ) || /^\/doctors\/[^/]+$/.test(pathname)
   );
 }
 

@@ -5,6 +5,7 @@ import Link from "next/link";
 
 import heroImage from "@/assets/hero-image.png";
 import Image from "next/image";
+import { cn } from "@/lib/utils";
 
 const stats = [
   { label: "Doctors", v: "500+" },
@@ -14,9 +15,9 @@ const stats = [
 
 const Hero = () => {
   return (
-    <section className="relative overflow-hidden border-b border-border bg-gradient-to-b 
+    <section className="relative overflow-hidden sm:border-b border-border bg-linear-to-b 
     from-primary-soft/30 to-background">
-      <div className="mx-auto grid max-w-7xl gap-12 px-4 py-10 sm:px-6 lg:grid-cols-2 lg:gap-16 lg:py-28 lg:px-8">
+      <div className="mx-auto grid max-w-7xl gap-12 px-4 py-10 sm:px-6 lg:grid-cols-2 lg:gap-16 lg:pb-28 lg:px-8">
         <Reveal>
           <span className="inline-flex items-center gap-2 rounded-full border border-border bg-background px-3 py-1 text-xs font-medium text-primary">
             <ShieldCheck className="h-3.5 w-3.5" />
@@ -32,13 +33,13 @@ const Hero = () => {
             your prescriptions and medical records in one secure place.
           </p>
           <div className="mt-8 flex flex-wrap items-center gap-3">
-            <Button asChild size="lg">
+            <Button asChild size="lg" className={cn("px-5 sm:px-8 ")}>
               <Link href="/doctors">
                 <Search className="h-4 w-4" />
                 Find a Doctor
               </Link>
             </Button>
-            <Button asChild size="lg" variant="outline">
+            <Button asChild size="lg" className={cn("px-5 sm:px-8 ")} variant="outline">
               <Link href="/auth/register">Book Appointment</Link>
             </Button>
           </div>
@@ -56,18 +57,17 @@ const Hero = () => {
           </dl>
         </Reveal>
 
-        <Reveal delay={0.15} className="relative">
-          <div className="overflow-hidden rounded-3xl border border-border bg-surface-muted shadow-lg">
+        <Reveal delay={0.15} className="">
+          <div className="relative  rounded-3xl border border-border bg-surface-muted shadow-lg">
             <Image
               src={heroImage}
               alt="Bangladeshi doctor in a modern clinic"
               width={1536}
               height={1024}
               fetchPriority="high"
-              className="aspect-[4/3] w-full object-cover"
+              className="aspect-[4/3] w-full object-cover rounded-3xl"
             />
-          </div>
-          <div className="absolute -bottom-5 left-4 rounded-xl border border-border bg-surface p-4 shadow-md sm:left-8">
+            <div className="absolute -bottom-5 left-4 rounded-xl border border-border bg-surface p-4 shadow-md sm:left-8">
             <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
               Simple path to care
             </p>
@@ -75,6 +75,8 @@ const Hero = () => {
               Search → schedule → consult
             </p>
           </div>
+          </div>
+          
         </Reveal>
       </div>
     </section>
