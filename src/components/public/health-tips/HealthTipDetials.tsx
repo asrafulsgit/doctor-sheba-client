@@ -3,14 +3,15 @@ import { ArrowLeft, Clock3, TriangleAlert } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useParams } from "next/navigation";
 import Link from "next/link";
-import { useHealthTip } from "@/lib/hooks/useHealthTip";
+import { useHealthTip, useRecordHealthTipView } from "@/lib/hooks/useHealthTip";
 import { HealthTipDetailSkeleton } from "@/components/shared/SkeletonSet";
+import { useEffect } from "react";
 
-function ArticleNotFound() {
+function ArticleNotFound({message} :{message? : string}) {
   return (
     <main className="mx-auto max-w-3xl px-4 py-24 text-center">
       <h1 className="text-xl sm:text-2xl md:text-3xl font-semibold text-foreground">
-        Health article not found
+        {message ?? "Health article not found"}
       </h1>
       <Button asChild className="mt-2 md:mt-5">
         <Link href="/health-tips">Browse health tips</Link>
@@ -18,58 +19,26 @@ function ArticleNotFound() {
     </main>
   );
 }
-// export const Route = createFileRoute("/health-tips/$slug")({
-//   loader: ({ params }) => {
-//     const article = healthTips.find((item) => item.slug === params.slug);
-//     if (!article) throw notFound();
-//     return article;
-//   },
-//   head: ({ loaderData, params }) => ({
-//     meta: [
-//       { title: `${loaderData?.title ?? "Health guidance"} | DoctorSheba` },
-//       {
-//         name: "description",
-//         content: loaderData?.excerpt ?? "General health guidance from DoctorSheba.",
-//       },
-//       { property: "og:title", content: `${loaderData?.title ?? "Health guidance"} | DoctorSheba` },
-//       {
-//         property: "og:description",
-//         content: loaderData?.excerpt ?? "General health guidance from DoctorSheba.",
-//       },
-//       { property: "og:type", content: "article" },
-//       { property: "og:url", content: `/health-tips/${params.slug}` },
-//     ],
-//     links: [{ rel: "canonical", href: `/health-tips/${params.slug}` }],
-//     scripts: loaderData
-//       ? [
-//           {
-//             type: "application/ld+json",
-//             children: JSON.stringify({
-//               "@context": "https://schema.org",
-//               "@type": "Article",
-//               headline: loaderData.title,
-//               description: loaderData.excerpt,
-//               author: { "@type": "Organization", name: "DoctorSheba" },
-//             }),
-//           },
-//         ]
-//       : [],
-//   }),
-//   component: ArticlePage,
-//   notFoundComponent: ArticleNotFound,
-// });
 
 const HealthTipDetails = () => {
   const slug = useParams().slug as string;
   const { data, isLoading, isError, error } = useHealthTip(slug);
-  const article =data?.data;
+  const article = data?.data;
+
+  const { mutate: recordView } = useRecordHealthTipView();
+
+  useEffect(() => {
+    if (!article?.id) return;
+
+    recordView(article.id);
+  }, [article?.id, recordView]);
 
   if (isLoading) {
     return <HealthTipDetailSkeleton />;
   }
-  
+
   if (!article || isError) {
-    return <ArticleNotFound />;
+    return <ArticleNotFound message={isError ? error.message : undefined}/>;
   }
   return (
     <main>

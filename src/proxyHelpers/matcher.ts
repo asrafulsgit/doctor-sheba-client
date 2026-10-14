@@ -24,7 +24,7 @@ export function isAuthenticatedRoute(pathname: string): boolean {
   return (
     AUTHENTICATED_ROUTES.some(
       (route) => pathname === route || pathname.startsWith(route + "/"),
-    ) || /^\/doctors\/[^/]+$/.test(pathname)
+    ) || /^\/doctors\/[^/]+$/.test(pathname) || /^\/health-tips\/[^/]+$/.test(pathname)
   );
 }
 

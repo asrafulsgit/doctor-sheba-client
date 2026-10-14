@@ -33,6 +33,7 @@ import { useDoctors } from "@/lib/hooks/UseDoctor";
 import DoctorsFilter from "./DoctorsFilter";
 import { useState } from "react";
 import DoctorRecordTable from "./DoctorRecordTable";
+import Link from "next/link";
 
 // export const Route = createFileRoute("/admin/doctors")({
 //   head: () => ({ meta: [{ title: "Doctors — Admin — DoctorSheba" }] }),
@@ -40,17 +41,18 @@ import DoctorRecordTable from "./DoctorRecordTable";
 // });
 
 const AdminDoctors = () => {
-  const [create, setCreate] = useState(false);
   return (
     <>
       <DashboardHeader
         title="Doctors"
         description="Add, verify, edit or suspend doctors."
         actions={
-          <Button onClick={() => setCreate(true)}>
-            <Plus className="h-4 w-4" />
-            Add doctor
-          </Button>
+          <Link href={"/admin/doctors/create"}>
+            <Button>
+              <Plus className="h-4 w-4" />
+              Add doctor
+            </Button>
+          </Link>
         }
       />
       <div className="mb-4 flex flex-wrap items-center gap-2">

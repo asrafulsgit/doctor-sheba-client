@@ -59,11 +59,9 @@ const CreateDoctorForm = () => {
       address: "",
       registrationNumber: "",
       specialties: [],
-      experience: 0,
       currentWorkingPlace: "",
       designation: "",
       qualification: "",
-      appointmentFee: 0,
     },
   });
 
@@ -271,7 +269,7 @@ const CreateDoctorForm = () => {
                 value={field.value ?? ""}
                 onChange={(e) =>
                   field.onChange(
-                    e.target.value === "" ? 0 : e.target.valueAsNumber,
+                    e.target.value === "" ? undefined : e.target.valueAsNumber,
                   )
                 }
                 aria-invalid={fieldState.invalid}
@@ -297,7 +295,7 @@ const CreateDoctorForm = () => {
                 value={field.value ?? ""}
                 onChange={(e) =>
                   field.onChange(
-                    e.target.value === "" ? 0 : e.target.valueAsNumber,
+                    e.target.value === "" ? undefined : e.target.valueAsNumber,
                   )
                 }
                 aria-invalid={fieldState.invalid}
@@ -316,7 +314,7 @@ const CreateDoctorForm = () => {
               <Combobox
                 options={
                   specialties?.map((s) => ({
-                    value: s?.title,
+                    value: s?.id,
                     label: s?.title,
                   })) ?? []
                 }

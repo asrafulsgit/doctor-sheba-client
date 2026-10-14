@@ -3,7 +3,14 @@
 import * as React from "react";
 import ReactMarkdown from "react-markdown";
 import Link from "next/link";
-import { HeartPulse, X, Send, Square, RotateCcw, MessageCirclePlus } from "lucide-react";
+import {
+  HeartPulse,
+  X,
+  Send,
+  Square,
+  RotateCcw,
+  MessageCirclePlus,
+} from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import {
@@ -228,15 +235,12 @@ const ChatBot = () => {
         align="end"
         sideOffset={12}
         collisionPadding={16}
-        // Full width minus margins on phones, fixed 360px from `sm` up.
-        // Height never exceeds the space actually available on screen.
         className="flex h-[min(480px,var(--radix-popover-content-available-height))] w-[calc(100vw-2rem)] flex-col overflow-hidden rounded-2xl p-0 shadow-elevated sm:w-[360px]"
         onOpenAutoFocus={(e) => {
           e.preventDefault();
           inputRef.current?.focus();
           endRef.current?.scrollIntoView();
         }}
-        // Clicking a sonner toast shouldn't count as "outside" and close the chat.
         onInteractOutside={(e) => {
           const target = e.target as HTMLElement | null;
           if (target?.closest?.("[data-sonner-toaster]")) e.preventDefault();
@@ -271,8 +275,6 @@ const ChatBot = () => {
           )}
         </header>
 
-        {/* [&>div>div]:!block fixes ScrollArea's inner `display: table`,
-            which otherwise lets long text overflow the panel width. */}
         <ScrollArea className="min-h-0 flex-1 [&_[data-radix-scroll-area-viewport]>div]:!block">
           <div role="log" aria-live="polite" className="space-y-3 p-3 sm:p-4">
             {messages.length === 0 && (
@@ -345,7 +347,6 @@ const ChatBot = () => {
             }}
             rows={1}
             placeholder="Describe your symptoms…"
-            // text-base on phones stops iOS Safari from zooming on focus
             className="max-h-28 min-h-10 flex-1 resize-none rounded-xl px-3 py-2 text-base sm:text-sm"
           />
           {busy ? (
