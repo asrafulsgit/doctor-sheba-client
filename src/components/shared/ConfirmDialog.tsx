@@ -19,7 +19,6 @@ interface ConfirmDialogProps {
   description?: React.ReactNode;
   confirmLabel?: string;
   cancelLabel?: string;
-  destructive?: boolean;
   onConfirm: () => void | boolean | Promise<void | boolean>;
 }
 
@@ -30,7 +29,6 @@ export function ConfirmDialog({
   description,
   confirmLabel = "Confirm",
   cancelLabel = "Cancel",
-  destructive,
   onConfirm,
 }: ConfirmDialogProps) {
   const [loading, setLoading] = React.useState(false);

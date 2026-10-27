@@ -1,3 +1,5 @@
+import { ISpecialty } from "./specialties";
+
 export type HealthTipSection = {
   heading: string;
   body: string;
@@ -17,10 +19,24 @@ export interface IHealthTip {
   title: string;
   slug: string;
   category: string;
-  excerpt: string ;
+  excerpt: string;
   content: string;
   authorId: string;
-  icon: string ;
+  author?: {
+    doctor: {
+      id: string;
+      name: string;
+      profilePhoto?: string;
+      designation?: string;
+      averageRating?: string;
+      doctorSpecialities?: ISpecialty[];
+      qualification?: string;
+      currentWorkingPlace?: string;
+      experience?: string;
+      appointmentFee?: string;
+    };
+  };
+  icon: string;
   isPublished: boolean;
   views: number;
   publishedAt: string;

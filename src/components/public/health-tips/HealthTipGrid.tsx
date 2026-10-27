@@ -12,6 +12,7 @@ const HealthTipGrid = () => {
   const allQueries: IHealthTipFilter = getAllQueries();
   const { data, isLoading, isError, error } = useHealthTips(allQueries);
   const healthTips = data?.data ?? [];
+
   if (isLoading) {
     return (
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
@@ -20,15 +21,11 @@ const HealthTipGrid = () => {
     );
   }
 
-  if (healthTips.length === 0) {
+  if (isError || healthTips.length === 0) {
     return (
       <EmptyState
-        title="No tips match these filters"
-        description={
-          isError
-            ? error.message
-            : "Try removing a filter or searching with a different tip."
-        }
+        title={isError ? error.message : "No tips match these filters"}
+        description={"Try removing a filter or searching with a different tip."}
       />
     );
   }

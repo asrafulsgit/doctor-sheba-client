@@ -2,41 +2,23 @@
 import {
   Calendar,
   Users,
-  Wallet2,
   Star,
   ListChecks,
   ArrowRight,
-  Video,
-  MapPin,
   Stethoscope,
-  Clock,
   ClipboardList,
-  TrendingUp,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import DashboardHeader from "@/components/shared/DashboardHeader";
-import {
-  APPOINTMENTS,
-  DOCTOR_EARNINGS_6M,
-  REVIEWS,
-} from "@/constants/patient/data";
 import Link from "next/link";
-import { StatusBadge } from "@/components/ui/badge";
 import { useMe } from "@/lib/hooks/useUser";
 import { useDoctorMetaData } from "@/lib/hooks/UseDoctor";
 import DashboardStats from "./DashboardStats";
 import PatientDashboardSkeleton from "@/components/patient/dashboard/skeleton";
-import { format } from "date-fns";
 import { LineChartWithTooltip } from "@/components/shared/LineChartWithTooltip";
 import TodaysAppointments from "./TodaysAppointments";
 import RecentReviews from "./RecentReviews";
 import { PieChartWithTooltip } from "@/components/shared/PieChartWithTooltip";
-
-// seo optimization
-// export const Route = createFileRoute("/doctor/dashboard")({
-//   head: () => ({ meta: [{ title: "Doctor Dashboard — DoctorSheba" }] }),
-//   component: DoctorHome,
-// });
 
 const DoctorDashboard = () => {
   const { data, isLoading } = useMe();
@@ -69,7 +51,7 @@ const DoctorDashboard = () => {
   return (
     <>
       <DashboardHeader
-        title={`Good day${user?.email ? `, Dr. ${user.email}` : ""}`}
+        title={`Good day${user?.name ? `, Dr. ${user.email}` : ""}`}
         description="Your practice at a glance."
         actions={
           <Button asChild variant="outline">

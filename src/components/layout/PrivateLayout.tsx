@@ -67,6 +67,7 @@ const DOCTOR_NAV: NavItem[] = [
   { to: "/doctor/patients", label: "Patient Records", icon: Users },
   { to: "/doctor/schedules", label: "Schedules", icon: ListChecks },
   { to: "/doctor/prescriptions", label: "Prescriptions", icon: ClipboardList },
+  { to: "/doctor/health-tips", label: "Health Tips", icon: FileText },
   { to: "/doctor/reviews", label: "Reviews", icon: Star },
   { to: "/doctor/earnings", label: "Earnings", icon: Wallet2 },
   { to: "/doctor/settings", label: "Settings", icon: Settings },
