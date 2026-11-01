@@ -7,7 +7,7 @@ import { cn } from '@/lib/utils'
 
 const BecomeADoctor = () => {
   return (
-   <section className="sm:border-b border-border bg-surface py-10 sm:py-20">
+   <section className="bg-surface py-10 sm:py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid items-center gap-8 sm:gap-10 rounded-3xl border border-border 
           bg-card p-5 sm:p-8 shadow-soft lg:grid-cols-5 lg:p-12">

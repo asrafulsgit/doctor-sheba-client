@@ -15,8 +15,8 @@ const page = () => {
       <Hero />
       <FeaturedSpecialties />
       <FeaturedDoctors />
-      <WhyDoctorSheba />
       <HowItWorks />
+      <WhyDoctorSheba />
       <TrustedAndSafety />
       <Services />
       <BecomeADoctor />

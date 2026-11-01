@@ -15,7 +15,7 @@ const stats = [
 
 const Hero = () => {
   return (
-    <section className="relative overflow-hidden sm:border-b border-border bg-linear-to-b 
+    <section className="relative overflow-hidden bg-linear-to-b 
     from-primary-soft/30 to-background">
       <div className="mx-auto grid max-w-7xl gap-12 px-4 py-10 sm:px-6 lg:grid-cols-2 lg:gap-16 lg:pb-28 lg:px-8">
         <Reveal>
@@ -39,7 +39,7 @@ const Hero = () => {
                 Find a Doctor
               </Link>
             </Button>
-            <Button asChild size="lg" className={cn("px-5 sm:px-8 ")} variant="outline">
+            <Button asChild size="lg" className={cn("px-5 sm:px-8")} variant="outline">
               <Link href="/auth/register">Book Appointment</Link>
             </Button>
           </div>
