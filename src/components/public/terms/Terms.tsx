@@ -1,5 +1,3 @@
-import { PublicLayout } from "@/components/layout/PublicLayout";
-
 const SECTIONS: { heading: string; body: string[] }[] = [
   {
     heading: "1. Acceptance of these terms",

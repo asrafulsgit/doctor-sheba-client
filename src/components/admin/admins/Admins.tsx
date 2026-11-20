@@ -29,32 +29,38 @@ const AdminAdmins = () => {
 
   const isDeactivating = toggleAdmin?.status === "ACTIVE";
 
-  const handleCreate = useCallback(async (data: AdminInput) => {
-    createAdminMutate(data, {
-      onSuccess: () => {
-        toast.success("Admin invited");
-        setCreateOpen(false);
-      },
-      onError: (err: Error) =>
-        toast.error(err.message || "Unable to invite admin"),
-    });
-  }, [createAdminMutate]);
-
-  const handleEdit = useCallback(async (data: UpateAdminFormValues) => {
-    if (!editingAdmin) return;
-
-    updateAdminMutate(
-      { id: editingAdmin.id, ...data },
-      {
+  const handleCreate = useCallback(
+    async (data: AdminInput) => {
+      createAdminMutate(data, {
         onSuccess: () => {
-          toast.success("Admin updated");
-          setEditingAdmin(null);
+          toast.success("Admin invited");
+          setCreateOpen(false);
         },
         onError: (err: Error) =>
-          toast.error(err.message || "Unable to update admin"),
-      },
-    );
-  }, [editingAdmin, updateAdminMutate]);
+          toast.error(err.message || "Unable to invite admin"),
+      });
+    },
+    [createAdminMutate],
+  );
+
+  const handleEdit = useCallback(
+    async (data: UpateAdminFormValues) => {
+      if (!editingAdmin) return;
+
+      updateAdminMutate(
+        { id: editingAdmin.id, ...data },
+        {
+          onSuccess: () => {
+            toast.success("Admin updated");
+            setEditingAdmin(null);
+          },
+          onError: (err: Error) =>
+            toast.error(err.message || "Unable to update admin"),
+        },
+      );
+    },
+    [editingAdmin, updateAdminMutate],
+  );
 
   const handleToggle = useCallback(async () => {
     if (!toggleAdmin?.admin.id) return;
@@ -142,7 +148,6 @@ const AdminAdmins = () => {
               : `${toggleAdmin.admin.name} will regain access to the dashboard.`
           }
           confirmLabel={isDeactivating ? "Deactivate" : "Activate"}
-          destructive={isDeactivating}
           onConfirm={handleToggle}
         />
       )}

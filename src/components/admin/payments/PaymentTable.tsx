@@ -26,7 +26,7 @@ const PaymentTable = ({
   if (isError || payments?.length === 0) {
     return (
       <EmptyState
-        title="Nothing here yet"
+        title={isError ? "Unable to load payments" : "No payments found"}
         description={
           isError
             ? error?.message

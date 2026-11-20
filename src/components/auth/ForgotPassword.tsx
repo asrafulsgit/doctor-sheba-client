@@ -1,10 +1,8 @@
 "use client";
 import * as React from "react";
-// import { toast } from "sonner";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import Link from "next/link";
 import z from "zod";
 import { Controller, useForm } from "react-hook-form";
@@ -13,12 +11,6 @@ import { useForgotPassword } from "@/lib/hooks/useAuth";
 import { toast } from "sonner";
 import { Field, FieldError, FieldGroup, FieldLabel } from "../ui/field";
 import { cn } from "@/lib/utils";
-
-// seo optimization
-// export const Route = createFileRoute("/auth/forgot-password")({
-//   head: () => ({ meta: [{ title: "Reset password — DoctorSheba" }] }),
-//   component: ForgotPage,
-// });
 
 const forgotPasswordSchema = z.object({
   email: z.string().trim().email({ error: "Invalid email format." }),

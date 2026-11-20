@@ -1,18 +1,7 @@
 "use client";
-import { Download, MoreHorizontal, Eye, Undo2, Search } from "lucide-react";
+import { Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { InfoDialog } from "@/components/shared/FormDialog";
-import { ConfirmDialog } from "@/components/shared/ConfirmDialog";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import DashboardHeader from "@/components/shared/DashboardHeader";
-
-import { StatusBadge } from "@/components/ui/badge";
 import Stats from "./Stats";
 import useQueryManager from "@/hooks/UseQueryManager";
 import { PaymentFilters } from "@/lib/query/query-keys";
@@ -51,7 +40,7 @@ const AdminPayments = () => {
       <div className="grid gap-4 sm:grid-cols-3">
         <Stats stats={stats} />
       </div>
-      
+
       <PaymentsFilter />
 
       <PaymentTable payments={payments ?? []} error={error} isError={isError} />

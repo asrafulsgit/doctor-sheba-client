@@ -100,7 +100,7 @@ const CreatePrescriptionForm = () => {
   return (
     <form onSubmit={form.handleSubmit(onSubmit)}>
       <FieldGroup className="mt-5">
-        {/* ── Diagnosis ──────────────────────────────────────────── */}
+        {/* Diagnosis */}
         <Controller
           name="diagnosis"
           control={form.control}
@@ -119,7 +119,7 @@ const CreatePrescriptionForm = () => {
           )}
         />
 
-        {/* ── Medications (dynamic) ──────────────────────────────── */}
+        {/* Medications */}
         <div>
           <div className="mb-2 flex items-center justify-between">
             <Label>Medications</Label>
@@ -269,7 +269,7 @@ const CreatePrescriptionForm = () => {
           )}
         </div>
 
-        {/* ── Instructions ───────────────────────────────────────── */}
+        {/* Instructions */}
         <Controller
           name="instructions"
           control={form.control}
@@ -289,7 +289,7 @@ const CreatePrescriptionForm = () => {
           )}
         />
 
-        {/* ── Follow-up date ─────────────────────────────────────── */}
+        {/* Follow-up date */}
         <Controller
           name="followUpDate"
           control={form.control}
@@ -325,7 +325,7 @@ const CreatePrescriptionForm = () => {
         />
       </FieldGroup>
 
-      {/* ── Actions ────────────────────────────────────────────── */}
+      {/* Actions */}
       <div className="flex justify-end gap-2 pt-2">
         <Button
           type="button"

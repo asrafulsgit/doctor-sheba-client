@@ -16,14 +16,41 @@ import { Stethoscope } from "lucide-react";
 import AppointmentActionMenu from "./AppointmentActionMenu";
 import { format } from "date-fns";
 import Image from "next/image";
+import useQueryManager from "@/hooks/UseQueryManager";
+import { AppointmentFilters } from "@/lib/query/query-keys";
+import { useMyAppointments } from "@/lib/hooks/useAppointment";
+import RowSkeleton from "@/components/shared/SkeletonSet";
+import { EmptyState } from "@/components/shared/PageState";
 
 const headers = [" ", "Doctor", "Date/Time", "Fee", "Status", "Action"];
 
-const AppointmentTable = ({
-  appointments,
-}: {
-  appointments: IAppointment[];
-}) => {
+const AppointmentTable = () => {
+  const { getAllQueries } = useQueryManager();
+  const allQueries: AppointmentFilters = getAllQueries();
+  const { data, isLoading, isError, error } = useMyAppointments(allQueries);
+  const appointments = data?.data ?? [];
+
+  if (isLoading)
+    return (
+      <div className="mt-2">
+        <RowSkeleton />
+      </div>
+    );
+
+  if (isError || !appointments.length) {
+    return (
+      <EmptyState
+        title={isError ? "Unable to load appointments" : "Nothing here yet"}
+        description={
+          isError
+            ? error.message
+            : "When you have bookings, they'll show up here."
+        }
+        className="mt-2"
+      />
+    );
+  }
+
   return (
     <div className="mt-2 overflow-hidden rounded-lg border">
       <Table>
@@ -56,7 +83,6 @@ const AppointmentTable = ({
                   ) : (
                     <Stethoscope className="h-4 w-4" />
                   )}
-                  
                 </div>
               </TableCell>
               <TableCell>

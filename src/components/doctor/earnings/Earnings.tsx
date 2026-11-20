@@ -1,13 +1,8 @@
 "use client";
-import { Wallet2, TrendingUp, Download } from "lucide-react";
-import { toast } from "sonner";
+import { Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { APPOINTMENTS } from "@/constants/patient/data";
 import DashboardHeader from "@/components/shared/DashboardHeader";
-import StatCard from "@/components/shared/StatCard";
-import { StatusBadge } from "@/components/ui/badge";
 import useQueryManager from "@/hooks/UseQueryManager";
 import { PaymentFilters } from "@/lib/query/query-keys";
 import { useMyEarnings } from "@/lib/hooks/usePayment";
@@ -20,19 +15,13 @@ import { Calendar } from "@/components/ui/calendar";
 import { getDate } from "@/helpers/getDate";
 import { useState } from "react";
 import AreaChartLinear from "@/components/shared/AreaChart";
-import RowSkeleton from "@/components/shared/SkeletonSet";
 import PaymentTable from "./PaymentTable";
 import { EmptyState } from "@/components/shared/PageState";
 import EarningStats from "./EarningStats";
 import EarningsSkeleton from "./EarningsSkeleton";
 
-// export const Route = createFileRoute("/doctor/earnings")({
-//   head: () => ({ meta: [{ title: "Earnings — DoctorSheba" }] }),
-//   component: DoctorEarnings,
-// });
-
 const DoctorEarnings = () => {
-  const { setQuery, getQuery, getAllQueries, clearQuery } = useQueryManager();
+  const { setQuery, getAllQueries } = useQueryManager();
 
   const [startDate, setStartDate] = useState<Date | undefined>(new Date());
   const [endDate, setEndDate] = useState<Date | undefined>(new Date());

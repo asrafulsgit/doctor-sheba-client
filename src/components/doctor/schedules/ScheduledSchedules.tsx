@@ -21,8 +21,10 @@ const ScheduledSchedules = () => {
   const allQueries: DoctorAvailableSchedulesFilters = getAllQueries();
   const { data, isLoading, isError, error } =
     useDoctorScheduledSchedules(allQueries);
-  const schedules = data?.data;
-  const formattedSchedules = schedules ? getSchedulesByDay(schedules) : [];
+  const schedules = data?.data ?? [];
+  const formattedSchedules = schedules.length
+    ? getSchedulesByDay(schedules)
+    : [];
   const { mutate: deleteSchedules, isPending } = useDeleteDoctorSchedules();
   const toggleSlot = (id: string) => {
     setSelectedules((prev) =>
@@ -48,14 +50,22 @@ const ScheduledSchedules = () => {
   };
 
   if (isLoading) return <SchedulesSkeleton />;
-  if (isError)
+  if (isError || !schedules.length)
     return (
       <EmptyState
-        title="Someting went wrong"
-        description={error.message ? error.message : "No scheduled slots found"}
+        title={
+          isError
+            ? "Unable to load scheduled slots"
+            : "No scheduled slots found"
+        }
+        description={
+          isError
+            ? error.message
+            : "When you have scheduled slots, they'll show up here."
+        }
       />
     );
-  return formattedSchedules.length ? (
+  return (
     <div>
       <div className="grid gap-2 sm:gap-3 grid-cols-2  sm:grid-cols-3 lg:grid-cols-4">
         {formattedSchedules.map(({ date, schedules }) => {
@@ -117,10 +127,6 @@ const ScheduledSchedules = () => {
           {isPending ? "Deleting..." : "Delete schedules"}
         </Button>
       </div>
-    </div>
-  ) : (
-    <div className="rounded-2xl border border-border bg-card p-6 text-sm text-muted-foreground shadow-soft">
-      No scheduled slots yet.
     </div>
   );
 };

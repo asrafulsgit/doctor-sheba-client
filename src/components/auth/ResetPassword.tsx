@@ -14,17 +14,6 @@ import Link from "next/link";
 import { useResetPassword } from "@/lib/hooks/useAuth";
 import { cn } from "@/lib/utils";
 
-// export const Route = createFileRoute("/auth/reset-password")({
-//   validateSearch: zodValidator(
-//     z.object({
-//       token: fallback(z.string(), "demo-token").default("demo-token"),
-//       email: fallback(z.string(), "").default(""),
-//     }),
-//   ),
-//   head: () => ({ meta: [{ title: "Set a new password — DoctorSheba" }] }),
-//   component: ResetPasswordPage,
-// });
-
 const resetPasswordSchema = z
   .object({
     password: z

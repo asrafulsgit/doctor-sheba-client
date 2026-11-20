@@ -22,15 +22,7 @@ import { useAdminAppointments } from "@/lib/hooks/useAppointment";
 import RowSkeleton from "@/components/shared/SkeletonSet";
 import { EmptyState } from "@/components/shared/PageState";
 
-const headers = [
-  "Patient",
-  "Doctor",
-  "DATE/TIME",
-  "STATUS",
-  "PAYMENT",
-  "FEE",
-  // "ACTION",
-];
+const headers = ["Patient", "Doctor", "DATE/TIME", "STATUS", "PAYMENT", "FEE"];
 
 const AppointmentTable = () => {
   const { getAllQueries } = useQueryManager();
@@ -48,10 +40,13 @@ const AppointmentTable = () => {
       </div>
     );
   }
+
   if (isError || appointments?.length === 0) {
     return (
       <EmptyState
-        title="Nothing here yet"
+        title={
+          isError ? "Unable to load appointments" : "No appointments found"
+        }
         description={
           isError
             ? error.message
@@ -61,6 +56,7 @@ const AppointmentTable = () => {
       />
     );
   }
+
   return (
     <div className="mt-2 overflow-hidden rounded-lg border">
       <Table>
@@ -127,10 +123,6 @@ const AppointmentRow = memo(function AppointmentRow({
       </TableCell>
 
       <TableCell>৳{app.doctor.appointmentFee}</TableCell>
-
-      {/* <TableCell className="text-center">
-                <AppointmentActionMenu appointment={app} />
-              </TableCell> */}
     </TableRow>
   );
 });

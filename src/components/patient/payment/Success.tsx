@@ -1,17 +1,7 @@
 "use client";
-import {
-  Calendar,
-  CheckCircle2,
-  Clock,
-  Download,
-  Receipt,
-  Stethoscope,
-  Wallet2,
-} from "lucide-react";
-import { useParams, useRouter } from "next/navigation";
+import { CheckCircle2, Download, Receipt, Stethoscope } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useMyAppointment } from "../../../lib/hooks/useAppointment";
-import { format } from "date-fns";
-import { StatusBadge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import PaymentSuccessSkeleton from "./SuccesSkeleton";
@@ -42,11 +32,11 @@ const PaymentSuccess = () => {
     return <PaymentSuccessSkeleton />;
   }
 
-  if (isError) {
+  if (isError || !appointment) {
     return (
       <EmptyState
-        title={error.message || "Error while getting appointment"}
-        description=""
+        title={isError ? "Unable to load appointment" : "Appointment not found"}
+        description={isError ? error.message : ""}
       />
     );
   }

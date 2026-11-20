@@ -19,13 +19,6 @@ import {
   useVerfiyEmailOTPVerification,
 } from "@/lib/hooks/useAuth";
 
-// export const Route = createFileRoute("/auth/verify-email")({
-//   validateSearch: zodValidator(
-//     z.object({ email: fallback(z.string(), "").default("") }),
-//   ),
-//   head: () => ({ meta: [{ title: "Verify your email — DoctorSheba" }] }),
-//   component: VerifyEmailPage,
-// });
 
 const otpSchema = z.object({
   otp: z.string().length(6, "Verification code must be 6 digits"),

@@ -1,6 +1,3 @@
-import { PublicLayout } from "@/components/layout/PublicLayout";
-import Link from "next/link";
-
 const SECTIONS: { heading: string; body: string[] }[] = [
   {
     heading: "1. Information we collect",

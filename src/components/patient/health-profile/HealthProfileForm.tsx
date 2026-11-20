@@ -16,7 +16,7 @@ import {
   FieldError,
   FieldGroup,
   FieldLabel,
-} from "@/components/ui/field"; 
+} from "@/components/ui/field";
 import {
   BLOOD_GROUP_OPTIONS,
   bloodGroupLabels,
@@ -143,10 +143,10 @@ const HealthProfileForm = () => {
   if (isLoading) {
     return <HealthProfileSkeleton />;
   }
-  if (isError) {
+  if (isError || !data?.data) {
     return (
       <EmptyState
-        title="Something went wrong"
+        title={isError ? "Unable to load profile" : "Profile not found"}
         description={
           isError ? error.message : "Error while fetching health profile"
         }
@@ -160,7 +160,7 @@ const HealthProfileForm = () => {
       onSubmit={form.handleSubmit(onSubmit)}
       className="grid gap-6 lg:grid-cols-2"
     >
-      {/* Personal health -------------------------------------------------- */}
+      {/* Personal health */}
       <section className="rounded-2xl border border-border bg-card p-6 shadow-soft">
         <div className="flex items-center gap-2">
           <span className="grid h-9 w-9 place-items-center rounded-lg bg-primary-soft text-primary">

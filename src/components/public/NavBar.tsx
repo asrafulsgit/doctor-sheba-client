@@ -12,7 +12,7 @@ import {
   SheetTrigger,
 } from "../ui/sheet";
 import { usePathname } from "next/navigation";
-import { publicNavBarLinks } from "@/constants/public/nav-links";
+import { publicNavBarLinks } from "@/constants/nav-links";
 import { User, UserRole } from "@/types/user";
 import { ROLE_HOME } from "@/proxyHelpers/config";
 import { useMe } from "@/lib/hooks/useUser";

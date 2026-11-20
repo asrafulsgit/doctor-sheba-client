@@ -54,7 +54,6 @@ const HealthTipCard = memo(function HealthTipCard({
 
       <div className="mt-4 flex flex-wrap items-center gap-2 border-t border-border pt-3">
         <label className="flex cursor-pointer items-center gap-2 text-xs text-muted-foreground">
-          {/* Controlled by server state: it only flips after the mutation succeeds */}
           <Switch
             checked={tip.isPublished}
             onCheckedChange={(checked) =>

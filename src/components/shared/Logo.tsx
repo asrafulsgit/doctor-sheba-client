@@ -1,7 +1,13 @@
 import { cn } from "@/lib/utils";
-import { HeartPulse } from "lucide-react";
+import { Stethoscope } from "lucide-react";
 
-export function Logo({ compact = false, className }: { compact?: boolean; className?: string }) {
+export function Logo({
+  compact = false,
+  className,
+}: {
+  compact?: boolean;
+  className?: string;
+}) {
   return (
     <span
       className={cn(
@@ -10,7 +16,7 @@ export function Logo({ compact = false, className }: { compact?: boolean; classN
       )}
     >
       <span className="grid size-9 place-items-center rounded-lg bg-primary text-primary-foreground">
-        <HeartPulse className="size-5" aria-hidden="true" />
+        <Stethoscope className="size-5" />
       </span>
       {compact ? (
         <span className="sr-only">DoctorSheba</span>

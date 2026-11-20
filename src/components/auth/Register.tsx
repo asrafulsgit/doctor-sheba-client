@@ -11,12 +11,6 @@ import { usePatientRegister } from "@/lib/hooks/useAuth";
 import { toast } from "sonner";
 import { Field, FieldError, FieldGroup, FieldLabel } from "../ui/field";
 
-// seo optimization
-// export const Route = createFileRoute("/auth/register")({
-//   head: () => ({ meta: [{ title: "Create account — DoctorSheba" }] }),
-//   component: RegisterPage,
-// });
-
 const registerSchema = z.object({
   name: z
     .string()

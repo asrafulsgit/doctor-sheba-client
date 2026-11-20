@@ -25,25 +25,20 @@ type SpecialtiesTableProps = {
 const SpecialtiesTable = ({ onEdit, onDelete }: SpecialtiesTableProps) => {
   const { data, isLoading, isError, error } = useSpecialties();
   const specialties = data?.data ?? [];
-  
+
   if (isLoading) {
     return <RowSkeleton />;
   }
 
-  if (isError) {
-    return (
-      <ErrorState
-        title="Unable to load specialties"
-        description={error.message || "Please try again later."}
-      />
-    );
-  }
-
-  if (!specialties.length) {
+  if (isError || !specialties.length) {
     return (
       <EmptyState
-        title="No specialties found"
-        description="Add a specialty to make it available to doctors and patients."
+        title={isError ? "Unable to load specialties" : "No specialties found"}
+        description={
+          isError
+            ? error.message
+            : "Add a specialty to make it available to doctors and patients."
+        }
       />
     );
   }

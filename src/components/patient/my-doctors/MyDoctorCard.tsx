@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { IDoctor } from "@/types/doctors";
-import { Calendar, MapPin, Stethoscope } from "lucide-react";
+import { MapPin, Stethoscope } from "lucide-react";
 import Link from "next/link";
 
 const MyDoctorCard = ({ doctor }: { doctor: IDoctor }) => {
@@ -18,7 +18,8 @@ const MyDoctorCard = ({ doctor }: { doctor: IDoctor }) => {
             {doctor.name}
           </p>
           <p className="truncate text-xs text-muted-foreground">
-            {doctor.doctorSpecialities && doctor?.doctorSpecialities[0]?.specialities.title}{" "}
+            {doctor.doctorSpecialities &&
+              doctor?.doctorSpecialities[0]?.specialities.title}{" "}
             · {doctor.experience}+ yrs
           </p>
         </div>
@@ -28,10 +29,6 @@ const MyDoctorCard = ({ doctor }: { doctor: IDoctor }) => {
           <MapPin className="h-3 w-3" />
           {doctor.currentWorkingPlace}
         </p>
-        {/* <p className="inline-flex items-center gap-1.5">
-                  <Calendar className="h-3 w-3" />
-                  {visits} visit{visits > 1 ? "s" : ""}
-                </p> */}
       </div>
       <div className="mt-4 flex gap-2">
         <Button asChild size="sm" variant="outline" className="flex-1">

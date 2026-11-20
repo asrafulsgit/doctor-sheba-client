@@ -13,11 +13,6 @@ import { useState } from "react";
 import { CustomDialog } from "@/hooks/useDialog";
 import AppointmentPicker from "./AppointmentPicker";
 
-// export const Route = createFileRoute("/doctor/prescriptions")({
-//   head: () => ({ meta: [{ title: "Prescriptions — DoctorSheba" }] }),
-//   component: DoctorPrescriptions,
-// });
-
 const DoctorPrescriptions = () => {
   const { getAllQueries } = useQueryManager();
   const filters: PrescriptionFilters = getAllQueries();
@@ -60,13 +55,15 @@ const DoctorPrescriptions = () => {
         />
       )}
 
-      <CustomDialog
-        open={isCreate}
-        onOpenChange={setIsCreate}
-        title="Select a appointment"
-      >
-        <AppointmentPicker />
-      </CustomDialog>
+      {isCreate && (
+        <CustomDialog
+          open={isCreate}
+          onOpenChange={setIsCreate}
+          title="Select a appointment"
+        >
+          <AppointmentPicker />
+        </CustomDialog>
+      )}
     </>
   );
 };

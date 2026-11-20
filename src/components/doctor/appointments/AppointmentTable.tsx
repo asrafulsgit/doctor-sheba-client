@@ -11,11 +11,16 @@ import {
 
 import { StatusBadge } from "@/components/ui/badge";
 
-import { IAppointment } from "@/types/appointment";
+import { AppointmentStatus, IAppointment } from "@/types/appointment";
 import AppointmentActionMenu from "./AppointmentActionMenu";
 import { format } from "date-fns";
 import Image from "next/image";
 import Link from "next/link";
+import useQueryManager from "@/hooks/UseQueryManager";
+import { AppointmentFilters } from "@/lib/query/query-keys";
+import { useMyAppointments } from "@/lib/hooks/useAppointment";
+import RowSkeleton from "@/components/shared/SkeletonSet";
+import { EmptyState } from "@/components/shared/PageState";
 
 const headers = [
   " ",
@@ -27,11 +32,36 @@ const headers = [
   "ACTION",
 ];
 
-const AppointmentTable = ({
-  appointments,
-}: {
-  appointments: IAppointment[];
-}) => {
+const AppointmentTable = () => {
+  const { getQuery, getAllQueries } = useQueryManager();
+
+  const allQueries: AppointmentFilters = getAllQueries();
+  const { data, isLoading, isError, error } = useMyAppointments({
+    status: (getQuery("status") as AppointmentStatus) ?? "SCHEDULED",
+    ...allQueries,
+  });
+  const appointments = data?.data ?? [];
+  if (isLoading)
+    return (
+      <div className="mt-2">
+        <RowSkeleton />{" "}
+      </div>
+    );
+
+  if (isError || !appointments.length) {
+    return (
+      <EmptyState
+        title={isError ? "Unable to load appointments" : "No appointments found"}
+        description={
+          isError
+            ? error.message
+            : "When you have appointments, they'll show up here."
+        }
+        className="mt-2"
+      />
+    );
+  }
+
   return (
     <div className="mt-2 overflow-hidden rounded-lg border">
       <Table>
@@ -67,8 +97,11 @@ const AppointmentTable = ({
                 </div>
               </TableCell>
               <TableCell>
-                <Link href={`/doctor/patients/${app.patient.id}`} className="font-medium text-foreground hover:text-primary hover:underline">
-                {app.patient.name}
+                <Link
+                  href={`/doctor/patients/${app.patient.id}`}
+                  className="font-medium text-foreground hover:text-primary hover:underline"
+                >
+                  {app.patient.name}
                 </Link>
               </TableCell>
               <TableCell>

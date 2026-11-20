@@ -30,29 +30,6 @@ const aboutItems = [
   },
 ];
 
-// seo optimization
-// export const Route = createFileRoute("/about")({
-//   head: () => ({
-//     meta: [
-//       { title: "About DoctorSheba" },
-//       {
-//         name: "description",
-//         content: "Learn about DoctorSheba’s approach to accessible digital healthcare.",
-//       },
-//       { property: "og:title", content: "About DoctorSheba" },
-//       {
-//         property: "og:description",
-//         content: "Learn about DoctorSheba’s approach to accessible digital healthcare.",
-//       },
-//       { property: "og:url", content: "/about" },
-//     ],
-//     links: [{ rel: "canonical", href: "/about" }],
-//   }),
-//   component: () => (
-
-//   ),
-// });
-
 const About = () => {
   return (
     <>

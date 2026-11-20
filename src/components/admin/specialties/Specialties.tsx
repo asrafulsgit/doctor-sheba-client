@@ -135,7 +135,6 @@ const AdminSpecialties = () => {
           title="Delete this specialty?"
           description={`This will permanently remove ${deletingSpecialty.title}.`}
           confirmLabel="Delete"
-          destructive
           onConfirm={handleDelete}
         />
       )}

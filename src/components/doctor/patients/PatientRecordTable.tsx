@@ -9,12 +9,16 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import Image from "next/image";
-import Link from "next/link"; 
+import Link from "next/link";
 import { bloodGroupLabels } from "@/constants/patient/data";
 import { Button } from "@/components/ui/button";
 import { Eye } from "lucide-react";
-import { PatientRecord } from "@/lib/hooks/UseDoctor";
+import { PatientRecord, usePatientRecords } from "@/lib/hooks/UseDoctor";
 import { getDate } from "@/helpers/getDate";
+import useQueryManager from "@/hooks/UseQueryManager";
+import { PatientFilters } from "@/lib/query/query-keys";
+import RowSkeleton from "@/components/shared/SkeletonSet";
+import { EmptyState } from "@/components/shared/PageState";
 
 const headers = [
   "PATIENT",
@@ -26,7 +30,32 @@ const headers = [
   "ACTION",
 ];
 
-const PatientRecordTable = ({ patients }: { patients: PatientRecord[] }) => {
+const PatientRecordTable = () => {
+  const { getAllQueries } = useQueryManager();
+  const allQueries: PatientFilters = getAllQueries();
+  const { data, isLoading, isError, error } = usePatientRecords(allQueries);
+  const patients = data?.data ?? [];
+  if (isLoading)
+    return (
+      <div className="mt-2">
+        <RowSkeleton />
+      </div>
+    );
+
+  if (isError || !patients.length) {
+    return (
+      <EmptyState
+        title={isError ? "Unable to load patients" : "Patients not found"}
+        description={
+          isError
+            ? error.message
+            : "When you have patients, they'll show up here."
+        }
+        className="mt-2"
+      />
+    );
+  }
+
   return (
     <div className="mt-2 overflow-hidden rounded-lg border">
       <Table>
@@ -81,15 +110,19 @@ const PatientRecordTable = ({ patients }: { patients: PatientRecord[] }) => {
                   : "Female"}
               </TableCell>
               <TableCell className="text-muted-foreground">
-               {patient?.patientHealthData?.bloodGroup && <span className="rounded-md bg-destructive-soft px-2 py-0.5 text-xs font-medium text-destructive">
-                  { bloodGroupLabels[patient.patientHealthData.bloodGroup]}
-                </span>}
+                {patient?.patientHealthData?.bloodGroup && (
+                  <span className="rounded-md bg-destructive-soft px-2 py-0.5 text-xs font-medium text-destructive">
+                    {bloodGroupLabels[patient.patientHealthData.bloodGroup]}
+                  </span>
+                )}
               </TableCell>
               <TableCell className="text-muted-foreground">
                 {patient.contactNumber ?? "N/A"}
               </TableCell>
               <TableCell className="text-muted-foreground">
-                {patient?.lastVisit ? getDate(patient.lastVisit, "dd MMM yyyy") : "N/A"}
+                {patient?.lastVisit
+                  ? getDate(patient.lastVisit, "dd MMM yyyy")
+                  : "N/A"}
               </TableCell>
               <TableCell className="font-medium">
                 {patient.totalVisits}

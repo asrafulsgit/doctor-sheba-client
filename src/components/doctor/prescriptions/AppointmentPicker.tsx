@@ -1,14 +1,12 @@
-import { Input } from "@/components/ui/input";
-import { bloodGroupLabels } from "@/constants/patient/data";
+
 import { getDate } from "@/helpers/getDate";
 import useQueryManager from "@/hooks/UseQueryManager";
 import { useMyAppointments } from "@/lib/hooks/useAppointment";
 import { AppointmentFilters } from "@/lib/query/query-keys";
 import { IAppointment } from "@/types/appointment";
 import { IPatient } from "@/types/patient";
-import { CalendarClock, Check, Mail, Phone, Search, User } from "lucide-react";
+import { CalendarClock,  Mail, Phone,  } from "lucide-react";
 import { useRouter } from "next/navigation";
-import React from "react";
 import { toast } from "sonner";
 import PrescriptionFilter from "./PrescriptionFilter";
 import Image from "next/image";

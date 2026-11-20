@@ -16,8 +16,8 @@ const UpdatePrescription = () => {
   if (!appointment || isError) {
     return (
       <EmptyState
-        title={isError ? error.message : "Appointment not found"}
-        description={"Error while getting appointment, Please try again!"}
+        title={isError ? "Unable to load appointments" : "Appointment not found"}
+        description={isError ? error.message :"Error while getting appointment, Please try again!"}
       />
     );
   }

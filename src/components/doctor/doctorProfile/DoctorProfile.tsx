@@ -29,7 +29,7 @@ const DoctorProfile = () => {
     return <DoctorProfileSkeleton />;
   }
 
-  if (isError) {
+  if (isError || !doctor) {
     return (
       <EmptyState
         title="Doctor not found"

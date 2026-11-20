@@ -10,10 +10,8 @@ const AdminAppointments = () => {
         title="My Appointments"
         description="Track and manage your visits."
       />
-      {/* Filters */}
-      <AppointmentFilter />
 
-      {/* Table */}
+      <AppointmentFilter />
 
       <AppointmentTable />
     </>

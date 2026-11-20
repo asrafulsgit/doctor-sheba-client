@@ -1,30 +1,6 @@
 "use client";
 import DashboardHeader from "@/components/shared/DashboardHeader";
-import { useDoctorAvailableSchedules } from "@/lib/hooks/schedule";
-import useQueryManager from "@/hooks/UseQueryManager";
-import { DoctorAvailableSchedulesFilters } from "@/lib/query/query-keys";
-
-// seo optimization
-// export const Route = createFileRoute("/doctor/schedules")({
-//   head: () => ({ meta: [{ title: "Schedules — DoctorSheba" }] }),
-//   component: DoctorSchedules,
-// });
-
-import { format, parseISO } from "date-fns";
-import { ISchedule } from "@/types/schedule";
-import { getSchedulesByDay } from "@/helpers/getSchedulesByDay";
-import { cn } from "@/lib/utils";
-import {
-  Calendar,
-  CalendarDays,
-  CheckCircle2,
-  Circle,
-  Clock,
-  FileText,
-  Filter,
-  Pill,
-} from "lucide-react";
-import { useState } from "react";
+import { Calendar, CalendarDays, Filter } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import AvailableSchedules from "./AvailableSchedules";
 import ScheduledSchedules from "./ScheduledSchedules";

@@ -13,11 +13,6 @@ import { PieChartWithTooltip } from "@/components/shared/PieChartWithTooltip";
 import RecentAppointmentsTable from "./RecentAppointmentsTable";
 import TopDoctors from "./TopDoctors";
 
-// export const Route = createFileRoute("/admin/dashboard")({
-//   head: () => ({ meta: [{ title: "Admin Dashboard — DoctorSheba" }] }),
-//   component: AdminHome,
-// });
-
 const AdminDashboard = () => {
   const {
     data: metaData,
@@ -34,6 +29,7 @@ const AdminDashboard = () => {
     label: a.status,
     value: a.appointments,
   }));
+
   if (metaDataLoading) {
     return <PatientDashboardSkeleton />;
   }
@@ -50,7 +46,7 @@ const AdminDashboard = () => {
       />
     );
   }
- 
+
   return (
     <>
       <DashboardHeader

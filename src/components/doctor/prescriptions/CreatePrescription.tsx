@@ -17,9 +17,9 @@ const CreatePrescription = () => {
   if (!appointment || isError) {
     return (
       <EmptyState
-        title="Appointment not found"
+        title={isError ? "Unable to load appointments" :"Appointment not found"}
         description={
-          isError ? error.message : "Error while getting appointment"
+          isError ? error.message : "When you have appointments, they'll show up here."
         }
       />
     );

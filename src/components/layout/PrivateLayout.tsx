@@ -34,7 +34,6 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "../ui/sheet";
-import { activatedDashboard } from "@/constants/public/user";
 import { useMe } from "@/lib/hooks/useUser";
 import {
   DashboardSidebarSkeleton,
@@ -81,10 +80,7 @@ const ADMIN_NAV: NavItem[] = [
   { to: "/admin/schedules", label: "Schedules", icon: ListChecks },
   { to: "/admin/payments", label: "Payments", icon: Wallet2 },
   { to: "/admin/specialties", label: "Specialties", icon: Tags },
-  // { to: "/admin/reviews", label: "Reviews", icon: Star },
-  // { to: "/admin/reports", label: "Reports", icon: BarChart3 },
   { to: "/admin/admins", label: "Admins", icon: UserCog },
-  // { to: "/admin/settings", label: "Settings", icon: Settings },
 ];
 
 function navFor(role: UserRole): NavItem[] {

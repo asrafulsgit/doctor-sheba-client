@@ -1,9 +1,8 @@
 import { Button } from "@/components/ui/button";
 import { getDate } from "@/helpers/getDate";
 import { IPrescription } from "@/types/prescription";
-import { Calendar, Edit, Edit3, Pill, Trash2 } from "lucide-react";
+import { Calendar, Edit, Pill } from "lucide-react";
 import Link from "next/link";
-import React from "react";
 
 const PrescriptionCard = ({
   prescription,

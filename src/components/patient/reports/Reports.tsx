@@ -5,27 +5,17 @@ import useQueryManager from "@/hooks/UseQueryManager";
 import { useMyMedicalReports } from "@/lib/hooks/useMedicalReport";
 import { MedicalReportFilters } from "@/lib/query/query-keys";
 import { Upload } from "lucide-react";
-import RowSkeleton from "@/components/shared/SkeletonSet";
 import { EmptyState } from "@/components/shared/PageState";
 import ReportCard from "./ReportCard";
 import ReportSkeleton from "./ReportSkeleton";
 import UploadReportForm from "./UploadReportForm";
 import { CustomDialog } from "@/hooks/useDialog";
 import { useState } from "react";
-
-// seo optimization
-// export const Route = createFileRoute("/patient/reports")({
-//   head: () => ({ meta: [{ title: "Medical Reports — DoctorSheba" }] }),
-//   component: PatientReports,
-// });
+import ReportGrid from "./ReportGrid";
 
 const PatientReports = () => {
   const [isOpenUploadReport, setIsOpenUploadReport] = useState(false);
 
-  const { setQuery, getQuery, getAllQueries, clearQuery } = useQueryManager();
-  const allQueries: MedicalReportFilters = getAllQueries();
-  const { data, isLoading, isError, error } = useMyMedicalReports(allQueries);
-  const reports = data?.data;
   return (
     <>
       <DashboardHeader
@@ -39,35 +29,17 @@ const PatientReports = () => {
         }
       />
 
-      {isLoading ? (
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          <ReportSkeleton />
-        </div>
-      ) : reports?.length ? (
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {reports.map((report) => (
-            <ReportCard report={report} key={report.id} />
-          ))}
-        </div>
-      ) : (
-        <EmptyState
-          title="Nothing here yet"
-          description={
-            isError
-              ? error.message
-              : "When you have medical report, they'll show up here."
-          }
-          className="mt-2"
-        />
-      )}
+      <ReportGrid />
 
-      {isOpenUploadReport && <CustomDialog
-        open={isOpenUploadReport}
-        onOpenChange={setIsOpenUploadReport}
-        title="Upload medical report"
-      >
-        <UploadReportForm onClose={()=>setIsOpenUploadReport(false)}/>
-      </CustomDialog>}
+      {isOpenUploadReport && (
+        <CustomDialog
+          open={isOpenUploadReport}
+          onOpenChange={setIsOpenUploadReport}
+          title="Upload medical report"
+        >
+          <UploadReportForm onClose={() => setIsOpenUploadReport(false)} />
+        </CustomDialog>
+      )}
     </>
   );
 };

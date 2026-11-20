@@ -23,28 +23,6 @@ import SearchDoctors from "./SearchDoctors";
 import DoctorsGrid from "./DoctorsGrid";
 import ChatBot from "@/components/shared/ChatBot";
 
-// seo optimization
-// export const Route = createFileRoute("/doctors/")({
-//   validateSearch: parseSearch,
-//   head: () => ({
-//     meta: [
-//       { title: "Find Doctors | DoctorSheba" },
-//       {
-//         name: "description",
-//         content: "Browse doctors by specialty and availability with DoctorSheba.",
-//       },
-//       { property: "og:title", content: "Find Doctors | DoctorSheba" },
-//       {
-//         property: "og:description",
-//         content: "Browse doctors by specialty and availability with DoctorSheba.",
-//       },
-//       { property: "og:url", content: "/doctors" },
-//     ],
-//     links: [{ rel: "canonical", href: "/doctors" }],
-//   }),
-//   component: DoctorsPage,
-// });
-
 const Doctors = () => {
   return (
     <>
@@ -58,12 +36,15 @@ const Doctors = () => {
       <section className="mx-auto w-full max-w-7xl px-4 pt-8 sm:px-6 lg:px-8">
         <div className="rounded-2xl border border-border bg-surface p-5 shadow-xs sm:p-7">
           <div className="mb-5 max-w-2xl">
-            <p className="text-sm font-semibold text-primary">Need help choosing?</p>
+            <p className="text-sm font-semibold text-primary">
+              Need help choosing?
+            </p>
             <h2 className="mt-1 text-xl font-semibold tracking-tight text-foreground">
               Get doctor suggestions for your concern
             </h2>
             <p className="mt-2 text-sm leading-6 text-muted-foreground">
-              Describe what you need help with to see relevant specialties and doctors.
+              Describe what you need help with to see relevant specialties and
+              doctors.
             </p>
           </div>
           <ChatBot />

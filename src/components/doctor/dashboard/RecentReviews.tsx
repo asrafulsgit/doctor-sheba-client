@@ -1,6 +1,5 @@
 import { IReview } from "@/types/review";
 import { Star } from "lucide-react";
-import React from "react";
 
 const RecentReviews = ({ reviews }: { reviews: IReview[] }) => {
   return (

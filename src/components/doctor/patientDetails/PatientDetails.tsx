@@ -1,25 +1,10 @@
 "use client";
 import { EmptyState } from "@/components/shared/PageState";
-import { bloodGroupLabels } from "@/constants/patient/data";
-import { getDate } from "@/helpers/getDate";
 import { usePatientRecord } from "@/lib/hooks/UseDoctor";
-import {
-  Cake,
-  Calendar,
-  FileText,
-  HeartPulse,
-  Mail,
-  MapPin,
-  Phone,
-  Pill,
-  User2,
-  Wallet,
-} from "lucide-react";
-import Image from "next/image";
+import { FileText, Pill } from "lucide-react";
 import { useParams } from "next/navigation";
 import PatientPersonalDetails from "./PatientPersonalDetails";
 import HealthDetails from "./HealthDetails";
-import { IHealthProfile } from "@/types/patient";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Prescriptions from "./Prescriptions";
 import Reports from "./Reports";
@@ -27,7 +12,6 @@ import PatientDetailsSkeleton from "./PatientDetailsSkeleton";
 
 const PatientDetails = () => {
   const params = useParams();
-
   const patientId = params.id as string;
   const { data, isLoading, isError, error } = usePatientRecord(patientId);
   const patient = data?.data;
@@ -40,7 +24,7 @@ const PatientDetails = () => {
   if (isError || !patient) {
     return (
       <EmptyState
-        title="Something went wrong"
+        title={isError ? "Unable to load patient" : "Patient not found"}
         description={
           isError ? error.message : "We couldn't find this patient record."
         }

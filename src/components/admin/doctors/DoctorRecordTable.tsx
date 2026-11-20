@@ -278,7 +278,6 @@ const DoctorRecordTable = () => {
             : ""
         }
         confirmLabel="Suspend"
-        destructive
         onConfirm={handleConfirmSuspend}
       />
     </>

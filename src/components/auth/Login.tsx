@@ -15,17 +15,6 @@ import { Label } from "../ui/label";
 import { UserRole } from "@/types/user";
 import { useState } from "react";
 
-// seo optimization
-// export const Route = createFileRoute("/auth/login")({
-//   validateSearch: zodValidator(
-//     z.object({ redirect: fallback(z.string(), "").default("") }),
-//   ),
-//   head: () => ({
-//     meta: [{ title: "Sign in — DoctorSheba" }],
-//   }),
-//   component: LoginPage,
-// });
-
 const loginSchema = z.object({
   email: z
     .string({ error: "Email is required" })
@@ -197,7 +186,7 @@ const Login = () => {
   );
 };
 
-export function RoleSelector({
+function RoleSelector({
   value,
   onChange,
 }: {

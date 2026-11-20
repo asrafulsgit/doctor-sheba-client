@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Mail, MapPin, PhoneCall } from "lucide-react";
 import { Logo } from "../shared/Logo";
-import { publicFooterLinks } from "@/constants/public/footer-links";
+import { publicFooterLinks } from "@/constants/footer-links";
 
 export function PublicFooter() {
   return (

@@ -8,13 +8,6 @@ import { EmptyState } from "@/components/shared/PageState";
 import ReviewStats from "./ReviewStats";
 import ReviewCard from "./ReviewCard";
 import ReviewsSkeleton from "./ReivewsSkeleton";
-import { IReview } from "@/types/review";
-
-// seo optimization
-// export const Route = createFileRoute("/doctor/reviews")({
-//   head: () => ({ meta: [{ title: "Reviews — DoctorSheba" }] }),
-//   component: DoctorReviews,
-// });
 
 const DoctorReviews = () => {
   const { getAllQueries } = useQueryManager();
@@ -26,8 +19,10 @@ const DoctorReviews = () => {
   if (!reviewData || isError) {
     return (
       <EmptyState
-        title={isError ? error.message : "Reviews not found"}
-        description="Something went wrong, Please try again"
+        title={isError ? "Unable to load reviews" : "Reviews not found"}
+        description={
+          isError ? error.message : "When you have reviews, they'll show up here."
+        }
       />
     );
   }

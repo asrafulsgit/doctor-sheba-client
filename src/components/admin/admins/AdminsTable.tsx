@@ -31,20 +31,15 @@ const AdminsTable = ({ onEdit, onToggleStatus }: AdminsTableProps) => {
     return <RowSkeleton />;
   }
 
-  if (isError) {
+  if (isError || !admins.length) {
     return (
       <ErrorState
-        title="Unable to load admins"
-        description={error.message || "Please try again later."}
-      />
-    );
-  }
-
-  if (!admins.length) {
-    return (
-      <EmptyState
-        title="No admins found"
-        description="Invite an admin to help manage the platform."
+        title={isError ? "Unable to load admins" : "No admins found"}
+        description={
+          isError
+            ? error.message
+            : "Invite an admin to help manage the platform."
+        }
       />
     );
   }

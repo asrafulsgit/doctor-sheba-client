@@ -1,9 +1,9 @@
 "use client";
 import SchedulesSkeleton from "@/components/doctor/schedules/SchedulesSkeleton";
 import { EmptyState } from "@/components/shared/PageState";
-import {  getSchedulesByDay } from "@/helpers/getSchedulesByDay";
+import { getSchedulesByDay } from "@/helpers/getSchedulesByDay";
 import useQueryManager from "@/hooks/UseQueryManager";
-import {  useSchedules } from "@/lib/hooks/schedule";
+import { useSchedules } from "@/lib/hooks/schedule";
 
 import { DoctorAvailableSchedulesFilters } from "@/lib/query/query-keys";
 import { cn } from "@/lib/utils";
@@ -15,20 +15,24 @@ const SchedulesTable = () => {
   const { getAllQueries } = useQueryManager();
   const allQueries: DoctorAvailableSchedulesFilters = getAllQueries();
   const { data, isLoading, isError, error } = useSchedules(allQueries);
-  const schedules = data?.data;
-  const formattedSchedules = schedules
+  const schedules = data?.data ?? [];
+  const formattedSchedules = schedules.length
     ? getSchedulesByDay(schedules)
     : [];
 
   if (isLoading) return <SchedulesSkeleton />;
-  if (isError)
+  if (isError || !formattedSchedules.length)
     return (
       <EmptyState
-        title="Someting went wrong"
-        description={error.message ? error.message : "No scheduled slots found"}
+        title={isError ? "Unable to load slots" : "No scheduled slots found"}
+        description={
+          isError
+            ? error.message
+            : "When you have scheduled slots, they'll show up here."
+        }
       />
     );
-  return formattedSchedules.length ? (
+  return (
     <div>
       <div className="grid gap-2 sm:gap-3 grid-cols-2  sm:grid-cols-3 lg:grid-cols-4">
         {formattedSchedules.map(({ date, schedules }) => {
@@ -48,7 +52,7 @@ const SchedulesTable = () => {
                 </div>
               </header>
               <div className="flex flex-col gap-2">
-                {schedules.map((s : ISchedule) => {
+                {schedules.map((s: ISchedule) => {
                   return (
                     <button
                       key={s.id}
@@ -68,10 +72,6 @@ const SchedulesTable = () => {
           );
         })}
       </div>
-    </div>
-  ) : (
-    <div className="rounded-2xl border border-border bg-card p-6 text-sm text-muted-foreground shadow-soft">
-      No published slots from doctor yet.
     </div>
   );
 };

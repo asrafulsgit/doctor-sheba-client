@@ -8,7 +8,7 @@ import { useDoctorSchedules } from "@/lib/hooks/schedule";
 import { DoctorAvailableSchedulesFilters } from "@/lib/query/query-keys";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
-import { CalendarDays, CheckCircle2, Circle } from "lucide-react";
+import { CalendarDays, CheckCircle2 } from "lucide-react";
 import { useParams } from "next/navigation";
 
 const SchedulesTable = () => {
@@ -24,16 +24,18 @@ const SchedulesTable = () => {
   const formattedSchedules = schedules
     ? getDoctorSchedulesByDay(schedules)
     : [];
-  
+
   if (isLoading) return <SchedulesSkeleton />;
-  if (isError)
+  if (isError || !formattedSchedules.length)
     return (
       <EmptyState
-        title="Someting went wrong"
-        description={error.message ? error.message : "No scheduled slots found"}
+        title={error ? "Something went wrong!" : "No published slots from doctor yet."}
+        description={
+          error?.message ? error.message : "No scheduled slots found"
+        }
       />
     );
-  return formattedSchedules.length ? (
+  return (
     <div>
       <div className="grid gap-2 sm:gap-3 grid-cols-2  sm:grid-cols-3 lg:grid-cols-4">
         {formattedSchedules.map(({ date, schedules }) => {
@@ -77,10 +79,6 @@ const SchedulesTable = () => {
           );
         })}
       </div>
-    </div>
-  ) : (
-    <div className="rounded-2xl border border-border bg-card p-6 text-sm text-muted-foreground shadow-soft">
-      No published slots from doctor yet.
     </div>
   );
 };

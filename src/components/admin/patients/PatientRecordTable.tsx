@@ -52,7 +52,7 @@ const PatientRecordTable = () => {
   const [suspendTarget, setSuspendTarget] = useState<AdminPatient | null>(null);
   const allQueries: PatientFilters = getAllQueries();
   const { data, isLoading, isError, error } = usePatientsAdmin(allQueries);
-  const patients = data?.data;
+  const patients = data?.data ?? [];
 
   const {
     mutate: updateSuspendOrActivate,
@@ -103,10 +103,10 @@ const PatientRecordTable = () => {
       </div>
     );
 
-  if (isError || patients?.length === 0) {
+  if (isError || !patients.length) {
     return (
       <EmptyState
-        title="Nothing here yet"
+        title={error ? "Unable to load patients" : "No patients found"}
         description={
           isError
             ? error.message
@@ -157,7 +157,6 @@ const PatientRecordTable = () => {
             : ""
         }
         confirmLabel="Suspend"
-        destructive
         onConfirm={handleConfirmSuspend}
       />
     </>

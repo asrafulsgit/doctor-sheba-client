@@ -1,44 +1,9 @@
-import type { FormEvent } from "react";
-import { Building2, Mail, Phone, Send } from "lucide-react"; 
+import { Building2, Mail, Phone, Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { PublicPageHeader } from "../PublicPageHeader";
-
-// seo optimization
-// export const Route = createFileRoute("/contact")({
-//   head: () => ({
-//     meta: [
-//       { title: "Contact DoctorSheba" },
-//       {
-//         name: "description",
-//         content:
-//           "Contact DoctorSheba for platform support and healthcare service information.",
-//       },
-//       { property: "og:title", content: "Contact DoctorSheba" },
-//       {
-//         property: "og:description",
-//         content:
-//           "Contact DoctorSheba for platform support and healthcare service information.",
-//       },
-//       { property: "og:url", content: "/contact" },
-//     ],
-//     links: [{ rel: "canonical", href: "/contact" }],
-//   }),
-//   component: ContactPage,
-// });
-
-// function ContactPage() {
-// //   const submit = (event: FormEvent<HTMLFormElement>) => {
-// //     event.preventDefault();
-// //     toast.info("Message sending is not connected yet", {
-// //       description:
-// //         "Contact submissions remain presentation-only until an approved storage or email contract is added.",
-// //     });
-// //   };
-
-// }
 
 const contactInfo = [
   {
@@ -111,12 +76,19 @@ const Contact = () => {
             This form is for platform enquiries, not medical advice or
             emergencies.
           </p>
-          <form 
-        //   onSubmit={submit} 
-          className="mt-7 grid gap-5">
+          <form
+            //   onSubmit={submit}
+            className="mt-7 grid gap-5"
+          >
             <div>
               <Label htmlFor="name">Name</Label>
-              <Input id="name" placeholder="karim" required maxLength={120} className="mt-2 h-11" />
+              <Input
+                id="name"
+                placeholder="karim"
+                required
+                maxLength={120}
+                className="mt-2 h-11"
+              />
             </div>
             <div>
               <Label htmlFor="email">Email</Label>

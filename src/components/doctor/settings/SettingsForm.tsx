@@ -227,10 +227,10 @@ const SettingsForm = () => {
     return <ProfileFormSkeleton />;
   }
 
-  if (isError) {
+  if (isError || !data?.data) {
     return (
       <EmptyState
-        title="Something went wrong"
+        title={isError ? "Unable to load profile" : "Profile not found"}
         description={error?.message || "Error while fetching profile"}
         className="mt-2"
       />
@@ -244,7 +244,7 @@ const SettingsForm = () => {
     >
       <h2 className="text-base font-semibold">Profile</h2>
 
-      {/* ── Avatar ─────────────────────────────────────────────── */}
+      {/* Avatar */}
       <Controller
         name="avatarFile"
         control={form.control}
@@ -293,7 +293,7 @@ const SettingsForm = () => {
       />
 
       <FieldGroup className="mt-5 grid gap-4">
-        {/* ── 1. Personal identity ─────────────────────────────── */}
+        {/* 1. Personal identity */}
         <Controller
           name="name"
           control={form.control}
@@ -383,7 +383,7 @@ const SettingsForm = () => {
           )}
         />
 
-        {/* ── 2. Professional credentials ──────────────────────── */}
+        {/* 2. Professional credentials */}
         <Controller
           name="designation"
           control={form.control}
@@ -465,7 +465,7 @@ const SettingsForm = () => {
           )}
         />
 
-        {/* ── 3. Practice details ──────────────────────────────── */}
+        {/* 3. Practice details */}
         <Controller
           name="currentWorkingPlace"
           control={form.control}
@@ -511,7 +511,7 @@ const SettingsForm = () => {
           )}
         />
 
-        {/* ── 4. Specialties (read-only display) ───────────────── */}
+        {/* 4. Specialties*/}
         <div className="space-y-3">
           <FieldLabel>Specialties</FieldLabel>
 

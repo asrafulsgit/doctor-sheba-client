@@ -2,21 +2,17 @@
 import { useDoctorSchedules } from "@/lib/hooks/schedule";
 import {
   Calendar,
-  Check,
   ChevronLeft,
   Clock,
   ShieldCheck,
   Wallet2,
 } from "lucide-react";
 import Link from "next/link";
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import BookingStep, { Step } from "./BookingStep";
-import { useMemo, useState } from "react";
-import { Button } from "@/components/ui/button";
+import { useMemo, useState } from "react"; 
 import { getSchedulesByDate } from "@/helpers/getDateSchedules";
-import { toast } from "sonner";
-import { useBooking } from "@/lib/hooks/useAppointment";
 import BookingStep1 from "./BookingStep1";
 import BookingSkeleton from "./BookingSkeleton";
 import BookingStep2 from "./BookingStep2";

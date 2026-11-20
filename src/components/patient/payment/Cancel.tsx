@@ -1,9 +1,8 @@
 "use client";
 import { useMyAppointment } from "@/lib/hooks/useAppointment";
 import { Receipt, RefreshCw, Stethoscope, XCircle } from "lucide-react";
-import { useParams, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import PaymentSuccessSkeleton from "./SuccesSkeleton";
-
 import AppointmentDetailsCard from "./AppointmentDetailsCard";
 import PaymentDetailscard from "./PaymentDetailscard";
 import { Button } from "@/components/ui/button";
@@ -32,11 +31,11 @@ const PaymentCancel = () => {
   if (appointmentLoading) {
     return <PaymentSuccessSkeleton />;
   }
-  if (isError) {
+  if (isError || !appointment) {
     return (
       <EmptyState
-        title={error.message || "Error while getting appointment"}
-        description=""
+        title={isError ? "Unable to load appointment" : "Appointment not found"}
+        description={isError ? error.message : ""}
       />
     );
   }

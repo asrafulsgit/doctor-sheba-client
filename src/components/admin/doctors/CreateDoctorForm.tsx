@@ -68,6 +68,7 @@ const CreateDoctorForm = () => {
   const { mutate: doctorRegister, isPending } = useDoctorRegister();
   const { data, isLoading, isError, error } = useSpecialties();
   const specialties = data?.data;
+  
   function onSubmit(data: DoctorFormValues) {
     doctorRegister(data, {
       onSuccess: () => {

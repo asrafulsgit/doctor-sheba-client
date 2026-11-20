@@ -3,7 +3,6 @@ import { Skeleton } from "@/components/ui/skeleton";
 const PatientDetailsSkeleton = () => {
   return (
     <>
-      {/* Profile header */}
       <section className="flex flex-wrap items-start gap-6 rounded-2xl border border-border bg-card p-6 shadow-soft">
         <Skeleton className="h-20 w-19 rounded-full" />
         <div className="flex-1 min-w-[260px]">
@@ -22,7 +21,6 @@ const PatientDetailsSkeleton = () => {
         </div>
       </section>
 
-      {/* Health snapshot + last consultation */}
       <section className="mt-6 grid gap-4 lg:grid-cols-3">
         <div className="rounded-2xl border border-border bg-card p-5 shadow-soft lg:col-span-2">
           <div className="flex items-center gap-2">
@@ -55,7 +53,6 @@ const PatientDetailsSkeleton = () => {
         </div>
       </section>
 
-      {/* Tabs */}
       <section className="mt-6">
         <div className="flex gap-2">
           <Skeleton className="h-9 w-36 rounded-md" />

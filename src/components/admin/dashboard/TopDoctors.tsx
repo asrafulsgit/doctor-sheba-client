@@ -3,7 +3,6 @@ import { Star } from "lucide-react";
 import Image from "next/image";
 
 const TopDoctors = ({ doctors }: { doctors: IDoctor[] }) => {
- 
   return (
     <section className="rounded-2xl border border-border bg-card p-6 shadow-soft">
       <h2 className="text-base font-semibold text-foreground">
@@ -15,8 +14,10 @@ const TopDoctors = ({ doctors }: { doctors: IDoctor[] }) => {
             key={d.id}
             className="flex items-center gap-3 rounded-xl border border-border bg-surface p-3"
           >
-            <div className="grid h-10 w-10 place-items-center rounded-full 
-            text-sm font-semibold text-primary-foreground">
+            <div
+              className="grid h-10 w-10 place-items-center rounded-full 
+            text-sm font-semibold text-primary-foreground"
+            >
               {d?.profilePhoto ? (
                 <Image
                   src={d.profilePhoto ?? ""}
@@ -26,7 +27,9 @@ const TopDoctors = ({ doctors }: { doctors: IDoctor[] }) => {
                   height={40}
                 />
               ) : (
-                <span className="bg-primary">{d?.name?.charAt(0).toUpperCase()}</span>
+                <span className="bg-primary">
+                  {d?.name?.charAt(0).toUpperCase()}
+                </span>
               )}
             </div>
             <div className="min-w-0 flex-1">

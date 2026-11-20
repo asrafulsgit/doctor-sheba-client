@@ -11,14 +11,8 @@ import PaymentTable from "./PaymentTable";
 import { EmptyState } from "@/components/shared/PageState";
 import PaymentStats from "./PaymentStats";
 
-// seo optimization
-// export const Route = createFileRoute("/patient/payments")({
-//   head: () => ({ meta: [{ title: "Payments — DoctorSheba" }] }),
-//   component: PatientPayments,
-// });
-
 const PatientPayments = () => {
-  const { setQuery, getQuery, getAllQueries, clearQuery } = useQueryManager();
+  const { getAllQueries } = useQueryManager();
   const allQueries: PaymentFilters = getAllQueries();
   const { data, isLoading, isError, error } = usePatientPayments(allQueries);
   const payments = data?.data?.payments;
