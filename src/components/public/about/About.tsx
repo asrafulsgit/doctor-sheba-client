@@ -80,7 +80,7 @@ const About = () => {
             </div>
           ))}
         </div>
-        <section className="mt-16 rounded-2xl bg-surface-muted p-7 sm:p-10">
+        <section className="mt-8 sm:mt-16 rounded-2xl bg-surface-muted p-4 sm:p-10">
           <h2 className="text-3xl font-semibold text-foreground">
             Doctors and facilities
           </h2>

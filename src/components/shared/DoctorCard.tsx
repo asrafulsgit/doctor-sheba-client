@@ -27,9 +27,6 @@ export function DoctorCard({ doctor }: { doctor: IDoctor }) {
           className="h-full w-full object-cover object-top transition-transform 
           duration-500 group-hover:scale-[1.025]"
         />
-        {/* <span className="absolute left-4 top-4 rounded-full border border-border bg-surface/95 px-3 py-1 text-xs font-medium text-foreground shadow-xs">
-          {doctor?.available ? "Available to book" : "Next slots soon"}
-        </span> */}
       </div>
       <CardContent className="px-4 pb-4">
         <div className="flex items-start justify-between gap-3">
@@ -69,7 +66,7 @@ export function DoctorCard({ doctor }: { doctor: IDoctor }) {
             <Link href={`/doctors/${doctor.id}`}>View profile</Link>
           </Button>
           <Button asChild>
-            <Link href={`/doctors/${doctor.id}`}>
+            <Link href={`/booking/${doctor.id}`}>
               <CalendarDays aria-hidden="true" /> Book
             </Link>
           </Button>

@@ -11,12 +11,15 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import BookingStep, { Step } from "./BookingStep";
-import { useMemo, useState } from "react"; 
+import { useMemo, useState } from "react";
 import { getSchedulesByDate } from "@/helpers/getDateSchedules";
 import BookingStep1 from "./BookingStep1";
 import BookingSkeleton from "./BookingSkeleton";
 import BookingStep2 from "./BookingStep2";
 import BookingStep3 from "./BookingStep3";
+import { EmptyState } from "@/components/shared/PageState";
+import Image from "next/image";
+import { format } from "date-fns";
 
 export type SelectedSlot = {
   id: string;
@@ -27,14 +30,14 @@ export type SelectedSlot = {
 
 const Booking = () => {
   const params = useParams();
-  
+
   const doctorId = params.id as string;
   const [step, setStep] = useState<Step>(1);
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
 
   const [slot, setSlot] = useState<SelectedSlot | null>(null);
 
-  const { data, isLoading, isError, error } = useDoctorSchedules({},doctorId);
+  const { data, isLoading, isError, error } = useDoctorSchedules({}, doctorId);
 
   const doctor = data?.data?.doctor;
   const schedules = data?.data?.doctorSchedules;
@@ -50,6 +53,16 @@ const Booking = () => {
   if (isLoading) {
     return <BookingSkeleton />;
   }
+
+  if (isError || !doctor) {
+    return (
+      <EmptyState
+        title={isError ? "Unable to load booking" : "Doctor not found"}
+        description={isError ? error.message : "Try again later"}
+      />
+    );
+  }
+
   return (
     <>
       <section className="border-b border-border bg-surface">
@@ -123,14 +136,27 @@ const Booking = () => {
               Booking summary
             </p>
             <div className="mt-3 flex items-center gap-3">
-              <div className="grid h-12 w-12 place-items-center rounded-full bg-primary-soft text-sm font-semibold text-primary">
-                {doctor?.name
-                  .replace(/^Dr\.?\s+/i, "")
-                  .split(" ")
-                  .map((n: string) => n[0])
-                  .slice(0, 2)
-                  .join("")}
+              <div className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl shadow-elevated">
+                {doctor?.profilePhoto ? (
+                  <Image
+                    src={doctor.profilePhoto}
+                    alt="Profile"
+                    className="h-full w-full rounded-2xl object-cover"
+                    width={48}
+                    height={48}
+                  />
+                ) : (
+                  <div className="grid  place-items-center rounded-full bg-primary-soft text-sm font-semibold text-primary">
+                    {doctor?.name
+                      .replace(/^Dr\.?\s+/i, "")
+                      .split(" ")
+                      .map((n: string) => n[0])
+                      .slice(0, 2)
+                      .join("")}
+                  </div>
+                )}
               </div>
+
               <div className="min-w-0">
                 <p className="truncate text-sm font-medium text-foreground">
                   {doctor?.name}
@@ -144,19 +170,12 @@ const Booking = () => {
               <div className="flex items-center gap-2 text-muted-foreground">
                 <Calendar className="h-4 w-4 text-primary" />
                 {slot
-                  ? new Date(slot.startTime).toLocaleDateString(undefined, {
-                      day: "numeric",
-                      month: "short",
-                    })
-                  : "Select a date"}
+                  ? format(new Date(slot.startTime), "d MMM")   : "Select a date"}
               </div>
               <div className="flex items-center gap-2 text-muted-foreground">
                 <Clock className="h-4 w-4 text-primary" />
                 {slot
-                  ? new Date(slot.startTime).toLocaleTimeString(undefined, {
-                      hour: "numeric",
-                      minute: "2-digit",
-                    })
+                  ? format(new Date(slot.startTime), "h:mm a")
                   : "Select a slot"}
               </div>
               <div className="flex items-center gap-2 text-muted-foreground">

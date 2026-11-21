@@ -5,8 +5,7 @@ const BookingStep = ({ step }: { step: Step }) => {
   const steps = [
     { n: 1, label: "Date" },
     { n: 2, label: "Time" },
-    { n: 3, label: "Review" },
-    { n: 4, label: "Done" },
+    { n: 3, label: "Review & confirm" }
   ];
   return (
     <ol className="mt-8 flex items-center gap-2">

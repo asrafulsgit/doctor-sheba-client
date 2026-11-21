@@ -4,6 +4,7 @@ import { SelectedSlot } from "./Booking";
 import { useBooking } from "@/lib/hooks/useAppointment";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { format } from "date-fns";
 
 type BookingStep3Props = {
   selectedDate: Date;
@@ -54,25 +55,15 @@ const BookingStep3 = ({
         <div className="flex items-center justify-between">
           <dt className="text-muted-foreground">Date</dt>
           <dd className="font-medium text-foreground">
-            {new Date(slot?.startTime).toLocaleDateString(undefined, {
-              weekday: "long",
-              day: "numeric",
-              month: "long",
-            })}
+            {slot?.startTime &&
+              format(new Date(slot.startTime), "EEEE, d MMMM")}
           </dd>
         </div>
         <div className="flex items-center justify-between">
           <dt className="text-muted-foreground">Time</dt>
           <dd className="font-medium text-foreground">
-            {new Date(slot?.startTime).toLocaleTimeString(undefined, {
-              hour: "numeric",
-              minute: "2-digit",
-            })}{" "}
-            –{" "}
-            {new Date(slot.endTime).toLocaleTimeString(undefined, {
-              hour: "numeric",
-              minute: "2-digit",
-            })}
+            {format(new Date(slot.startTime), "h:mm a")} –{" "}
+            {format(new Date(slot.endTime), "h:mm a")}
           </dd>
         </div>
         <div className="flex items-center justify-between">

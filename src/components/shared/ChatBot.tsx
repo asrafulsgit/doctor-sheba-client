@@ -31,7 +31,6 @@ const SUGGESTIONS = [
   "Skin rash with itching",
 ];
 
-// Until the backend accepts a messages array, send the last N user messages.
 const MAX_CONTEXT_MESSAGES = 5;
 
 type Doctor = AISuggestion["doctors"][number];
@@ -39,8 +38,8 @@ type Doctor = AISuggestion["doctors"][number];
 type ChatMessage = {
   id: string;
   role: "user" | "assistant";
-  text: string; // markdown for assistant messages
-  doctors?: Doctor[]; // rendered as links below the text
+  text: string; 
+  doctors?: Doctor[]; 
   specialties?: string[];
 };
 
@@ -48,7 +47,6 @@ const newId = () =>
   globalThis.crypto?.randomUUID?.() ??
   `${Date.now()}-${Math.random().toString(36).slice(2)}`;
 
-/* Hoisted so ReactMarkdown gets a stable object across renders. */
 const markdownComponents = {
   a: ({ href, children }: React.ComponentPropsWithoutRef<"a">) => (
     <a href={href} target="_blank" rel="noreferrer">
@@ -148,7 +146,7 @@ const ChatBot = () => {
     endRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, busy]);
 
-  // Re-focus the input after a reply arrives (no-op while the panel is closed).
+  // Re-focus the input after a reply arrives.
   React.useEffect(() => {
     if (!busy) inputRef.current?.focus();
   }, [busy]);
@@ -164,7 +162,7 @@ const ChatBot = () => {
 
     const userMsg: ChatMessage = { id: newId(), role: "user", text: t };
 
-    // Give the AI context so follow-up answers ("I'm 25") make sense.
+    // the AI context.
     const context = [
       ...messages.filter((m) => m.role === "user").map((m) => m.text),
       t,
@@ -196,7 +194,6 @@ const ChatBot = () => {
           ]);
         },
         onError: (error: any) => {
-          // Drop the failed message and give the text back to the user.
           setMessages((prev) => prev.filter((m) => m.id !== userMsg.id));
           setInput((cur) => cur || t);
 
@@ -217,16 +214,12 @@ const ChatBot = () => {
       <PopoverTrigger asChild>
         <Button
           type="button"
-          size="icon"
           aria-label={open ? "Close symptom checker" : "Open symptom checker"}
-          className="fixed bottom-4 right-4 z-50 h-12 w-12 rounded-full shadow-elevated 
-          transition sm:bottom-5 sm:right-5 sm:h-14 sm:w-14"
+          className="fixed bottom-4 right-4 z-50 
+      size-12 rounded-full shadow-elevated transition
+      sm:bottom-5 sm:right-5 sm:size-16 [&_svg]:size-7! sm:[&_svg]:size-8!"
         >
-          {open ? (
-            <X className="h-5 w-5 sm:h-6 sm:w-6" />
-          ) : (
-            <MessageCirclePlus className="h-5 w-5 sm:h-6 sm:w-6" />
-          )}
+          {open ? <X /> : <MessageCirclePlus />}
         </Button>
       </PopoverTrigger>
 
@@ -297,7 +290,7 @@ const ChatBot = () => {
                   ))}
                 </div>
                 <p className="text-[11px] text-muted-foreground">
-                  Not a diagnosis. In an emergency call 999.
+                  Not a diagnosis. In an emergency call 10666.
                 </p>
               </div>
             )}

@@ -25,12 +25,13 @@ function PageState({
   return (
     <section
       className={cn(
-        "flex min-h-64 flex-col items-center justify-center rounded-xl border border-dashed border-border bg-surface-muted px-6 py-12 text-center",
+        "p-2",
         className,
       )}
       aria-labelledby="page-state-title"
     >
-      { icon &&
+      <div className="flex mx-auto min-h-64 max-w-6xl flex-col items-center justify-center rounded-xl border border-dashed border-border bg-surface-muted  text-center">
+        { icon &&
         <span className="mb-4 grid size-11 place-items-center rounded-full bg-info text-info-foreground">
           <Icon aria-hidden="true" className="size-5" />
         </span>
@@ -49,6 +50,7 @@ function PageState({
           {actionLabel}
         </Button>
       ) : null}
+      </div>
     </section>
   );
 }

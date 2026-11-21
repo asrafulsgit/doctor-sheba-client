@@ -50,7 +50,9 @@ export interface UpcomingAppointment {
   patientId: string;
   doctorId: string;
   scheduleId: string;
-  videoCallingId: string;
+  videoCallingId?: string;
+  videoCallingLink?: string;
+  videoCallingStatus?: string;
   status: AppointmentStatus;
   paymentStatus: string;
   createdAt: string;

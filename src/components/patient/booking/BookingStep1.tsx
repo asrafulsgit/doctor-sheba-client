@@ -1,12 +1,18 @@
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { addDays, format, isSameDay } from "date-fns";
 type BookingStep1Props = {
   selectedDate: Date;
-  setSelectedDate:(date : Date)=>void
+  setSelectedDate: (date: Date) => void;
   setSlot: () => void;
   next: () => void;
 };
-const BookingStep1 = ({selectedDate,setSelectedDate,setSlot,next}:BookingStep1Props) => {
+const BookingStep1 = ({
+  selectedDate,
+  setSelectedDate,
+  setSlot,
+  next,
+}: BookingStep1Props) => {
   return (
     <div>
       <h2 className="text-lg font-semibold">Choose a date</h2>
@@ -14,18 +20,16 @@ const BookingStep1 = ({selectedDate,setSelectedDate,setSlot,next}:BookingStep1Pr
         Pick a day in the next 14 days.
       </p>
       <div className="mt-5 grid grid-cols-2 gap-2 sm:grid-cols-4 lg:grid-cols-7">
-        {Array.from({ length: 14 }).map((_, i) => {
-          const d = new Date();
-          d.setDate(d.getDate() + i);
-
-          const selected = d.toDateString() === selectedDate.toDateString();
+        {Array.from({ length: 14 }, (_, i) => {
+          const date = addDays(new Date(), i);
+          const selected = isSameDay(date, selectedDate);
 
           return (
             <button
               key={i}
               type="button"
               onClick={() => {
-                setSelectedDate(d);
+                setSelectedDate(date);
                 setSlot();
               }}
               className={cn(
@@ -35,19 +39,13 @@ const BookingStep1 = ({selectedDate,setSelectedDate,setSlot,next}:BookingStep1Pr
                   : "border-border bg-background text-foreground hover:border-primary/40",
               )}
             >
-              <span className="text-xs opacity-80">
-                {d.toLocaleDateString(undefined, {
-                  weekday: "short",
-                })}
+              <span className="text-xs opacity-80">{format(date, "EEE")}</span>
+
+              <span className="mt-1 text-lg font-semibold">
+                {format(date, "d")}
               </span>
 
-              <span className="mt-1 text-lg font-semibold">{d.getDate()}</span>
-
-              <span className="text-xs opacity-80">
-                {d.toLocaleDateString(undefined, {
-                  month: "short",
-                })}
-              </span>
+              <span className="text-xs opacity-80">{format(date, "MMM")}</span>
             </button>
           );
         })}
