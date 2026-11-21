@@ -1,6 +1,6 @@
 import { UserRole } from "@/types/user";
 
-// ─── Auth routes ───────────────────
+// Auth routes
 export const AUTH_ROUTES = [
   "/auth/login",
   "/auth/register",
@@ -9,8 +9,7 @@ export const AUTH_ROUTES = [
   "/auth/verify-email",
 ];
 
-// ─── Public routes  ───────────────────
-
+// Public routes 
 export const PUBLIC_ROUTES = [
   "/",
   "/about",
@@ -23,16 +22,13 @@ export const PUBLIC_ROUTES = [
   "/privacy",
 ];
 
-// ─── Authenticated routes (any role can access) ────────────────────────────
-// Routes that require authentication but don't restrict by role.
-
+// Authenticated routes (any role can access)
 export const AUTHENTICATED_ROUTES = [
   "/booking",
   "/payment",
 ];
 
-// ─── Role home pages (after login redirect) ────────────────────────────────
-
+// Role home pages (after login redirect)
 export const ROLE_HOME: Record<UserRole, string> = {
   [UserRole.PATIENT]: "/patient/dashboard",
   [UserRole.DOCTOR]: "/doctor/dashboard",
@@ -41,15 +37,11 @@ export const ROLE_HOME: Record<UserRole, string> = {
 };
 
 export interface RouteConfig {
-  /** Roles that can access this route prefix. Empty = public. */
   allowedRoles: UserRole[];
-  /** Redirect destination if access is denied (logged-in user, wrong role). */
   deniedRedirect?: string;
 }
 
-// ─── Protected route prefixes → allowed roles ──────────────────────────────
-// SUPER_ADMIN intentionally inherits /admin/* access.
-
+// Protected route prefixes → allowed roles
 export const PROTECTED_ROUTES: Record<string, RouteConfig> = {
   "/patient": {
     allowedRoles: [UserRole.PATIENT],
@@ -65,8 +57,7 @@ export const PROTECTED_ROUTES: Record<string, RouteConfig> = {
   },
 };
 
-// ─── Cookie names ───────────────────────────────────────────────────────────
-
+// Cookie names
 export const COOKIE_NAMES = {
   ACCESS_TOKEN: "accessToken",
   REFRESH_TOKEN: "refreshToken",

@@ -19,7 +19,7 @@ const FilterPanel = () => {
   const specialties = data?.data;
   const gender = getQuery("gender");
   return (
-    <div className="grid gap-6">
+    <div className="grid gap-3">
       <div>
         <Label htmlFor="specialty" className="pb-2">
           Specialty

@@ -4,8 +4,20 @@ import { Briefcase } from 'lucide-react'
 import { Button } from '../../ui/button'
 import Link from 'next/link'
 import { cn } from '@/lib/utils'
+import { ApplicationMeta } from '@/lib/api/api-client'
 
-const BecomeADoctor = () => {
+interface BecomeADoctorProps {
+  metadata: ApplicationMeta | null;
+}
+
+const BecomeADoctor = ({ metadata }: BecomeADoctorProps) => {
+
+  const stats = [
+    { value: metadata?.doctorsCount ?? 0, label: "Doctors" },
+    { value: metadata?.patientsCount ?? 0, label: "Patients" },
+    { value: metadata?.appointmentsCount ?? 0, label: "Appointments" },
+    { value: metadata?.specialtiesCount ?? 0, label: "Specialties" },
+  ];
   return (
    <section className="bg-surface py-10 sm:py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -21,7 +33,7 @@ const BecomeADoctor = () => {
               </h2>
               <p className="mt-3 max-w-xl text-muted-foreground">
                 Manage schedules, accept online consultations, and reach thousands of patients
-                — without the paperwork. Join 500+ verified doctors already on the platform.
+                — without the paperwork. Join {metadata?.doctorsCount ?? 0}+ verified doctors already on the platform.
               </p>
               <div className="mt-6 flex flex-wrap gap-3">
                 <Button asChild size="lg" className={cn("px-6 sm:px-8")} >
@@ -34,18 +46,13 @@ const BecomeADoctor = () => {
             </Reveal>
             <Reveal delay={0.1} className="lg:col-span-2">
               <div className="grid grid-cols-2 gap-4">
-                {[
-                  { v: "500+", l: "Doctors" },
-                  { v: "20k+", l: "Patients" },
-                  { v: "10000+", l: "Appointments" },
-                  { v: "30+", l: "Specialties" },
-                ].map((m) => (
+                {stats.map((m) => (
                   <div
-                    key={m.l}
+                    key={m.label}
                     className="rounded-2xl border border-border bg-surface p-5 text-center transition-colors hover:border-primary/40"
                   >
-                    <p className="text-2xl font-bold text-primary">{m.v}</p>
-                    <p className="mt-1 text-xs text-muted-foreground">{m.l}</p>
+                    <p className="text-2xl font-bold text-primary">{m.value.toLocaleString()}+</p>
+                    <p className="mt-1 text-xs text-muted-foreground">{m.label}</p>
                   </div>
                 ))}
               </div>

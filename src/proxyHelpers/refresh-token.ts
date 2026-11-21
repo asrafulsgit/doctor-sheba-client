@@ -1,25 +1,32 @@
+"use server";
 import { NextResponse } from "next/server";
 import { COOKIE_NAMES } from "./config";
 
 const REFRESH_ENDPOINT = `${process.env.NEXT_PUBLIC_API_URL}/auth/refresh-token`;
 
-// ─── Attempt token refresh ──────────────────────────────────────────────────
+//  Attempt token refresh
 
-export async function attemptTokenRefresh(): Promise<{ success: boolean }> {
+export async function attemptTokenRefresh(
+  token: string,
+): Promise<{ success: boolean; cookies?: string[] }> {
   try {
+    console.log("refressToken calling");
     const response = await fetch(REFRESH_ENDPOINT, {
-      credentials: "include",
+      headers: {
+        Cookie: `${COOKIE_NAMES.REFRESH_TOKEN}=${token}`,
+      },
     });
 
     if (!response.ok) return { success: false };
+    const cookies = response.headers.getSetCookie();
 
-    return { success: true };
+    return { success: true, cookies };
   } catch {
     return { success: false };
   }
 }
 
-// ─── Clear all auth cookies (logout) ───────────────────────────────────────
+// Clear all auth cookies (logout)
 
 export function clearAuthCookies(response: NextResponse): void {
   response.cookies.delete(COOKIE_NAMES.ACCESS_TOKEN);

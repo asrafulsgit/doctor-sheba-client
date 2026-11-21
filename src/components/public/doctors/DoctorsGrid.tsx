@@ -1,3 +1,4 @@
+"use client";
  
 import { EmptyState } from "@/components/shared/PageState";
 import { DoctorCardSkeleton } from "@/components/shared/SkeletonSet";

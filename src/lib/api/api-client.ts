@@ -1,3 +1,4 @@
+import { ApiResponse } from "@/types/api-response";
 import { ApiError } from "./api-error";
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
@@ -32,7 +33,7 @@ export async function api<T>(
 
     const data = await res.json().catch(() => null);
 
-    if (!res.ok) { 
+    if (!res.ok) {
       throw new ApiError(res.status, data?.message ?? res.statusText);
     }
 
@@ -50,5 +51,29 @@ export async function api<T>(
       0,
       "Network error. Please check your internet connection.",
     );
+  }
+}
+
+export type ApplicationMeta = {
+  doctorsCount: number;
+  specialtiesCount: number;
+  totalDoctorsAvgRatings: number;
+  patientsCount: number;
+  appointmentsCount: number;
+};
+
+export async function getApplicationMetadata() {
+  try {
+    return await api<ApiResponse<ApplicationMeta>>("/meta/app", {
+      method: "GET",
+      cache: "force-cache",
+      next: {
+        revalidate: 60 * 10,
+        tags: ["application-metadata"],
+      },
+    });
+  } catch (error) {
+    console.error("Application metadata error:", error);
+    return null;
   }
 }

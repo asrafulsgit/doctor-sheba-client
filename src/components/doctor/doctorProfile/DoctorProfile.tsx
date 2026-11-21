@@ -108,6 +108,29 @@ const DoctorProfile = () => {
 
       <section className="mx-auto max-w-7xl px-4 py-8 sm:py-12 sm:px-6 lg:grid lg:grid-cols-3 lg:gap-10 lg:px-8">
         <div className="space-y-4 sm:space-y-8 lg:col-span-2">
+          <Reveal className="block lg:hidden rounded-2xl border border-border bg-card p-4 sm:p-6 shadow-soft">
+            <div className="flex items-baseline gap-2">
+              <span className="text-3xl font-bold tracking-tight text-foreground">
+                ৳{doctor?.appointmentFee.toLocaleString()}
+              </span>
+              <span className="text-sm text-muted-foreground">
+                consultation
+              </span>
+            </div>
+            <Button asChild className="mt-4 w-full" size="lg">
+              <Link href={`/booking/${doctor?.id}`}>Book Appointment</Link>
+            </Button>
+            <div className="mt-5 space-y-3 border-t border-border pt-5 text-sm">
+              <div className="flex items-center gap-2 text-muted-foreground">
+                <Wallet2 className="h-4 w-4 text-primary" />
+                Secure online payment
+              </div>
+              <div className="flex items-center gap-2 text-muted-foreground">
+                <Phone className="h-4 w-4 text-primary" />
+                Free reschedule up to 2 hours before
+              </div>
+            </div>
+          </Reveal>
           <Reveal className="rounded-2xl border border-border bg-card p-4 sm:p-6 shadow-soft">
             <h2 className="text-lg font-semibold">About</h2>
             <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
@@ -206,7 +229,7 @@ const DoctorProfile = () => {
           </Reveal>
         </div>
 
-        <aside className="mt-4 sm:mt-8 lg:mt-0">
+        <aside className="hidden lg:block mt-4 sm:mt-8 lg:mt-0">
           <Reveal className="sticky top-24 rounded-2xl border border-border bg-card p-4 sm:p-6 shadow-soft">
             <div className="flex items-baseline gap-2">
               <span className="text-3xl font-bold tracking-tight text-foreground">

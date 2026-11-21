@@ -36,7 +36,7 @@ export function isStaticAsset(pathname: string): boolean {
   );
 }
 
-// ─── Longest prefix match for protected routes ──────────────────────────────
+// Longest prefix match for protected routes
 
 export function matchProtectedRoute(pathname: string): RouteConfig | null {
   let bestMatch: string | null = null;
@@ -52,13 +52,13 @@ export function matchProtectedRoute(pathname: string): RouteConfig | null {
   return bestMatch ? PROTECTED_ROUTES[bestMatch] : null;
 }
 
-// ─── Role access check ──────────────────────────────────────────────────────
+// Role access check
 
 export function canRoleAccess(role: UserRole, config: RouteConfig): boolean {
   return config.allowedRoles.includes(role);
 }
 
-// ─── Redirect destinations ──────────────────────────────────────────────────
+// Redirect destinations
 
 export function getRoleHome(role: UserRole): string {
   return ROLE_HOME[role] ?? "/";

@@ -1,4 +1,4 @@
-import { Search, ShieldCheck } from "lucide-react";
+import { MoveRight, Search, ShieldCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Reveal } from "../../shared/Reveal";
 import Link from "next/link";
@@ -6,14 +6,30 @@ import Link from "next/link";
 import heroImage from "@/assets/hero-image.png";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
+import { ApplicationMeta } from "@/lib/api/api-client";
 
-const stats = [
-  { label: "Doctors", v: "500+" },
-  { label: "Specialties", v: "30+" },
-  { label: "Rating", v: "4.8★" },
-];
+interface HeroProps {
+  metadata: ApplicationMeta | null;
+}
 
-const Hero = () => {
+const Hero = ({ metadata }: HeroProps) => {
+   const stats = [
+    {
+      label: "Doctors",
+      value: metadata?.doctorsCount ?? 0,
+      suffix: "+",
+    },
+    {
+      label: "Specialties",
+      value: metadata?.specialtiesCount ?? 0,
+      suffix: "+",
+    },
+    {
+      label: "Rating",
+      value: metadata?.totalDoctorsAvgRatings?.toFixed(1) ?? "0.0",
+      suffix: "★",
+    },
+  ];
   return (
     <section className="relative overflow-hidden bg-linear-to-b 
     from-primary-soft/30 to-background">
@@ -21,7 +37,7 @@ const Hero = () => {
         <Reveal>
           <span className="inline-flex items-center gap-2 rounded-full border border-border bg-background px-3 py-1 text-xs font-medium text-primary">
             <ShieldCheck className="h-3.5 w-3.5" />
-            Trusted by 500+ doctors across Bangladesh
+            Trusted by {metadata?.doctorsCount ?? 0}+ doctors across Bangladesh
           </span>
           <h1 className="mt-5 text-4xl font-bold tracking-tight text-foreground sm:text-5xl lg:text-6xl">
             Digital healthcare,
@@ -50,7 +66,7 @@ const Hero = () => {
                   {s.label}
                 </dt>
                 <dd className="mt-1 text-xl font-semibold text-foreground">
-                  {s.v}
+                  {s.value}{s.suffix}
                 </dd>
               </div>
             ))}
@@ -71,8 +87,8 @@ const Hero = () => {
             <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
               Simple path to care
             </p>
-            <p className="mt-1 font-semibold text-foreground">
-              Search → schedule → consult
+            <p className="mt-1 flex gap-0.5 items-center font-semibold text-foreground">
+              Search <MoveRight className="h-4 w-4" /> Schedule <MoveRight className="h-4 w-4" /> Consult
             </p>
           </div>
           </div>

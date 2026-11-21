@@ -1,8 +1,5 @@
-"use client";
-import { Filter, Search, SlidersHorizontal, X } from "lucide-react";
+import { Filter, SlidersHorizontal, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-
 import {
   Sheet,
   SheetContent,
@@ -13,12 +10,6 @@ import {
 } from "@/components/ui/sheet";
 import FilterPanel from "./FilterPanel";
 import { PublicPageHeader } from "../PublicPageHeader";
-import { DoctorCardSkeleton } from "@/components/shared/SkeletonSet";
-import { DoctorCard } from "@/components/shared/DoctorCard";
-import { EmptyState } from "@/components/shared/PageState";
-import { IDoctorFilter } from "@/types/doctors";
-import useQueryManager from "@/hooks/UseQueryManager";
-import { useDoctors } from "@/lib/hooks/UseDoctor";
 import SearchDoctors from "./SearchDoctors";
 import DoctorsGrid from "./DoctorsGrid";
 import ChatBot from "@/components/shared/ChatBot";
@@ -33,23 +24,7 @@ const Doctors = () => {
       >
         <SearchDoctors />
       </PublicPageHeader>
-      <section className="mx-auto w-full max-w-7xl px-4 pt-8 sm:px-6 lg:px-8">
-        <div className="rounded-2xl border border-border bg-surface p-5 shadow-xs sm:p-7">
-          <div className="mb-5 max-w-2xl">
-            <p className="text-sm font-semibold text-primary">
-              Need help choosing?
-            </p>
-            <h2 className="mt-1 text-xl font-semibold tracking-tight text-foreground">
-              Get doctor suggestions for your concern
-            </h2>
-            <p className="mt-2 text-sm leading-6 text-muted-foreground">
-              Describe what you need help with to see relevant specialties and
-              doctors.
-            </p>
-          </div>
-          <ChatBot />
-        </div>
-      </section>
+
       <main className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
         <div className="mb-6 flex items-center justify-between gap-4">
           <div>
@@ -91,6 +66,23 @@ const Doctors = () => {
           </section>
         </div>
       </main>
+
+      <section className="mx-auto w-full max-w-7xl px-4 pt-8 sm:px-6 lg:px-8 mb-5">
+        <div className="rounded-2xl border border-border bg-surface p-5 shadow-xs sm:p-7">
+          <div className="mb-5 max-w-2xl">
+            <p className="text-sm font-semibold text-primary">
+              Need help choosing?
+            </p>
+            <h2 className="mt-1 text-xl font-semibold tracking-tight text-foreground">
+              Get doctor suggestions for your concern
+            </h2>
+            <p className="mt-2 text-sm leading-6 text-muted-foreground">
+              Describe what you need help with to see relevant specialties and
+              doctors.
+            </p>
+          </div>
+        </div>
+      </section>
     </>
   );
 };

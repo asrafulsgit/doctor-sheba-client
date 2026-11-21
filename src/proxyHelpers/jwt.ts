@@ -2,7 +2,7 @@ import jwt from "jsonwebtoken";
 import { UserRole } from "@/types/user";
 import { COOKIE_NAMES } from "./config";
 
-// ─── JWT Payload ────────────────────────────────────────────────────────────
+// JWT Payload
 
 export interface JWTPayload {
   sub: string; // userId
@@ -10,7 +10,7 @@ export interface JWTPayload {
   role: UserRole;
   iat: number;
   exp: number;
-  jti?: string; // JWT ID (for revocation checks)
+  jti?: string; // JWT ID
 }
 
 const accessTokenSecret = process.env.JWT_ACCESS_TOKEN_SECRET;

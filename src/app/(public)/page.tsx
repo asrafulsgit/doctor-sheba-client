@@ -8,18 +8,22 @@ import Services from "@/components/public/home/Services";
 import Testimonials from "@/components/public/home/Testimonials";
 import TrustedAndSafety from "@/components/public/home/TrustedAndSafety";
 import WhyDoctorSheba from "@/components/public/home/WhyDoctorSheba";
+import { getApplicationMetadata } from "@/lib/api/api-client";
 
-const page = () => {
+const page = async () => {
+  const response = await getApplicationMetadata();
+  const metadata = response?.data ?? null;
+
   return (
     <>
-      <Hero />
+      <Hero metadata={metadata}/>
       <FeaturedSpecialties />
       <FeaturedDoctors />
       <HowItWorks />
       <WhyDoctorSheba />
       <TrustedAndSafety />
       <Services />
-      <BecomeADoctor />
+      <BecomeADoctor metadata={metadata}/>
       <Testimonials />
       <EmergencyCta />
     </>

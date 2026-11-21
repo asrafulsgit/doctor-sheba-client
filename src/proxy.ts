@@ -17,27 +17,25 @@ import {
 } from "./proxyHelpers/refresh-token";
 import { UserRole } from "./types/user";
 
-// ─── Middleware entry point ──────────────────────────────────────────────────
-
 export async function proxy(request: NextRequest): Promise<NextResponse> {
   const { pathname } = request.nextUrl;
 
-  // ── 1. Skip static assets entirely ─────────────────────────────────────
+  // 1. Skip static assets entirely
   if (isStaticAsset(pathname)) {
     return NextResponse.next();
   }
 
-  // ── 2. Base response that will be modified and returned ─────────────────
+  // 2. Base response that will be modified and returned
   let response = NextResponse.next({
     request: { headers: request.headers },
   });
 
-  // ── 3. Public routes — pass through unconditionally ─────────────────────
+  // 3. Public routes — pass through unconditionally
   if (isPublicRoute(pathname)) {
     return response;
   }
 
-  // ── 4. Parse tokens from cookies ────────────────────────────────────────
+  // 4. Parse tokens from cookies
   const accessTokenRaw = request.cookies.get(COOKIE_NAMES.ACCESS_TOKEN)?.value;
   const refreshTokenRaw = request.cookies.get(
     COOKIE_NAMES.REFRESH_TOKEN,
@@ -50,16 +48,24 @@ export async function proxy(request: NextRequest): Promise<NextResponse> {
     ? decodeJWT(accessTokenRaw, COOKIE_NAMES.ACCESS_TOKEN)
     : { payload: null, verification: false };
 
-  // ── 5. Token refresh pipeline ───────────────────────────────────────────
-  //    Trigger if:
-  //      (a) access token is fully expired but we have a refresh token, OR
-  //      (b) access token expires soon (proactive refresh to avoid mid-session expiry)
+  // 5. Token refresh pipeline
+  //    Trigger if: access token is fully expired but we have a refresh token, OR
   if (!authObject.verification && refreshTokenRaw) {
     const jwtDecoded = decodeJWT(refreshTokenRaw, COOKIE_NAMES.REFRESH_TOKEN);
-    const refreshResult = await attemptTokenRefresh();
-    if (jwtDecoded.verification && refreshResult.success) {
+    console.log(jwtDecoded);
+    const refreshResult = await attemptTokenRefresh(refreshTokenRaw);
+
+    if (
+      jwtDecoded.verification &&
+      refreshResult.success &&
+      refreshResult.cookies
+    ) {
       authObject.verification = refreshResult.success;
       authObject.payload = jwtDecoded.payload;
+
+      for (const c of refreshResult.cookies) {
+        response.headers.append("set-cookie", c);
+      }
     } else {
       clearAuthCookies(response);
       authObject.verification = false;
@@ -68,17 +74,17 @@ export async function proxy(request: NextRequest): Promise<NextResponse> {
 
   const userRole = authObject?.payload?.role;
 
-  // ── 6. Auth routes — redirect logged-in users to their dashboard ─────────
+  // 6. Auth routes — redirect logged-in users to their dashboard
   if (isAuthRoute(pathname)) {
     if (authObject && userRole) {
       const dest = getRoleHome(userRole as UserRole);
       return buildRedirect(request, dest, response);
     }
-    // Not authenticated → allow access to login/register/etc.
+    // Not authenticated → allow access to login/register.
     return response;
   }
 
-  // ── 7. Authenticated routes (any role) — require login but allow any role ──
+  // 7. Authenticated routes (any role) - require login but allow any role
   if (isAuthenticatedRoute(pathname)) {
     if (!authObject.verification || !userRole) {
       // Not authenticated → redirect to login
@@ -88,16 +94,16 @@ export async function proxy(request: NextRequest): Promise<NextResponse> {
     return response;
   }
 
-  // ── 8. Protected route guard ────────────────────────────────────────────
+  // 8. Protected route guard 
   const routeConfig = matchProtectedRoute(pathname);
 
   if (routeConfig) {
-    // 7a. Not authenticated → redirect to login with return URL
+    // 8a. Not authenticated → redirect to login with return URL
     if (!authObject.verification || !userRole) {
       return redirectToLogin(request, response);
     }
 
-    // 7b. Authenticated but wrong role → redirect to their own dashboard
+    // 8b. Authenticated but wrong role → redirect to their own dashboard
     if (!canRoleAccess(userRole as UserRole, routeConfig)) {
       const dest = getDeniedRedirect(userRole as UserRole, routeConfig);
       return buildRedirect(request, dest, response);
@@ -122,7 +128,7 @@ function redirectToLogin(
   return buildRedirect(request, loginUrl.toString(), sourceResponse);
 }
 
-// ─── Redirect helper — preserves security headers ───────────────────────────
+// Redirect helper — preserves security headers
 
 function buildRedirect(
   request: NextRequest,
@@ -140,9 +146,6 @@ function buildRedirect(
 
   return redirectResponse;
 }
-
-// ─── Matcher — defines which paths this middleware runs on ──────────────────
-//    Excludes /_next/* and static files at the framework level for performance.
 
 export const config = {
   matcher: [
