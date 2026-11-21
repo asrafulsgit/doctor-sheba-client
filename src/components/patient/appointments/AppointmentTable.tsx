@@ -10,8 +10,6 @@ import {
 } from "@/components/ui/table";
 
 import { StatusBadge } from "@/components/ui/badge";
-
-import { IAppointment } from "@/types/appointment";
 import { Stethoscope } from "lucide-react";
 import AppointmentActionMenu from "./AppointmentActionMenu";
 import { format } from "date-fns";
