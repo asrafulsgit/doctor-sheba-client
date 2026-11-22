@@ -10,7 +10,6 @@ export async function attemptTokenRefresh(
   token: string,
 ): Promise<{ success: boolean; cookies?: string[] }> {
   try {
-    console.log("refressToken calling");
     const response = await fetch(REFRESH_ENDPOINT, {
       headers: {
         Cookie: `${COOKIE_NAMES.REFRESH_TOKEN}=${token}`,

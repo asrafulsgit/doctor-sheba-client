@@ -140,9 +140,10 @@ export const queryKeys = {
   },
 
   meta: {
-    patientMeta: ["patientMeta"] as const,
-    doctorMeta: ["doctorMeta"] as const,
-    adminMeta: ["adminMeta"] as const,
+    all : ["meta"] as const,
+    patientMeta: ["meta","patientMeta"] as const,
+    doctorMeta: ["meta","doctorMeta"] as const,
+    adminMeta: ["meta","adminMeta"] as const,
   },
 
   // ─── Notifications ────────────────────────────────────────────────────────

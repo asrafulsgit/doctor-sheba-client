@@ -10,8 +10,7 @@ const headers = [
   "Method",
   "Transaction ID",
   "Status",
-  "Amount",
-  "Action",
+  "Amount"
 ];
 const PaymentTable = ({ payments }: { payments: Payment[] }) => {
   return (
@@ -27,6 +26,11 @@ const PaymentTable = ({ payments }: { payments: Payment[] }) => {
                 {h}
               </TableHead>
             ))}
+              <TableHead
+                className="uppercase text-right text-xs text-muted-foreground px-2"
+              >
+                Action
+              </TableHead>
           </TableRow>
         </TableHeader>
 

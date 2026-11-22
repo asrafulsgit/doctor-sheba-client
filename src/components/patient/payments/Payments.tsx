@@ -1,8 +1,5 @@
 "use client";
 import DashboardHeader from "@/components/shared/DashboardHeader";
-import StatCard from "@/components/shared/StatCard";
-import { CreditCard, Download, Wallet2 } from "lucide-react";
-
 import useQueryManager from "@/hooks/UseQueryManager";
 import { PaymentFilters } from "@/lib/query/query-keys";
 import { usePatientPayments } from "@/lib/hooks/usePayment";

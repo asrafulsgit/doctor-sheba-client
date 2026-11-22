@@ -52,10 +52,6 @@ const healthProfileSchema = z.object({
   pregnancyStatus: z.boolean(),
   recentAnxiety: z.boolean(),
   recentDepression: z.boolean(),
-
-  dietaryPreferences: z.string().nullable().optional(),
-  mentalHealthHistory: z.string().nullable().optional(),
-  immunizationStatus: z.string().nullable().optional(),
 });
 
 export type HealthProfileFormValues = z.infer<typeof healthProfileSchema>;
@@ -74,9 +70,6 @@ const defaultValues: HealthProfileFormValues = {
   pregnancyStatus: false,
   recentAnxiety: false,
   recentDepression: false,
-  dietaryPreferences: "",
-  mentalHealthHistory: "",
-  immunizationStatus: "",
 };
 
 const MEDICAL_TOGGLES: {
@@ -118,9 +111,6 @@ const HealthProfileForm = () => {
         pregnancyStatus: !!profile.pregnancyStatus,
         recentAnxiety: !!profile.recentAnxiety,
         recentDepression: !!profile.recentDepression,
-        dietaryPreferences: profile.dietaryPreferences ?? "",
-        mentalHealthHistory: profile.mentalHealthHistory ?? "",
-        immunizationStatus: profile.immunizationStatus ?? "",
       });
     }
   }, [data?.data]);
@@ -339,80 +329,6 @@ const HealthProfileForm = () => {
             />
           ))}
         </div>
-      </section>
-
-      {/* Additional notes ---------------------------------------------------*/}
-      <section className="lg:col-span-2 rounded-2xl border border-border bg-card p-6 shadow-soft">
-        <div className="flex items-center gap-2">
-          <span className="grid h-9 w-9 place-items-center rounded-lg bg-primary-soft text-primary">
-            <NotebookText className="h-4 w-4" />
-          </span>
-          <h2 className="text-base font-semibold">Additional notes</h2>
-        </div>
-
-        <FieldGroup className="mt-5 grid gap-4 sm:grid-cols-3">
-          <Controller
-            name="dietaryPreferences"
-            control={form.control}
-            render={({ field, fieldState }) => (
-              <Field data-invalid={fieldState.invalid}>
-                <FieldLabel htmlFor="diet">Dietary preferences</FieldLabel>
-                <Textarea
-                  {...field}
-                  value={field.value ?? ""}
-                  id="diet"
-                  placeholder="e.g. Vegetarian, low sodium"
-                  className="min-h-20"
-                />
-                {fieldState.invalid && (
-                  <FieldError errors={[fieldState.error]} />
-                )}
-              </Field>
-            )}
-          />
-
-          <Controller
-            name="mentalHealthHistory"
-            control={form.control}
-            render={({ field, fieldState }) => (
-              <Field data-invalid={fieldState.invalid}>
-                <FieldLabel htmlFor="mental">Mental health history</FieldLabel>
-                <Textarea
-                  {...field}
-                  value={field.value ?? ""}
-                  id="mental"
-                  placeholder="Optional"
-                  className="min-h-20"
-                />
-                {fieldState.invalid && (
-                  <FieldError errors={[fieldState.error]} />
-                )}
-              </Field>
-            )}
-          />
-
-          <Controller
-            name="immunizationStatus"
-            control={form.control}
-            render={({ field, fieldState }) => (
-              <Field data-invalid={fieldState.invalid}>
-                <FieldLabel htmlFor="immunization">
-                  Immunization status
-                </FieldLabel>
-                <Textarea
-                  {...field}
-                  value={field.value ?? ""}
-                  id="immunization"
-                  placeholder="Optional"
-                  className="min-h-20"
-                />
-                {fieldState.invalid && (
-                  <FieldError errors={[fieldState.error]} />
-                )}
-              </Field>
-            )}
-          />
-        </FieldGroup>
       </section>
 
       <div className="lg:col-span-2 flex justify-end">

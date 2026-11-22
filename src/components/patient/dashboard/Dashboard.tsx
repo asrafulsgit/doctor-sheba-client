@@ -106,7 +106,7 @@ const PatientDashboard = () => {
           </div>
 
           {appointments.length > 0 ? (
-            <div className="mt-4 divide-y divide-border rounded-xl border border-border">
+            <div className="mt-4 rounded-xl border border-border">
               {appointments.map((appointment: UpcomingAppointment) => (
                 <AppointmentItem
                   key={appointment.id}

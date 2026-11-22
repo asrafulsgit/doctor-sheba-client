@@ -1,17 +1,34 @@
 import { Button } from "@/components/ui/button";
 import { IDoctor } from "@/types/doctors";
 import { MapPin, Stethoscope } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 
 const MyDoctorCard = ({ doctor }: { doctor: IDoctor }) => {
   return (
     <div
       key={doctor.id}
-      className="rounded-2xl border border-border bg-card p-5 shadow-soft transition hover:-translate-y-0.5 hover:shadow-elevated"
+      className="rounded-2xl border border-border bg-card p-5 shadow-soft 
+      transition hover:-translate-y-0.1 hover:shadow-elevated"
     >
       <div className="flex items-center gap-3">
-        <div className="grid h-12 w-12 place-items-center rounded-full bg-primary text-base font-semibold text-primary-foreground">
-          {doctor.name.split(" ").slice(-1)[0][0]}
+        <div
+          className="grid h-12 w-12 place-items-center rounded-full 
+        "
+        >
+          {doctor.profilePhoto ? (
+            <Image
+              src={doctor.profilePhoto ?? ""}
+              alt="Profile"
+              className="h-full w-full rounded-xl object-cover border border-primary-soft"
+              width={48}
+              height={48}
+            />
+          ) : (
+            <span className="bg-primary text-base font-semibold text-primary-foreground">
+              {doctor.name.split(" ").slice(-1)[0][0]}
+            </span>
+          )}
         </div>
         <div className="min-w-0 flex-1">
           <p className="truncate font-semibold text-foreground">

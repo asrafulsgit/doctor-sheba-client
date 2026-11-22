@@ -37,7 +37,6 @@ const AppointmentTable = () => {
 
   const allQueries: AppointmentFilters = getAllQueries();
   const { data, isLoading, isError, error } = useMyAppointments({
-    status: (getQuery("status") as AppointmentStatus) ?? "SCHEDULED",
     ...allQueries,
   });
   const appointments = data?.data ?? [];

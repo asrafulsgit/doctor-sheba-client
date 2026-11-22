@@ -52,7 +52,6 @@ export async function proxy(request: NextRequest): Promise<NextResponse> {
   //    Trigger if: access token is fully expired but we have a refresh token, OR
   if (!authObject.verification && refreshTokenRaw) {
     const jwtDecoded = decodeJWT(refreshTokenRaw, COOKIE_NAMES.REFRESH_TOKEN);
-    console.log(jwtDecoded);
     const refreshResult = await attemptTokenRefresh(refreshTokenRaw);
 
     if (
@@ -98,12 +97,12 @@ export async function proxy(request: NextRequest): Promise<NextResponse> {
   const routeConfig = matchProtectedRoute(pathname);
 
   if (routeConfig) {
-    // 8a. Not authenticated → redirect to login with return URL
+    // Not authenticated → redirect to login with return URL
     if (!authObject.verification || !userRole) {
       return redirectToLogin(request, response);
     }
 
-    // 8b. Authenticated but wrong role → redirect to their own dashboard
+    // Authenticated but wrong role → redirect to their own dashboard
     if (!canRoleAccess(userRole as UserRole, routeConfig)) {
       const dest = getDeniedRedirect(userRole as UserRole, routeConfig);
       return buildRedirect(request, dest, response);

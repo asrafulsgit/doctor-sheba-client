@@ -75,8 +75,8 @@ const AppointmentTable = () => {
                       src={app.doctor.profilePhoto ?? ""}
                       alt="Profile"
                       className="h-full w-full rounded-2xl object-cover"
-                      width={10}
-                      height={10}
+                      width={40}
+                      height={40}
                     />
                   ) : (
                     <Stethoscope className="h-4 w-4" />

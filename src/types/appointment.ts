@@ -16,7 +16,9 @@ export interface IAppointment {
   doctorId: string;
   doctor: IDoctor;
   scheduleId: string;
-  videoCallingId: string;
+  videoCallingId?: string;
+  videoCallingLink?: string;
+  videoCallingStatus?: string;
   status: AppointmentStatus;
   paymentStatus: PaymentStatus;
   schedule: ISchedule;

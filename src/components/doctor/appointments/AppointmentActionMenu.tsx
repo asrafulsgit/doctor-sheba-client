@@ -106,8 +106,8 @@ const AppointmentActionMenu = ({ appointment }: AppointmentActionMenuProps) => {
                     src={appointment.patient.profilePhoto ?? ""}
                     alt="Profile"
                     className="h-full w-full rounded-3xl object-cover"
-                    width={12}
-                    height={12}
+                    width={48}
+                    height={48}
                   />
                 ) : (
                   <span>
@@ -154,7 +154,7 @@ const AppointmentActionMenu = ({ appointment }: AppointmentActionMenuProps) => {
               value={
                 appointment.schedule?.startDateTime &&
                 appointment.schedule?.endDateTime
-                  ? `${format(new Date(appointment?.schedule?.startDateTime), "hh:mm")} – ${format(new Date(appointment?.schedule?.endDateTime), "hh:mm")}`
+                  ? `${format(new Date(appointment?.schedule?.startDateTime), "hh:mm a")} – ${format(new Date(appointment?.schedule?.endDateTime), "hh:mm a")}`
                   : `N/A`
               }
             />

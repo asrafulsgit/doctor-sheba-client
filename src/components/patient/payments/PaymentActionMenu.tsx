@@ -30,13 +30,13 @@ const PaymentActionMenu = ({ payment }: PaymentActionMenuProps) => {
 
   return (
     <>
-      <div className="flex gap-2">
+      <div className="flex gap-1 justify-end">
         <Button
           size="sm"
           variant="ghost"
           onClick={() => setIsOpenInvoice(true)}
         >
-          View
+          <Eye className="size-4" />
         </Button>
         {payment.status === "PAID" ? (
           <Button size="sm" variant="ghost" onClick={() => {}}>
@@ -49,99 +49,103 @@ const PaymentActionMenu = ({ payment }: PaymentActionMenuProps) => {
         )}
       </div>
 
-      <CustomDialog
-        open={isOpenInvoice}
-        onOpenChange={setIsOpenInvoice}
-        title="Invoice details"
-        contentClassName="sm:max-w-[600px]"
-      >
-        <div>
-          {/* billed to */}
-          <div className="rounded-lg border border-border bg-muted/30 px-3.5 py-3">
-            <div className="mb-2 flex items-center justify-between">
-              <p
-                className="text-[11px] font-medium uppercase tracking-wide 
+      {isOpenInvoice && (
+        <CustomDialog
+          open={isOpenInvoice}
+          onOpenChange={setIsOpenInvoice}
+          title="Invoice details"
+          contentClassName="sm:max-w-[600px]"
+        >
+          <div>
+            
+            <div className="rounded-lg border border-border bg-muted/30 px-3.5 py-3">
+              <div className="mb-2 flex items-center justify-between">
+                <p
+                  className="text-[11px] font-medium uppercase tracking-wide 
               text-muted-foreground"
-              >
-                Billed to
+                >
+                  Billed to
+                </p>
+                <div className="flex gap-1.5">
+                  <StatusBadge status={payment?.status as PaymentStatus} />
+                  <StatusBadge
+                    status={payment?.appointment?.status as AppointmentStatus}
+                  />
+                </div>
+              </div>
+              <p className="text-[14px] font-semibold text-foreground">
+                {customer?.name}
               </p>
-              <div className="flex gap-1.5">
-                <StatusBadge status={payment?.status as PaymentStatus} />
-                <StatusBadge
-                  status={payment?.appointment?.status as AppointmentStatus}
-                />
+              {customer?.business_name && (
+                <p className="text-[13px] text-muted-foreground">
+                  {customer?.business_name}
+                </p>
+              )}
+              <div className="mt-2 space-y-1">
+                <p className="flex items-center gap-1.5 text-[12.5px] text-[#12261F]/60">
+                  <Mail size={12} />
+                  {customer?.email}
+                </p>
+                {customer?.phone && (
+                  <p className="flex items-center gap-1.5 text-[12.5px] text-[#12261F]/60">
+                    <Phone size={12} />
+                    {customer.phone}
+                  </p>
+                )}
+                {address && (
+                  <p className="flex items-center gap-1.5 text-[12.5px] text-[#12261F]/60">
+                    <MapPin size={12} />
+                    {address.postal_code && (
+                      <span>{address?.postal_code},</span>
+                    )}
+                    {address?.city && <span>{address?.city},</span>}
+                    {address?.state && <span>{address?.state},</span>}
+                    {address?.country && <span>{address?.country}</span>}
+                  </p>
+                )}
               </div>
             </div>
-            <p className="text-[14px] font-semibold text-foreground">
-              {customer?.name}
-            </p>
-            {customer?.business_name && (
-              <p className="text-[13px] text-muted-foreground">
-                {customer.business_name}
-              </p>
-            )}
-            <div className="mt-2 space-y-1">
-              <p className="flex items-center gap-1.5 text-[12.5px] text-[#12261F]/60">
-                <Mail size={12} />
-                {customer?.email}
-              </p>
-              {customer?.phone && (
-                <p className="flex items-center gap-1.5 text-[12.5px] text-[#12261F]/60">
-                  <Phone size={12} />
-                  {customer.phone}
-                </p>
-              )}
-              {address && (
-                <p className="flex items-center gap-1.5 text-[12.5px] text-[#12261F]/60">
-                  <MapPin size={12} />
-                  {`${address.postal_code}, ${address.city}, ${address.state}, ${address.country}`}
-                </p>
-              )}
+
+            <div className="mt-4 flex items-center gap-2.5 sm:px-3 py-2">
+              <Stethoscope size={15} className="text-muted-foreground" />
+              <span className="text-[13px] text-muted-foreground">
+                Consultation with
+              </span>
+              <span className="text-[13px] font-medium text-foreground">
+                {payment?.appointment?.doctor?.name}
+              </span>
+            </div>
+
+            <div className=" sm:px-3">
+              <Row
+                icon={<Hash size={15} />}
+                label="Transaction ID"
+                value={payment.transactionId as string}
+              />
+              <Row
+                icon={<CreditCard size={15} />}
+                label="Payment method"
+                value={payment?.paymentGatewayData?.method?.join(", ") || "N/A"}
+              />
+              <Row
+                icon={<Banknote size={15} />}
+                label="Amount"
+                value={`৳${payment?.amount?.toLocaleString("en-BD")} ${payment?.paymentGatewayData?.currency?.toUpperCase() ?? ""}`.trim()}
+                last
+              />
+            </div>
+
+            <div className="sm:mt-2 flex  items-center justify-between border-t border-border px-3 pt-4">
+              <span className="text-[14px] font-medium text-foreground">
+                Total paid
+              </span>
+              <span className="text-[18px] font-semibold tabular-nums text-foreground">
+                {`৳${payment?.amount?.toLocaleString("en-BD")}`}
+              </span>
             </div>
           </div>
-
-          {/* provider / service */}
-          <div className="mt-4 flex items-center gap-2.5 sm:px-3 py-2">
-            <Stethoscope size={15} className="text-muted-foreground" />
-            <span className="text-[13px] text-muted-foreground">
-              Consultation with
-            </span>
-            <span className="text-[13px] font-medium text-foreground">
-              {payment?.appointment?.doctor?.name}
-            </span>
-          </div>
-
-          {/* details list */}
-          <div className=" sm:px-3">
-            <Row
-              icon={<Hash size={15} />}
-              label="Transaction ID"
-              value={payment.transactionId as string}
-            />
-            <Row
-              icon={<CreditCard size={15} />}
-              label="Payment method"
-              value={payment?.paymentGatewayData?.method?.join(", ") || "N/A"}
-            />
-            <Row
-              icon={<Banknote size={15} />}
-              label="Amount"
-              value={`৳${payment?.amount?.toLocaleString("en-BD")} ${payment?.paymentGatewayData?.currency?.toUpperCase() ?? ""}`.trim()}
-              last
-            />
-          </div>
-
-          {/* total */}
-          <div className="sm:mt-2 flex  items-center justify-between border-t border-border px-3 pt-4">
-            <span className="text-[14px] font-medium text-foreground">
-              Total paid
-            </span>
-            <span className="text-[18px] font-semibold tabular-nums text-foreground">
-              {`৳${payment?.amount?.toLocaleString("en-BD")}`}
-            </span>
-          </div>
-        </div>
-      </CustomDialog>
+        </CustomDialog>
+      )}
     </>
   );
 };

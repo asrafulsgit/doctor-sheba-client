@@ -81,8 +81,8 @@ const AppointmentActionMenu = ({ appointment }: AppointmentActionMenuProps) => {
                     src={appointment.doctor.profilePhoto ?? ""}
                     alt="Profile"
                     className="h-full w-full rounded-3xl object-cover"
-                    width={12}
-                    height={12}
+                    width={48}
+                    height={48}
                   />
                 ) : (
                   <span>

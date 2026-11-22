@@ -61,7 +61,7 @@ export function useUpdateAppointmentStatus() {
         queryKey: queryKeys.appointments.all,
       });
       queryClient.invalidateQueries({
-        queryKey: queryKeys.meta.patientMeta,
+        queryKey: queryKeys.meta.all,
       });
       queryClient.invalidateQueries({
         queryKey: queryKeys.payments.all,
