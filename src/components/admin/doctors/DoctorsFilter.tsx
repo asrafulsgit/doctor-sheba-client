@@ -86,7 +86,7 @@ const DoctorsFilter = () => {
         className="w-50"
       />
 
-      <Button variant="outline" onClick={clearQuery}>
+      <Button variant="outline" onClick={clearQuery} className="text-muted-foreground">
         Reset Filters
       </Button>
     </>

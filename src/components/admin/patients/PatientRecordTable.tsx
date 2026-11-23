@@ -182,7 +182,7 @@ const PatientRow = memo(function PatientRow({
     <TableRow key={patient.id}>
       <TableCell className="flex gap-2">
         <Link
-          href={`/doctor/patients/${patient.id}`}
+          href={`/admin/patients/${patient.id}`}
           className="flex items-center gap-3 text-left"
         >
           <div className="grid h-10 w-10 place-items-center rounded-xl bg-primary-soft text-primary">

@@ -80,7 +80,7 @@ const DoctorSchedulesFilter = () => {
         </SelectContent>
       </Select>
 
-      <Button variant="outline" onClick={clearQuery} className="self-start">
+      <Button variant="outline" onClick={clearQuery} className="self-start text-muted-foreground">
         Reset Filters
       </Button>
     </>

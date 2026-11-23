@@ -44,7 +44,8 @@ const DoctorProfile = () => {
         <div className="mx-auto max-w-7xl px-4 py-8 sm:py-12 sm:px-6 lg:px-8">
           <Reveal>
             <div className="flex flex-col items-start gap-6 sm:flex-row sm:items-center">
-              <div className="grid h-30 w-30 shrink-0 place-items-center rounded-2xl shadow-elevated">
+              <div className={`grid  h-30 w-30 shrink-0 place-items-center rounded-2xl 
+              shadow-elevated ${!doctor.profilePhoto && "bg-primary"}`}>
                 {doctor?.profilePhoto ? (
                   <Image
                     src={doctor.profilePhoto}
@@ -54,7 +55,8 @@ const DoctorProfile = () => {
                     height={120}
                   />
                 ) : (
-                  <span className="bg-primary text-2xl font-bold text-primary-foreground">
+                  <span className="text-2xl font-bold 
+                  text-primary-foreground">
                     {doctor?.name
                       .replace(/^Dr\.?\s+/i, "")
                       .split(" ")

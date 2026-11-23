@@ -148,7 +148,7 @@ const FilterContent = () => {
           </SelectContent>
         </Select>
       </div>
-      <Button variant="outline" onClick={clearQuery} className="self-start">
+      <Button variant="outline" onClick={clearQuery} className="self-start text-muted-foreground">
         Reset Filters
       </Button>
     </div>

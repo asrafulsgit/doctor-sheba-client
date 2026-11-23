@@ -76,7 +76,7 @@ export const Combobox = React.memo(function Combobox({
             className,
           )}
         >
-          <span className="truncate">
+          <span className="truncate text-muted-foreground">
             {selectedOption?.label || placeholder}
           </span>
           <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />

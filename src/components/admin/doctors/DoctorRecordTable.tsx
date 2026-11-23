@@ -27,7 +27,6 @@ import {
 } from "@/lib/hooks/UseDoctor";
 import { IDoctor, IDoctorFilter } from "@/types/doctors";
 import {
-  Edit3,
   Eye,
   ListChecks,
   MoreHorizontal,
@@ -72,7 +71,7 @@ const DoctorRow = memo(function DoctorRow({
     <TableRow>
       <TableCell className="flex gap-2">
         <Link
-          href={`/doctor/doctors/${doctor.id}`}
+          href={`/doctors/${doctor.id}`}
           className="flex items-center gap-3 text-left"
         >
           <div className="grid h-9 w-9 place-items-center rounded-xl bg-primary-soft text-primary">
@@ -89,7 +88,8 @@ const DoctorRow = memo(function DoctorRow({
             )}
           </div>
           <div>
-            <p className="flex items-center gap-1 font-medium text-foreground hover:text-primary hover:underline">
+            <p className="flex items-center gap-1 font-medium text-foreground 
+            hover:text-primary hover:underline">
               {doctor.name}
             </p>
             <p className="text-xs text-muted-foreground">{doctor.email}</p>
