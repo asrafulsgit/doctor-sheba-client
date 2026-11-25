@@ -20,7 +20,7 @@ import { useMyAppointments } from "@/lib/hooks/useAppointment";
 import RowSkeleton from "@/components/shared/SkeletonSet";
 import { EmptyState } from "@/components/shared/PageState";
 
-const headers = [" ", "Doctor", "Date/Time", "Fee", "Status", "Action"];
+const headers = [" ", "Doctor", "Date/Time", "Fee", "Status"];
 
 const AppointmentTable = () => {
   const { getAllQueries } = useQueryManager();
@@ -62,6 +62,7 @@ const AppointmentTable = () => {
                 {h}
               </TableHead>
             ))}
+            <TableHead className="uppercase text-right text-xs text-muted-foreground px-4">Action</TableHead>
           </TableRow>
         </TableHeader>
 
@@ -69,12 +70,12 @@ const AppointmentTable = () => {
           {appointments.map((app) => (
             <TableRow key={app.id}>
               <TableCell className="flex gap-2">
-                <div className="grid h-10 w-10 place-items-center rounded-xl bg-primary-soft text-primary">
+                <div className="grid h-10 w-10 place-items-center rounded-full bg-primary-soft text-primary">
                   {app?.doctor?.profilePhoto ? (
                     <Image
                       src={app.doctor.profilePhoto ?? ""}
                       alt="Profile"
-                      className="h-full w-full rounded-2xl object-cover"
+                      className="h-full w-full rounded-full object-cover"
                       width={40}
                       height={40}
                     />
@@ -114,7 +115,7 @@ const AppointmentTable = () => {
                 <StatusBadge status={app.status} />
               </TableCell>
 
-              <TableCell className="text-center">
+              <TableCell className="text-right">
                 <AppointmentActionMenu appointment={app} />
               </TableCell>
             </TableRow>

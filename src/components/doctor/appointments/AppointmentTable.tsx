@@ -81,12 +81,12 @@ const AppointmentTable = () => {
           {appointments.map((app) => (
             <TableRow key={app.id}>
               <TableCell className="flex gap-2">
-                <div className="grid h-10 w-10 place-items-center rounded-xl bg-primary-soft text-primary">
+                <div className="grid h-10 w-10 place-items-center rounded-full bg-primary-soft text-primary">
                   {app.patient.profilePhoto ? (
                     <Image
                       src={app.patient.profilePhoto ?? ""}
                       alt="Profile"
-                      className="h-full w-full rounded-2xl object-cover"
+                      className="h-full w-full rounded-full object-cover"
                       width={40}
                       height={40}
                     />

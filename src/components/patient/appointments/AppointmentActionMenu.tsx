@@ -12,14 +12,10 @@ import {
 } from "lucide-react";
 import { ReactNode, useState } from "react";
 import { AppointmentStatus, IAppointment } from "@/types/appointment";
-import { CustomAlertDialog, CustomDialog } from "@/hooks/useDialog";
-import { AlertDialogAction } from "@/components/ui/alert-dialog";
+import { CustomDialog } from "@/hooks/useDialog";
 import { format } from "date-fns";
 import { StatusBadge } from "@/components/ui/badge";
 import { PaymentStatus } from "@/types/payment";
-import { useUpdateAppointmentStatus } from "@/lib/hooks/useAppointment";
-import { toast } from "sonner";
-import { getDate } from "@/helpers/getDate";
 import Image from "next/image";
 
 type AppointmentActionMenuProps = {
@@ -28,146 +24,98 @@ type AppointmentActionMenuProps = {
 
 const AppointmentActionMenu = ({ appointment }: AppointmentActionMenuProps) => {
   const [isOpenDetails, setIsOpenDetails] = useState(false);
-  const [isOpenCancel, setIsOpenCancel] = useState(false);
-
-  const { mutate: cancelAppointment, isPending } = useUpdateAppointmentStatus();
-  const handleCancel = (appointmentId: string) => {
-    cancelAppointment(
-      { appointmentId, status: "CANCELED" },
-      {
-        onSuccess: () => {
-          toast.success("Appointment cancelled successfully.");
-        },
-        onError: (error: any) => {
-          toast.error(error?.message || "Failed to cancel appointment.");
-        },
-      },
-    );
-  };
-
   return (
     <>
-      <div className="flex gap-2">
-        <Button
-          size="sm"
-          variant="ghost"
-          onClick={() => setIsOpenDetails(true)}
-        >
-          <Eye className="h-4 w-4" />
-        </Button>
-        {appointment.status === "SCHEDULED" && (
-          <Button
-            size="sm"
-            variant="ghost"
-            onClick={() => setIsOpenCancel(true)}
-          >
-            <X className="h-4 w-4" />
-          </Button>
-        )}
-      </div>
+      <Button size="sm" variant="ghost" onClick={() => setIsOpenDetails(true)}>
+        <Eye className="h-4 w-4" />
+      </Button>
 
-      <CustomDialog
-        open={isOpenDetails}
-        onOpenChange={setIsOpenDetails}
-        title="Appointment details"
-      >
-        <div>
-          <div className="pb-5">
-            <div className="flex items-start gap-3.5">
-              <div className="bg-primary-soft flex h-12 w-12 shrink-0 items-center 
-              justify-center rounded-full text-[15px] font-semibold text-primary">
-                {appointment?.doctor?.profilePhoto ? (
-                  <Image
-                    src={appointment.doctor.profilePhoto ?? ""}
-                    alt="Profile"
-                    className="h-full w-full rounded-3xl object-cover"
-                    width={48}
-                    height={48}
-                  />
-                ) : (
-                  <span>
-                    {appointment?.doctor?.name.charAt(0).toUpperCase()}
-                  </span>
-                )}
+      {isOpenDetails && (
+        <CustomDialog
+          open={isOpenDetails}
+          onOpenChange={setIsOpenDetails}
+          title="Appointment details"
+        >
+          <div>
+            <div className="pb-5">
+              <div className="flex items-start gap-3.5">
+                <div
+                  className="bg-primary-soft flex h-12 w-12 shrink-0 items-center 
+              justify-center rounded-full text-[15px] font-semibold text-primary"
+                >
+                  {appointment?.doctor?.profilePhoto ? (
+                    <Image
+                      src={appointment.doctor.profilePhoto ?? ""}
+                      alt="Profile"
+                      className="h-full w-full rounded-3xl object-cover"
+                      width={48}
+                      height={48}
+                    />
+                  ) : (
+                    <span>
+                      {appointment?.doctor?.name.charAt(0).toUpperCase()}
+                    </span>
+                  )}
+                </div>
+                <div className="min-w-0 pt-0.5">
+                  <h2 className="truncate text-xl font-semibold leading-tight">
+                    {appointment.doctor?.name}
+                  </h2>
+                  <p className="mt-0.5 flex items-center gap-1.5 text-[13px] text-[#12261F]/60">
+                    <Stethoscope size={13} strokeWidth={2} />
+                    {appointment.doctor?.designation}
+                  </p>
+                </div>
               </div>
-              <div className="min-w-0 pt-0.5">
-                <h2 className="truncate text-xl font-semibold leading-tight">
-                  {appointment.doctor?.name}
-                </h2>
-                <p className="mt-0.5 flex items-center gap-1.5 text-[13px] text-[#12261F]/60">
-                  <Stethoscope size={13} strokeWidth={2} />
-                  {appointment.doctor?.designation}
-                </p>
+
+              {/* stamps */}
+              <div className="mt-5 flex gap-2.5">
+                <StatusBadge status={appointment.status as AppointmentStatus} />
+                <StatusBadge
+                  status={appointment.paymentStatus as PaymentStatus}
+                />
               </div>
             </div>
 
-            {/* stamps */}
-            <div className="mt-5 flex gap-2.5">
-              <StatusBadge status={appointment.status as AppointmentStatus} />
-              <StatusBadge
-                status={appointment.paymentStatus as PaymentStatus}
+            {/* details list */}
+            <div className="px-3">
+              <Row
+                icon={<CalendarDays size={15} />}
+                label="Date"
+                value={
+                  appointment.schedule?.startDateTime
+                    ? format(
+                        new Date(appointment?.schedule?.startDateTime),
+                        "dd MMM yyyy",
+                      )
+                    : "N/A"
+                }
+              />
+              <Row
+                icon={<Clock size={15} />}
+                label="Time"
+                value={
+                  appointment.schedule?.startDateTime &&
+                  appointment.schedule?.endDateTime
+                    ? `${format(new Date(appointment?.schedule?.startDateTime), "hh:mm")} – ${format(new Date(appointment?.schedule?.endDateTime), "hh:mm")}`
+                    : `N/A`
+                }
+              />
+              <Row
+                icon={<Video size={15} />}
+                label="Mode"
+                value={"Video call"}
+              />
+              <Row
+                icon={<Banknote size={15} />}
+                label="Fee"
+                value={`৳${appointment.doctor?.appointmentFee.toLocaleString("en-BD")}`}
+                last
               />
             </div>
           </div>
-
-          {/* details list */}
-          <div className="px-3">
-            <Row
-              icon={<CalendarDays size={15} />}
-              label="Date"
-              value={
-                appointment.schedule?.startDateTime
-                  ? format(
-                      new Date(appointment?.schedule?.startDateTime),
-                      "dd MMM yyyy",
-                    )
-                  : "N/A"
-              }
-            />
-            <Row
-              icon={<Clock size={15} />}
-              label="Time"
-              value={
-                appointment.schedule?.startDateTime &&
-                appointment.schedule?.endDateTime
-                  ? `${format(new Date(appointment?.schedule?.startDateTime), "hh:mm")} – ${format(new Date(appointment?.schedule?.endDateTime), "hh:mm")}`
-                  : `N/A`
-              }
-            />
-            <Row icon={<Video size={15} />} label="Mode" value={"Video call"} />
-            <Row
-              icon={<Banknote size={15} />}
-              label="Fee"
-              value={`৳${appointment.doctor?.appointmentFee.toLocaleString("en-BD")}`}
-              last
-            />
-          </div>
-        </div>
-      </CustomDialog>
-
-      <CustomAlertDialog
-        open={isOpenCancel}
-        onOpenChange={setIsOpenCancel}
-        title="Cancel this appointment?"
-        isLoading={isPending}
-        description={`${appointment.doctor?.name} · ${getDate(
-          appointment?.schedule?.startDateTime,
-          "dd MMM yyyy hh:mm a",
-        )}. Refund processed in 5–7 days.`}
-        cancelLabel="Cancel"
-      >
-        <AlertDialogAction
-          onClick={(e) => {
-            e.preventDefault();
-            handleCancel(appointment.id as string);
-            setIsOpenCancel(false);
-          }}
-          disabled={isPending}
-          variant={"destructive"}
-        >
-          {isPending ? "Canceling…" : "Yes, cancel"}
-        </AlertDialogAction>
-      </CustomAlertDialog>
+        </CustomDialog>
+      )}
     </>
   );
 };

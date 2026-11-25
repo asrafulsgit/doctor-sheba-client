@@ -2,18 +2,13 @@ import { AppointmentStatus } from "./appointment";
 import { IDoctor } from "./doctors";
 import { IPatient } from "./patient";
 
-export type PaymentStatus = "PAID" | "UNPAID";
-// export interface Payment {
-//   id: string;
-//   appointmentId: string;
-//   amount: number;
-//   transactionId: string;
-//   status: PaymentStatus;
-//   paymentGatewayData?: unknown;
-//   createdAt: string;
-//   updatedAt: string;
-// }
-
+export type PaymentStatus =
+  | "PAID"
+  | "UNPAID"
+  | "FAILED"
+  | "REFUND_PENDING"
+  | "REFUNDED"
+  | "REFUND_FAILED";
 export interface Payment {
   id: string;
   appointmentId: string;
@@ -62,4 +57,50 @@ export interface IPayment {
   due: number;
   transactions: number;
   payments: Payment[];
+}
+
+export type AllPayment = {
+  payments: Payment[];
+  stats: {
+    paidAmount: number;
+    unPaidAmount: number;
+    currentMonthPaidAmount: number;
+  };
+};
+
+export type MyEarnings = {
+  totalEarnings: number;
+  totalPaidPayments: number;
+  last7DaysEarnings: number;
+  lastMonthEarnings: number;
+  last6MonthsEarningsChart: {
+    label: string;
+    value: number;
+  }[];
+  payments: {
+    status: PaymentStatus;
+    appointmentId: string;
+    id: string;
+    createdAt: string;
+    updatedAt: string;
+    transactionId: string;
+    amount: number;
+    appointment: {
+      patient: IPatient;
+    };
+    paymentGatewayData: Record<string, any>;
+  }[];
+};
+
+export type RefundStatus = "PENDING" | "PROCESSING" | "SUCCEEDED" | "FAILED";
+export interface IRefund{
+    status: RefundStatus;
+    id: string;
+    createdAt: string;
+    updatedAt: string;
+    amount: number;
+    paymentId: string;
+    stripeRefundId?: string ;
+    reason?: string ;
+    failureReason?: string ;
 }

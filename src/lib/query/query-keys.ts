@@ -1,7 +1,7 @@
 import { AppointmentStatus } from "@/types/appointment";
 import { IDoctorFilter } from "@/types/doctors";
 import { IHealthTipFilter } from "@/types/health-tips";
-import { PaymentStatus } from "@/types/payment";
+import { PaymentStatus, RefundStatus } from "@/types/payment";
 
 export const queryKeys = {
   // ─── Auth ────────────────────────────────────────────────────────────────
@@ -140,10 +140,10 @@ export const queryKeys = {
   },
 
   meta: {
-    all : ["meta"] as const,
-    patientMeta: ["meta","patientMeta"] as const,
-    doctorMeta: ["meta","doctorMeta"] as const,
-    adminMeta: ["meta","adminMeta"] as const,
+    all: ["meta"] as const,
+    patientMeta: ["meta", "patientMeta"] as const,
+    doctorMeta: ["meta", "doctorMeta"] as const,
+    adminMeta: ["meta", "adminMeta"] as const,
   },
 
   // ─── Notifications ────────────────────────────────────────────────────────
@@ -187,7 +187,7 @@ export const queryKeys = {
   // ─── users ───────────────────────────────────────────────────
   users: {
     all: ["users"] as const,
-    adminList: ["users","admins"] as const,
+    adminList: ["users", "admins"] as const,
   },
 
   // ─── Payments ─────────────────────────────────────────────────────────────
@@ -201,10 +201,23 @@ export const queryKeys = {
     detail: (id: string) => ["payments", "detail", id] as const,
     byPatient: (patientId: string) =>
       ["payments", "patient", patientId] as const,
+    refunds: (filters: RefundFilters) =>
+      ["payments", "refunds", filters] as const,
   },
 } as const;
 
 // ─── Types (shared filter shapes) ────────────────────────────────────────────
+
+export interface RefundFilters {
+  searchTerm?: string;
+  status?: RefundStatus;
+  startDate?: string;
+  endDate?: string;
+  page?: number;
+  limit?: number;
+  sortBy?: string;
+  sortOrder?: "asc" | "desc";
+}
 
 export interface DateRange {
   from: string;

@@ -46,13 +46,13 @@ const DoctorDashboard = () => {
     }),
   );
 
-  if (metaDataLoading) {
+  if (metaDataLoading || isLoading) {
     return <PatientDashboardSkeleton />;
   }
   return (
     <>
       <DashboardHeader
-        title={`Good day${user?.name ? `, Dr. ${user.email}` : ""}`}
+        title={`Good day${user?.name ? `, ${user.name}` : ""}`}
         description="Your practice at a glance."
         actions={
           <Button asChild variant="outline">

@@ -1,9 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
-import { PaymentFilters, queryKeys } from "../query/query-keys";
+import { PaymentFilters, queryKeys, RefundFilters } from "../query/query-keys";
 import { api } from "../api/api-client";
 import { ApiResponse } from "@/types/api-response";
-import { IPayment, Payment, PaymentStatus } from "@/types/payment";
-import { IPatient } from "@/types/patient";
+import { AllPayment, IPayment, IRefund, MyEarnings } from "@/types/payment";
 
 export function usePatientPayments(filters: PaymentFilters) {
   return useQuery({
@@ -16,15 +15,6 @@ export function usePatientPayments(filters: PaymentFilters) {
   });
 }
 
-type AllPayment = {
-  payments: Payment[];
-  stats: {
-    paidAmount: number;
-    unPaidAmount: number;
-    currentMonthPaidAmount: number;
-  };
-};
-
 export function usePayments(filters: PaymentFilters) {
   return useQuery({
     queryKey: queryKeys.payments.list(filters),
@@ -36,35 +26,22 @@ export function usePayments(filters: PaymentFilters) {
   });
 }
 
-type MyEarnings = {
-  totalEarnings: number;
-  totalPaidPayments: number;
-  last7DaysEarnings: number;
-  lastMonthEarnings: number;
-  last6MonthsEarningsChart: {
-    label: string;
-    value: number;
-  }[];
-  payments: {
-    status: PaymentStatus;
-    appointmentId: string;
-    id: string;
-    createdAt: string;
-    updatedAt: string;
-    transactionId: string;
-    amount: number;
-    appointment: {
-      patient: IPatient;
-    };
-    paymentGatewayData: Record<string, any>;
-  }[];
-};
-
 export function useMyEarnings(filters: PaymentFilters) {
   return useQuery({
     queryKey: queryKeys.payments.myEarnings(filters),
     queryFn: () =>
       api<ApiResponse<MyEarnings>>(`/payment/my-earnings`, {
+        params: filters,
+      }),
+    staleTime: 1000 * 60 * 5,
+  });
+}
+
+export function useGetRefunds(filters: RefundFilters) {
+  return useQuery({
+    queryKey: queryKeys.payments.refunds(filters),
+    queryFn: () =>
+      api<ApiResponse<IRefund[]>>("/payment/refunds", {
         params: filters,
       }),
     staleTime: 1000 * 60 * 5,

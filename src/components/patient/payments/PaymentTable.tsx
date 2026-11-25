@@ -1,5 +1,12 @@
 import { StatusBadge } from "@/components/ui/badge";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { Payment } from "@/types/payment";
 import { format } from "date-fns";
 import PaymentActionMenu from "./PaymentActionMenu";
@@ -10,7 +17,7 @@ const headers = [
   "Method",
   "Transaction ID",
   "Status",
-  "Amount"
+  "Amount",
 ];
 const PaymentTable = ({ payments }: { payments: Payment[] }) => {
   return (
@@ -26,11 +33,9 @@ const PaymentTable = ({ payments }: { payments: Payment[] }) => {
                 {h}
               </TableHead>
             ))}
-              <TableHead
-                className="uppercase text-right text-xs text-muted-foreground px-2"
-              >
-                Action
-              </TableHead>
+            <TableHead className="uppercase text-right text-xs text-muted-foreground px-2">
+              Action
+            </TableHead>
           </TableRow>
         </TableHeader>
 
@@ -38,18 +43,18 @@ const PaymentTable = ({ payments }: { payments: Payment[] }) => {
           {payments.map((payment) => (
             <TableRow key={payment.id}>
               <TableCell className="text-muted-foreground">
-                {format(payment.createdAt,"dd MMM yyyy")}
+                {format(payment.createdAt, "dd MMM yyyy")}
               </TableCell>
               <TableCell className="font-medium text-foreground">
-                 {payment.appointment.doctor.name}
+                {payment.appointment.doctor.name}
+              </TableCell>
+
+              <TableCell className="font-mono text-xs text-muted-foreground">
+                {payment.paymentGatewayData?.method[0]}
               </TableCell>
               <TableCell className="text-muted-foreground">
                 {payment.transactionId}
               </TableCell>
-              <TableCell className="font-mono text-xs text-muted-foreground">
-                {payment.paymentGatewayData?.method[0]}
-              </TableCell>
-
               <TableCell>
                 <StatusBadge status={payment.status} />
               </TableCell>

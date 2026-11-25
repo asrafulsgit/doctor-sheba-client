@@ -3,7 +3,7 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { Slot } from "radix-ui"
 
 import { cn } from "@/lib/utils"
-import { PaymentStatus } from "@/types/payment"
+import { PaymentStatus, RefundStatus } from "@/types/payment"
 import { AppointmentStatus } from "@/types/appointment"
 
 const badgeVariants = cva(
@@ -49,27 +49,61 @@ function Badge({
 }
 
 
-type Status = AppointmentStatus | PaymentStatus | "ACTIVE" | "BLOCKED" | "DELETED";
+type Status =
+  | AppointmentStatus
+  | PaymentStatus
+  | RefundStatus
+  | "ACTIVE"
+  | "BLOCKED"
+  | "DELETED";
 
 const styles: Record<Status, string> = {
+  // Appointment
   SCHEDULED: "bg-info-soft text-info-one",
   INPROGRESS: "bg-warning-soft text-warning-foreground",
   COMPLETED: "bg-success-soft text-success-one",
   CANCELED: "bg-destructive-soft text-destructive",
+
+  // Payment
   PAID: "bg-success-soft text-success-one",
   UNPAID: "bg-warning-soft text-warning-foreground",
+  FAILED: "bg-destructive-soft text-destructive",
+
+  // Refund
+  REFUND_PENDING: "bg-warning-soft text-warning-foreground",
+  REFUNDED: "bg-success-soft text-success-one",
+  REFUND_FAILED: "bg-destructive-soft text-destructive",
+
+  // Other
+  PENDING: "bg-warning-soft text-warning-foreground",
+  PROCESSING: "bg-info-soft text-info-one",
+  SUCCEEDED: "bg-success-soft text-success-one",
   ACTIVE: "bg-success-soft text-success-one",
   BLOCKED: "bg-destructive-soft text-destructive",
   DELETED: "bg-destructive-soft text-destructive",
 };
 
 const labels: Record<Status, string> = {
+  // Appointment
   SCHEDULED: "Scheduled",
   INPROGRESS: "In progress",
   COMPLETED: "Completed",
   CANCELED: "Cancelled",
+
+  // Payment
   PAID: "Paid",
   UNPAID: "Unpaid",
+  FAILED: "Failed",
+
+  // Refund
+  REFUND_PENDING: "Refund pending",
+  REFUNDED: "Refunded",
+  REFUND_FAILED: "Refund failed",
+
+  // Other
+  PENDING: "Pending",
+  PROCESSING: "Processing",
+  SUCCEEDED: "Succeeded",
   ACTIVE: "Active",
   BLOCKED: "Blocked",
   DELETED: "Deleted",

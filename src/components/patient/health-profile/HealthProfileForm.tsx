@@ -6,9 +6,12 @@ import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 import { Switch } from "@/components/ui/switch";
 import { z } from "zod";
-import { useEffect, useMemo } from "react";
+import { useEffect } from "react";
 import { toast } from "sonner";
-import { usePatientProfile, useUpdatePatient } from "@/lib/hooks/usePatient";
+import {
+  usePatientHealthProfile,
+  useUpdatePatient,
+} from "@/lib/hooks/usePatient";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -18,6 +21,13 @@ import {
   FieldLabel,
 } from "@/components/ui/field";
 import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
   BLOOD_GROUP_OPTIONS,
   bloodGroupLabels,
   GENDER_OPTIONS,
@@ -25,7 +35,6 @@ import {
 } from "@/constants/patient/data";
 import HealthProfileSkeleton from "./HealthProfileSkeleton";
 import { EmptyState } from "@/components/shared/PageState";
-import { Combobox } from "@/components/ui/combobox";
 
 const healthProfileSchema = z.object({
   gender: z.enum(GENDER_OPTIONS, { error: "Gender is required" }),
@@ -52,6 +61,10 @@ const healthProfileSchema = z.object({
   pregnancyStatus: z.boolean(),
   recentAnxiety: z.boolean(),
   recentDepression: z.boolean(),
+
+  dietaryPreferences: z.string().nullable().optional(),
+  mentalHealthHistory: z.string().nullable().optional(),
+  immunizationStatus: z.string().nullable().optional(),
 });
 
 export type HealthProfileFormValues = z.infer<typeof healthProfileSchema>;
@@ -70,6 +83,9 @@ const defaultValues: HealthProfileFormValues = {
   pregnancyStatus: false,
   recentAnxiety: false,
   recentDepression: false,
+  dietaryPreferences: "",
+  mentalHealthHistory: "",
+  immunizationStatus: "",
 };
 
 const MEDICAL_TOGGLES: {
@@ -86,17 +102,16 @@ const MEDICAL_TOGGLES: {
 ];
 
 const HealthProfileForm = () => {
-  const { data, isLoading, isError, error } = usePatientProfile();
+  const { data, isLoading, isError, error } = usePatientHealthProfile();
   const { mutate: updatePatient, isPending } = useUpdatePatient();
-
   const form = useForm<HealthProfileFormValues>({
     resolver: zodResolver(healthProfileSchema),
     defaultValues,
   });
 
   useEffect(() => {
-    if (data?.data?.patientHealthData) {
-      const profile = data.data.patientHealthData;
+    if (data?.data) {
+      const profile = data?.data;
       form.reset({
         gender: profile.gender,
         dateOfBirth: profile.dateOfBirth?.slice(0, 10) ?? "",
@@ -111,9 +126,12 @@ const HealthProfileForm = () => {
         pregnancyStatus: !!profile.pregnancyStatus,
         recentAnxiety: !!profile.recentAnxiety,
         recentDepression: !!profile.recentDepression,
+        dietaryPreferences: profile.dietaryPreferences ?? "",
+        mentalHealthHistory: profile.mentalHealthHistory ?? "",
+        immunizationStatus: profile.immunizationStatus ?? "",
       });
     }
-  }, [data?.data]);
+  }, [data, form]);
 
   function onSubmit(data: HealthProfileFormValues) {
     const payload = {
@@ -133,10 +151,10 @@ const HealthProfileForm = () => {
   if (isLoading) {
     return <HealthProfileSkeleton />;
   }
-  if (isError || !data?.data) {
+  if (isError) {
     return (
       <EmptyState
-        title={isError ? "Unable to load profile" : "Profile not found"}
+        title="Something went wrong"
         description={
           isError ? error.message : "Error while fetching health profile"
         }
@@ -144,13 +162,12 @@ const HealthProfileForm = () => {
       />
     );
   }
-
   return (
     <form
       onSubmit={form.handleSubmit(onSubmit)}
       className="grid gap-6 lg:grid-cols-2"
     >
-      {/* Personal health */}
+      {/* Personal health -------------------------------------------------- */}
       <section className="rounded-2xl border border-border bg-card p-6 shadow-soft">
         <div className="flex items-center gap-2">
           <span className="grid h-9 w-9 place-items-center rounded-lg bg-primary-soft text-primary">
@@ -185,19 +202,18 @@ const HealthProfileForm = () => {
             render={({ field, fieldState }) => (
               <Field data-invalid={fieldState.invalid}>
                 <FieldLabel htmlFor="gender">Gender</FieldLabel>
-                <Combobox
-                  options={
-                    GENDER_OPTIONS?.map((g) => ({
-                      value: g,
-                      label: g.charAt(0) + g.slice(1).toLowerCase(),
-                    })) ?? []
-                  }
-                  value={field.value as string}
-                  onChange={field.onChange}
-                  placeholder="Select"
-                  className="w-full"
-                  isSearhable={false}
-                />
+                <Select value={field.value} onValueChange={field.onChange}>
+                  <SelectTrigger id="gender" aria-invalid={fieldState.invalid}>
+                    <SelectValue placeholder="Select" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {GENDER_OPTIONS.map((g) => (
+                      <SelectItem key={g} value={g}>
+                        {g.charAt(0) + g.slice(1).toLowerCase()}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
                 {fieldState.invalid && (
                   <FieldError errors={[fieldState.error]} />
                 )}
@@ -211,19 +227,18 @@ const HealthProfileForm = () => {
             render={({ field, fieldState }) => (
               <Field data-invalid={fieldState.invalid}>
                 <FieldLabel htmlFor="blood">Blood group</FieldLabel>
-                <Combobox
-                  options={
-                    BLOOD_GROUP_OPTIONS?.map((bg) => ({
-                      value: bg,
-                      label: bloodGroupLabels[bg],
-                    })) ?? []
-                  }
-                  value={field.value as string}
-                  onChange={field.onChange}
-                  placeholder="Select"
-                  className="w-full"
-                  isSearhable={false}
-                />
+                <Select value={field.value} onValueChange={field.onChange}>
+                  <SelectTrigger id="blood" aria-invalid={fieldState.invalid}>
+                    <SelectValue placeholder="Select" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {BLOOD_GROUP_OPTIONS.map((bg) => (
+                      <SelectItem key={bg} value={bg}>
+                        {bloodGroupLabels[bg]}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
                 {fieldState.invalid && (
                   <FieldError errors={[fieldState.error]} />
                 )}
@@ -237,19 +252,18 @@ const HealthProfileForm = () => {
             render={({ field, fieldState }) => (
               <Field data-invalid={fieldState.invalid}>
                 <FieldLabel htmlFor="marital">Marital status</FieldLabel>
-                <Combobox
-                  options={
-                    MARITAL_STATUS_OPTIONS?.map((m) => ({
-                      value: m,
-                      label: m.charAt(0) + m.slice(1).toLowerCase(),
-                    })) ?? []
-                  }
-                  value={field.value as string}
-                  onChange={field.onChange}
-                  placeholder="Select"
-                  className="w-full"
-                  isSearhable={false}
-                />
+                <Select value={field.value} onValueChange={field.onChange}>
+                  <SelectTrigger id="marital" aria-invalid={fieldState.invalid}>
+                    <SelectValue placeholder="Select" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {MARITAL_STATUS_OPTIONS.map((m) => (
+                      <SelectItem key={m} value={m}>
+                        {m.charAt(0) + m.slice(1).toLowerCase()}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
                 {fieldState.invalid && (
                   <FieldError errors={[fieldState.error]} />
                 )}
@@ -329,6 +343,80 @@ const HealthProfileForm = () => {
             />
           ))}
         </div>
+      </section>
+
+      {/* Additional notes ---------------------------------------------------*/}
+      <section className="lg:col-span-2 rounded-2xl border border-border bg-card p-6 shadow-soft">
+        <div className="flex items-center gap-2">
+          <span className="grid h-9 w-9 place-items-center rounded-lg bg-primary-soft text-primary">
+            <NotebookText className="h-4 w-4" />
+          </span>
+          <h2 className="text-base font-semibold">Additional notes</h2>
+        </div>
+
+        <FieldGroup className="mt-5 grid gap-4 sm:grid-cols-3">
+          <Controller
+            name="dietaryPreferences"
+            control={form.control}
+            render={({ field, fieldState }) => (
+              <Field data-invalid={fieldState.invalid}>
+                <FieldLabel htmlFor="diet">Dietary preferences</FieldLabel>
+                <Textarea
+                  {...field}
+                  value={field.value ?? ""}
+                  id="diet"
+                  placeholder="e.g. Vegetarian, low sodium"
+                  className="min-h-20"
+                />
+                {fieldState.invalid && (
+                  <FieldError errors={[fieldState.error]} />
+                )}
+              </Field>
+            )}
+          />
+
+          <Controller
+            name="mentalHealthHistory"
+            control={form.control}
+            render={({ field, fieldState }) => (
+              <Field data-invalid={fieldState.invalid}>
+                <FieldLabel htmlFor="mental">Mental health history</FieldLabel>
+                <Textarea
+                  {...field}
+                  value={field.value ?? ""}
+                  id="mental"
+                  placeholder="Optional"
+                  className="min-h-20"
+                />
+                {fieldState.invalid && (
+                  <FieldError errors={[fieldState.error]} />
+                )}
+              </Field>
+            )}
+          />
+
+          <Controller
+            name="immunizationStatus"
+            control={form.control}
+            render={({ field, fieldState }) => (
+              <Field data-invalid={fieldState.invalid}>
+                <FieldLabel htmlFor="immunization">
+                  Immunization status
+                </FieldLabel>
+                <Textarea
+                  {...field}
+                  value={field.value ?? ""}
+                  id="immunization"
+                  placeholder="Optional"
+                  className="min-h-20"
+                />
+                {fieldState.invalid && (
+                  <FieldError errors={[fieldState.error]} />
+                )}
+              </Field>
+            )}
+          />
+        </FieldGroup>
       </section>
 
       <div className="lg:col-span-2 flex justify-end">

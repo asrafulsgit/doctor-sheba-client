@@ -5,10 +5,14 @@ import DashboardHeader from "@/components/shared/DashboardHeader";
 import Stats from "./Stats";
 import useQueryManager from "@/hooks/UseQueryManager";
 import { PaymentFilters } from "@/lib/query/query-keys";
-import { usePayments } from "@/lib/hooks/usePayment";
+import { useGetRefunds, usePayments } from "@/lib/hooks/usePayment";
 import EarningsSkeleton from "@/components/doctor/earnings/EarningsSkeleton";
 import PaymentTable from "./PaymentTable";
 import PaymentsFilter from "./PaymentsFilter";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { EmptyState } from "@/components/shared/PageState";
+import RowSkeleton from "@/components/shared/SkeletonSet";
+import RefundTable from "@/components/patient/payments/RefundTable";
 
 const AdminPayments = () => {
   const { getAllQueries } = useQueryManager();
@@ -30,22 +34,60 @@ const AdminPayments = () => {
       <DashboardHeader
         title="Payments"
         description="All transactions across the platform."
-        actions={
-          <Button variant="outline" onClick={() => {}}>
-            <Download className="h-4 w-4" />
-            Export CSV
-          </Button>
-        }
       />
-      <div className="grid gap-4 sm:grid-cols-3">
-        <Stats stats={stats} />
-      </div>
+      <Tabs defaultValue="payments">
+        <TabsList>
+          <TabsTrigger value="payments">Payments</TabsTrigger>
+          <TabsTrigger value="refunds">Refunds</TabsTrigger>
+        </TabsList>
 
-      <PaymentsFilter />
+        <TabsContent value="payments">
+          <div className="grid gap-4 sm:grid-cols-3">
+            <Stats stats={stats} />
+          </div>
 
-      <PaymentTable payments={payments ?? []} error={error} isError={isError} />
+          <PaymentsFilter />
+
+          <PaymentTable
+            payments={payments ?? []}
+            error={error}
+            isError={isError}
+          />
+        </TabsContent>
+
+        <TabsContent value="refunds">
+          <AdminRefundContent />
+        </TabsContent>
+      </Tabs>
     </>
   );
 };
+
+function AdminRefundContent() {
+  const { data, isLoading, isError, error } = useGetRefunds({});
+  const refunds = data?.data;
+
+  if (isLoading) {
+    return (
+      <div className="mt-2">
+        <RowSkeleton />
+      </div>
+    );
+  }
+
+  if (isError || !refunds?.length) {
+    return (
+      <EmptyState
+        title={isError ? "Unable to load refunds" : "No refunds found"}
+        description={
+          isError ? error.message : "When you have refunds, they'll show up here."
+        }
+        className="mt-2"
+      />
+    );
+  }
+
+  return <RefundTable refunds={refunds} />;
+}
 
 export default AdminPayments;

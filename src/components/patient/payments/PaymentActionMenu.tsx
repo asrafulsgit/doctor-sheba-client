@@ -38,15 +38,10 @@ const PaymentActionMenu = ({ payment }: PaymentActionMenuProps) => {
         >
           <Eye className="size-4" />
         </Button>
-        {payment.status === "PAID" ? (
-          <Button size="sm" variant="ghost" onClick={() => {}}>
-            <Download className="h-4 w-4" />
-          </Button>
-        ) : (
-          <Button size="sm" onClick={() => {}}>
-            Pay now
-          </Button>
-        )}
+
+        <Button size="sm" variant="ghost" onClick={() => {}}>
+          <Download className="h-4 w-4" />
+        </Button>
       </div>
 
       {isOpenInvoice && (
@@ -57,7 +52,6 @@ const PaymentActionMenu = ({ payment }: PaymentActionMenuProps) => {
           contentClassName="sm:max-w-[600px]"
         >
           <div>
-            
             <div className="rounded-lg border border-border bg-muted/30 px-3.5 py-3">
               <div className="mb-2 flex items-center justify-between">
                 <p
