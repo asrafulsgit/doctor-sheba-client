@@ -1,10 +1,17 @@
-export async function downloader(url: string, fileName: string) {
-  const res = await fetch(url);
-  const blob = await res.blob();
-  const blobUrl = URL.createObjectURL(blob);
-  const a = document.createElement('a');
+type DownloadSource = Blob | string;
+
+export function downloader(source: DownloadSource, fileName: string) {
+  const blobUrl = source instanceof Blob ? URL.createObjectURL(source) : source;
+
+  const a = document.createElement("a");
   a.href = blobUrl;
   a.download = fileName;
+
+  document.body.appendChild(a);
   a.click();
-  URL.revokeObjectURL(blobUrl);
+  a.remove();
+
+  if (source instanceof Blob) {
+    setTimeout(() => URL.revokeObjectURL(blobUrl), 1000);
+  }
 }

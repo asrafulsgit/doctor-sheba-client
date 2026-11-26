@@ -7,10 +7,18 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { formatReference } from "@/helpers/formatReference";
 import { IRefund } from "@/types/payment";
 import { format } from "date-fns";
 
-const headers = ["Date", "Refund ID", "Payment ID", "Reason", "Status", "Amount"];
+const headers = [
+  "Date",
+  "Refund ID",
+  "Payment ID",
+  "Reason",
+  "Status",
+  "Amount",
+];
 
 const RefundTable = ({ refunds }: { refunds: IRefund[] }) => {
   return (
@@ -36,10 +44,10 @@ const RefundTable = ({ refunds }: { refunds: IRefund[] }) => {
                 {format(new Date(refund.createdAt), "dd MMM yyyy")}
               </TableCell>
               <TableCell className="font-mono text-xs text-muted-foreground">
-                {refund.stripeRefundId || refund.id}
+                {formatReference(refund.stripeRefundId || refund.id,12)}
               </TableCell>
               <TableCell className="font-mono text-xs text-muted-foreground">
-                {refund.paymentId}
+                {formatReference(refund.paymentId)}
               </TableCell>
               <TableCell className="text-muted-foreground">
                 {refund.reason || refund.failureReason || "—"}

@@ -7,11 +7,16 @@ if (!BASE_URL) {
   throw new Error("NEXT_PUBLIC_API_URL is not defined");
 }
 
+type ApiOptions = RequestInit & {
+  params?: Record<string, any>;
+  responseType?: "json" | "blob";
+};
+
 export async function api<T>(
   path: string,
-  options: RequestInit & { params?: Record<string, any> } = {},
+  options: ApiOptions = {},
 ): Promise<T> {
-  const { params, ...init } = options;
+  const { params, responseType = "json", ...init } = options;
 
   const url = new URL(`${BASE_URL}${path}`);
   if (params) {
@@ -31,7 +36,10 @@ export async function api<T>(
       credentials: "include",
     });
 
-    const data = await res.json().catch(() => null);
+    const data =
+      responseType === "blob"
+        ? await res.blob()
+        : await res.json();
 
     if (!res.ok) {
       throw new ApiError(res.status, data?.message ?? res.statusText);

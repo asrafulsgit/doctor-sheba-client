@@ -10,12 +10,13 @@ import {
 import { Payment } from "@/types/payment";
 import { format } from "date-fns";
 import PaymentActionMenu from "./PaymentActionMenu";
+import { formatReference } from "@/helpers/formatReference";
 
 const headers = [
-  "Date",
-  "Doctor",
-  "Method",
   "Transaction ID",
+  "Doctor",
+  "Date",
+  "Method",
   "Status",
   "Amount",
 ];
@@ -43,18 +44,18 @@ const PaymentTable = ({ payments }: { payments: Payment[] }) => {
           {payments.map((payment) => (
             <TableRow key={payment.id}>
               <TableCell className="text-muted-foreground">
-                {format(payment.createdAt, "dd MMM yyyy")}
+                {formatReference(payment.transactionId, 12)}
               </TableCell>
               <TableCell className="font-medium text-foreground">
                 {payment.appointment.doctor.name}
               </TableCell>
-
+              <TableCell className="text-muted-foreground">
+                {format(payment.createdAt, "dd MMM yyyy")}
+              </TableCell>
               <TableCell className="font-mono text-xs text-muted-foreground">
                 {payment.paymentGatewayData?.method[0]}
               </TableCell>
-              <TableCell className="text-muted-foreground">
-                {payment.transactionId}
-              </TableCell>
+
               <TableCell>
                 <StatusBadge status={payment.status} />
               </TableCell>

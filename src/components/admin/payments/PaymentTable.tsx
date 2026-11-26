@@ -8,12 +8,13 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { formatReference } from "@/helpers/formatReference";
 import { getDate } from "@/helpers/getDate";
 import { Payment } from "@/types/payment";
 import Link from "next/link";
 import { memo } from "react";
 
-const headers = ["Txn ID", "Date", "Patient", "Doctor", "Method", "Status"];
+const headers = ["Txn ID", "Patient", "Doctor", "Date", "Method", "Status"];
 const PaymentTable = ({
   payments,
   isError,
@@ -59,10 +60,7 @@ const PaymentTable = ({
           {payments?.map((payment) => (
             <TableRow key={payment.id}>
               <TableCell className="text-xs text-muted-foreground">
-                {payment.transactionId}
-              </TableCell>
-              <TableCell className="text-muted-foreground">
-                {getDate(payment.createdAt, "dd MMM yyyy")}
+                {formatReference(payment.transactionId, 12)}
               </TableCell>
               <TableCell>
                 <Link
@@ -79,6 +77,9 @@ const PaymentTable = ({
                 >
                   {payment.appointment.doctor.name}
                 </Link>
+              </TableCell>
+              <TableCell className="text-muted-foreground">
+                {getDate(payment.createdAt, "dd MMM yyyy")}
               </TableCell>
               <TableCell className="text-muted-foreground">
                 {payment.paymentGatewayData?.method[0]}

@@ -1,5 +1,11 @@
 "use client";
-import { CheckCircle2, Download, Receipt, Stethoscope } from "lucide-react";
+import {
+  CheckCircle2,
+  Download,
+  Loader,
+  Receipt,
+  Stethoscope,
+} from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useMyAppointment } from "../../../lib/hooks/useAppointment";
 import { Button } from "@/components/ui/button";
@@ -9,6 +15,9 @@ import AppointmentDetailsCard from "./AppointmentDetailsCard";
 import PaymentDetailscard from "./PaymentDetailscard";
 import { EmptyState } from "@/components/shared/PageState";
 import useQueryManager from "@/hooks/UseQueryManager";
+import { useDownloadPaymentInvoice } from "@/lib/hooks/usePayment";
+import { downloader } from "@/helpers/downloader";
+import { toast } from "sonner";
 
 const PaymentSuccess = () => {
   const { getQuery } = useQueryManager();
@@ -21,6 +30,8 @@ const PaymentSuccess = () => {
     isError,
     error,
   } = useMyAppointment(appointmentId);
+  const { mutate: downloadInvoice, isPending } = useDownloadPaymentInvoice();
+
   const appointment = data?.data;
   const payment = appointment?.payments.find((p) => p.id === paymentId);
 
@@ -40,6 +51,17 @@ const PaymentSuccess = () => {
       />
     );
   }
+
+  const handleDownloadInvoice = () => {
+    downloadInvoice(paymentId, {
+      onSuccess: ({ blob, paymentId }) => {
+        downloader(blob, `invoice-${paymentId}.pdf`);
+      },
+      onError: (error) => {
+        toast.error(error.message || "Failed to download invoice");
+      },
+    });
+  };
 
   return (
     <section className="mx-auto max-w-3xl px-4 py-16 sm:px-6 lg:px-8">
@@ -85,11 +107,15 @@ const PaymentSuccess = () => {
 
       <div className="mt-8 flex flex-wrap justify-center gap-2">
         <Button
-          // onClick={downloadReceipt}
-          disabled={!payment}
+          onClick={handleDownloadInvoice}
+          disabled={!payment || isPending}
           variant="outline"
         >
-          <Download className="h-4 w-4" />
+          {isPending ? (
+            <Loader className="size-4 animate-spin" />
+          ) : (
+            <Download className="size-4" />
+          )}
           Download receipt
         </Button>
         <Button asChild>

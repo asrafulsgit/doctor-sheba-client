@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { PaymentFilters, queryKeys, RefundFilters } from "../query/query-keys";
 import { api } from "../api/api-client";
 import { ApiResponse } from "@/types/api-response";
@@ -45,5 +45,23 @@ export function useGetRefunds(filters: RefundFilters) {
         params: filters,
       }),
     staleTime: 1000 * 60 * 5,
+  });
+}
+
+export function useDownloadPaymentInvoice() {
+  return useMutation({
+    mutationFn: async (paymentId: string) => {
+      const response = await api<Blob>(
+        `/payment/${paymentId}/invoice`,
+        {
+          responseType: "blob",
+        },
+      );
+
+      return {
+        blob: response,
+        paymentId,
+      };
+    },
   });
 }

@@ -7,6 +7,8 @@ import {
   Download,
   Eye,
   Hash,
+  Loader,
+  Loader2,
   Mail,
   MapPin,
   Phone,
@@ -18,15 +20,32 @@ import { CustomDialog } from "@/hooks/useDialog";
 import { StatusBadge } from "@/components/ui/badge";
 import { Payment, PaymentStatus } from "@/types/payment";
 import { AppointmentStatus } from "@/types/appointment";
+import { useDownloadPaymentInvoice } from "@/lib/hooks/usePayment";
+import { downloader } from "@/helpers/downloader";
+import { toast } from "sonner";
+import { formatReference } from "@/helpers/formatReference";
 
 type PaymentActionMenuProps = {
-  payment: Partial<Payment>;
+  payment: Payment;
 };
 
 const PaymentActionMenu = ({ payment }: PaymentActionMenuProps) => {
   const [isOpenInvoice, setIsOpenInvoice] = useState(false);
   const customer = payment?.paymentGatewayData?.customer_details;
   const address = payment?.paymentGatewayData?.customer_details.address;
+
+  const { mutate: downloadInvoice, isPending } = useDownloadPaymentInvoice();
+
+  const handleDownloadInvoice = (paymentId: string) => {
+    downloadInvoice(paymentId, {
+      onSuccess: ({ blob, paymentId }) => {
+        downloader(blob, `invoice-${paymentId}.pdf`);
+      },
+      onError: (error) => {
+        toast.error(error.message || "Failed to download invoice");
+      },
+    });
+  };
 
   return (
     <>
@@ -39,8 +58,17 @@ const PaymentActionMenu = ({ payment }: PaymentActionMenuProps) => {
           <Eye className="size-4" />
         </Button>
 
-        <Button size="sm" variant="ghost" onClick={() => {}}>
-          <Download className="h-4 w-4" />
+        <Button
+          size="sm"
+          variant="ghost"
+          disabled={isPending}
+          onClick={() => handleDownloadInvoice(payment.id)}
+        >
+          {isPending ? (
+            <Loader className="size-4 animate-spin" />
+          ) : (
+            <Download className="size-4" />
+          )}
         </Button>
       </div>
 
@@ -114,7 +142,7 @@ const PaymentActionMenu = ({ payment }: PaymentActionMenuProps) => {
               <Row
                 icon={<Hash size={15} />}
                 label="Transaction ID"
-                value={payment.transactionId as string}
+                value={formatReference(payment.transactionId, 12) as string}
               />
               <Row
                 icon={<CreditCard size={15} />}

@@ -17,8 +17,8 @@ import { getDate } from "@/helpers/getDate";
 import useQueryManager from "@/hooks/UseQueryManager";
 import { PatientFilters } from "@/lib/query/query-keys";
 import {
-  AdminPatient,
-  usePatientsAdmin,
+  Patient,
+  usePatients,
   useSuspendOrActivatePatient,
 } from "@/lib/hooks/usePatient";
 import RowSkeleton from "@/components/shared/SkeletonSet";
@@ -49,9 +49,9 @@ const headers = [
 const PatientRecordTable = () => {
   const router = useRouter();
   const { getAllQueries } = useQueryManager();
-  const [suspendTarget, setSuspendTarget] = useState<AdminPatient | null>(null);
+  const [suspendTarget, setSuspendTarget] = useState<Patient | null>(null);
   const allQueries: PatientFilters = getAllQueries();
-  const { data, isLoading, isError, error } = usePatientsAdmin(allQueries);
+  const { data, isLoading, isError, error } = usePatients(allQueries);
   const patients = data?.data ?? [];
 
   const {
@@ -65,7 +65,7 @@ const PatientRecordTable = () => {
     [router],
   );
 
-  const handleActivate = useCallback((patient: AdminPatient) => {
+  const handleActivate = useCallback((patient: Patient) => {
     updateSuspendOrActivate(
       { id: patient.id, isDelete: false },
       {
@@ -76,7 +76,7 @@ const PatientRecordTable = () => {
     );
   }, []);
 
-  const handleRequestSuspend = useCallback((patient: AdminPatient) => {
+  const handleRequestSuspend = useCallback((patient: Patient) => {
     setSuspendTarget(patient);
   }, []);
 
@@ -164,11 +164,11 @@ const PatientRecordTable = () => {
 };
 
 type PatientRowProps = {
-  patient: AdminPatient;
+  patient: Patient;
   isPending: boolean;
   onView: (id: string) => void;
-  onActivate: (patient: AdminPatient) => void;
-  onRequestSuspend: (patient: AdminPatient) => void;
+  onActivate: (patient: Patient) => void;
+  onRequestSuspend: (patient: Patient) => void;
 };
 
 const PatientRow = memo(function PatientRow({
